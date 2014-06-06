@@ -15,28 +15,35 @@ class GroovyAndroidPlugin implements Plugin<Project> {
         if (!androidPlugin) {
             throw new GradleException('You must apply the Android plugin before using the groovy-android plugin')
         }
-        project.beforeEvaluate {
-            android {
-                applicationVariants.all {
-                    task "groovy${name}Compile"(type: GroovyCompile) {
-                        source = javaCompile.source + fileTree('src/main/java').include('**/*.groovy') +
-                                fileTree('src/main/groovy').include('**/*.groovy')
-                        destinationDir = javaCompile.destinationDir
-                        classpath = javaCompile.classpath
-                        groovyClasspath = classpath
-                        sourceCompatibility = '1.6'
-                        targetCompatibility = '1.6'
-                        doFirst {
-                            def runtimeJars = plugins.findPlugin(com.android.build.gradle.AppPlugin).runtimeJars
-                            classpath = files(runtimeJars) + classpath
-                        }
-                    }
-                    javaCompile.dependsOn("groovy${name}Compile")
-                    javaCompile.enabled = false
-                }
 
+        project.android {
+
+            packagingOptions {
+                // workaround for http://stackoverflow.com/questions/20673625/android-gradle-plugin-0-7-0-duplicate-files-during-packaging-of-apk
+                exclude 'META-INF/LICENSE.txt'
+                exclude 'META-INF/groovy-release-info.properties'
             }
+
+            applicationVariants.all {
+                project.task("groovy${name}Compile",type: GroovyCompile) {
+                    source = javaCompile.source + project.fileTree('src/main/java').include('**/*.groovy') +
+                            project.fileTree('src/main/groovy').include('**/*.groovy')
+                    destinationDir = javaCompile.destinationDir
+                    classpath = javaCompile.classpath
+                    groovyClasspath = classpath
+                    sourceCompatibility = '1.6'
+                    targetCompatibility = '1.6'
+                    doFirst {
+                        def runtimeJars = project.plugins.find { it.class.name == 'com.android.build.gradle.AppPlugin' }.runtimeJars
+                        classpath = project.files(runtimeJars) + classpath
+                    }
+                }
+                javaCompile.dependsOn("groovy${name}Compile")
+                javaCompile.enabled = false
+            }
+
         }
+
 
     }
 }

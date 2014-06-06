@@ -44,22 +44,7 @@ dependencies {
 
 ```
 
-then use the `packageDebug` task to test. If you see an error like:
-
-```
-Duplicate files copied in APK META-INF/LICENSE.txt
-```
-
-Then add the following block to your `android` configuration section:
-
-```groovy
-
-packagingOptions {
-   // workaround for http://stackoverflow.com/questions/20673625/android-gradle-plugin-0-7-0-duplicate-files-during-packaging-of-apk
-   exclude 'META-INF/LICENSE.txt'
-   exclude 'META-INF/groovy-release-info.properties'
-}
-```
+then use the `assembleDebug` task to test.
 
 Writing Groovy code
 -------------------
