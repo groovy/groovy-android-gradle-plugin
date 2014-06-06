@@ -1,0 +1,30 @@
+apply plugin: 'idea'
+apply from: 'gradle/credentials.gradle'
+apply from: 'gradle/compile.gradle'
+apply from: 'gradle/publishing.gradle'
+apply from: 'gradle/bintray.gradle'
+apply from: 'gradle/artifactory.gradle'
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.3'
+        classpath 'org.jfrog.buildinfo:build-info-extractor-gradle:2.2.4'
+    }
+}
+
+dependencies {
+    compile localGroovy()
+    compile gradleApi()
+}
+
+group='me.champeau.gradle'
+version='0.1'
+
+task release {
+    description = "Releases a version of the plugin on Artifactory and Bintray"
+    dependsOn artifactoryPublish, bintrayUpload
+}
+

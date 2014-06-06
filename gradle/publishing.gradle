@@ -1,0 +1,56 @@
+// configuration of the Maven artifacts
+apply plugin: 'maven-publish'
+
+// add javadoc/source jar tasks as artifacts
+artifacts {
+    archives sourcesJar, javadocJar
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+
+            artifact sourcesJar {
+                classifier "sources"
+            }
+
+            artifact javadocJar {
+                classifier "javadoc"
+            }
+
+            pom.withXml {
+                def Node root = asNode()
+                /*
+
+                        UNCOMMENT THIS BLOCK IF YOU WANT TO CUSTOMIZE THE GENERATED pom.xml FILE
+
+                root.appendNode('name', 'Gradle Plugin for Antlr4')
+                root.appendNode('description', 'Gradle plugin for generating grammars with Antlr4')
+                root.appendNode('url', 'https://github.com/melix/antlr4-gradle-plugin')
+
+                def issues = root.appendNode( 'issueManagement' )
+                issues.appendNode( 'system', 'github' )
+                issues.appendNode( 'url', 'https://github.com/melix/antlr4-gradle-plugin/issues' )
+
+                def scm = root.appendNode( 'scm' )
+                scm.appendNode( 'url', 'https://github.com/melix/antlr4-gradle-plugin' )
+                scm.appendNode( 'connection', 'scm:git:https://github.com/melix/antlr4-gradle-plugin.git' )
+                scm.appendNode( 'developerConnection', 'scm:git:git@github.com:melix/antlr4-gradle-plugin.git' )
+
+                def license = root.appendNode( 'licenses' ).appendNode( 'license' );
+                license.appendNode( 'name', 'The Apache Software License, Version 2.0' )
+                license.appendNode( 'url', 'http://www.apache.org/licenses/LICENSE-2.0.txt' )
+                license.appendNode( 'distribution', 'repo' )
+
+                def dev = root.appendNode( 'developers' ).appendNode( 'developer' );
+                dev.appendNode( 'id', 'melix' )
+                dev.appendNode( 'name', 'Cédric Champeau' )
+                dev.appendNode( 'organization', 'Groovy' )
+                dev.appendNode( 'organizationUrl', 'http://groovy.codehaus.org' )
+
+                 */
+            }
+        }
+    }
+}

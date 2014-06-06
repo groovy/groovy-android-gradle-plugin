@@ -1,0 +1,16 @@
+// Handles publication of distributions to Bintray
+
+apply plugin: 'bintray'
+
+bintray {
+    user = bintrayUsername
+    key = bintrayKey
+    publications = ['mavenJava']
+    pkg {
+        repo = 'gradle-plugins'
+        name = 'gradle-groovy-android-plugin'
+        desc = 'Adds support for the Groovy language to Android builds'
+        licenses = ['Apache-2.0']
+        labels = []
+    }
+}
