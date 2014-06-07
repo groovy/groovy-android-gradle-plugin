@@ -21,7 +21,7 @@ dependencies {
 }
 
 group='me.champeau.gradle'
-version='0.1'
+version='0.2-SNAPSHOT'
 
 task release {
     description = "Releases a version of the plugin on Artifactory and Bintray"
