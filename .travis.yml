@@ -1,7 +1,8 @@
-script: ./gradlew -q -s -PbuildInfo.build.number=$TRAVIS_BUILD_NUMBER -PbuildInfo.buildUrl=https://travis-ci.org/${TRAVIS_REPO_SLUG}/builds/${TRAVIS_JOB_ID} -PbuildInfo.buildAgent.name=$USER -PbuildInfo.principal=$USER clean build artifactoryPublish
+script: ./gradlew -q -s -PbuildInfo.build.number=$TRAVIS_BUILD_NUMBER -PbuildInfo.buildUrl=https://travis-ci.org/${TRAVIS_REPO_SLUG}/builds/${TRAVIS_JOB_ID}
+  -PbuildInfo.buildAgent.name=$USER -PbuildInfo.principal=$USER clean build artifactoryPublish
 jdk:
-  - openjdk7
+- openjdk7
 env:
   global:
-  - secure: MxtJg/js8gzZxmD0iHv2AWVupsaZJuuW4cbsDq8yuVoylD7BP981Tk/FkxNi2hhMJDElCW7QyUSmeaK0iIBORd8P8OnShx8zC7GpqQdvXfGX8VAuyQe7YXqzGzcaWCzzJOpNwlIFJleY9eWeSrZ5kl1ZrijpdPi9yi2okQvuqWo=
-  - secure: YN/XUj9BOvxrkV8x4mKSOmDwk5C871CrVHfA5tStA/ZMyCk8R1AYDoawVl/n8l8EYVLEJD9kFb/jHhFmfNrmt8/WXEh0G7l06WfLcbEiHriJ3BucRV46Q4g+F3IQsCT2U/G7wKhC6+S/SkB9zg7aCTdEykCWeXhL/zFbHo07Xb0=
+  - secure: XmUpm/CUBmjCwTUIRblUyKbYNcZzFBKhufI5y5sQb42zyzqG7QIpgbIdGDC2xulJ672hixeBKtGSJ3fvAHZ6uFhAKXsh0/cPexc2FR14A5O99PP8zL3QGGgaFDOqv2AZ4lnULBmwtqJLqcWBzhQ2q8Uua3J83EUIjK6j8s0Ek10=
+  - secure: cAyM6BbLYSW4p+f1J9LbLNxK9EGpPs+IpeudbSsQ8ZVUNFjykhRYjmHLr8IKwioxRMab+zka1Rn4t5oyJiQ7OILZaDq8WJQxbqDIAJNY5+ysieDYA4OsUauPJZqcccd/iJYnqkBGSHUhskpB+epI+xlDaz4Cm+RGFhoIGZMtMOo=
