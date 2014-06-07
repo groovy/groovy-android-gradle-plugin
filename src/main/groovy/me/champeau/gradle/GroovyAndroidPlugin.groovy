@@ -9,6 +9,11 @@ import org.gradle.api.tasks.compile.GroovyCompile
  * This is the main plugin file. Put a description of your plugin here.
  */
 class GroovyAndroidPlugin implements Plugin<Project> {
+
+    private static List RUNTIMEJARS_COMPAT = [
+            { it.runtimeJars }
+    ]
+
     void apply(Project project) {
 
         def androidPlugin = project.plugins.hasPlugin('android')
@@ -16,6 +21,7 @@ class GroovyAndroidPlugin implements Plugin<Project> {
             throw new GradleException('You must apply the Android plugin before using the groovy-android plugin')
         }
 
+        def groovyPlugin = this
         project.android {
 
             packagingOptions {
@@ -34,16 +40,37 @@ class GroovyAndroidPlugin implements Plugin<Project> {
                     sourceCompatibility = '1.6'
                     targetCompatibility = '1.6'
                     doFirst {
-                        def runtimeJars = project.plugins.find { it.class.name == 'com.android.build.gradle.AppPlugin' }.runtimeJars
+                        def runtimeJars = groovyPlugin.getRuntimeJars(project, project.plugins.find { it.class.name == 'com.android.build.gradle.AppPlugin' })
                         classpath = project.files(runtimeJars) + classpath
                     }
                 }
                 javaCompile.dependsOn("groovy${name}Compile")
                 javaCompile.enabled = false
             }
-
         }
+        project.logger.info("Detected Android plugin version ${getAndroidPluginVersion(project)}")
+    }
 
+    private String getAndroidPluginVersion(Project project) {
+        project.buildscript.configurations.classpath.resolvedConfiguration.firstLevelModuleDependencies.find { it.moduleGroup == 'com.android.tools.build' &&  it.moduleName=='gradle' }.moduleVersion
+    }
 
+    def getRuntimeJars(Project project, plugin) {
+        int index
+        switch (getAndroidPluginVersion(project)) {
+            case ~/0\.9\..*/:
+                index = 0
+                break
+            case ~/0\.10\..*/:
+                index = 0
+                break
+            case ~/0\.11\..*/:
+                index = 0
+                break
+            default:
+                index = RUNTIMEJARS_COMPAT.size()-1
+        }
+        def fun = RUNTIMEJARS_COMPAT[index]
+        fun(plugin)
     }
 }
