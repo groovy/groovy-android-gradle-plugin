@@ -16,7 +16,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'me.champeau.gradle:gradle-groovy-android-plugin:0.1'
+        classpath 'me.champeau.gradle:gradle-groovy-android-plugin:0.2.1'
     }
 }
 
