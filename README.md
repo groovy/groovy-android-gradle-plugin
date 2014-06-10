@@ -20,7 +20,7 @@ buildscript {
     }
 }
 
-apply plugin: 'groovy-android'
+apply plugin: 'me.champeau.gradle.groovy-android'
 
 ```
 
