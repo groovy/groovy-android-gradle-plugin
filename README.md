@@ -52,7 +52,7 @@ Writing Groovy code
 -------------------
 
 This plugin has been successfully tested with Android Studio. It will let you write an application in Groovy. It is
-recommanded, for performance, memory and battery life, that you use @CompileStatic wherever possible.
+recommended, for performance, memory and battery life, that you use @CompileStatic wherever possible.
 
 Details can be found on my [blog](http://melix.github.io/blog/2014/06/grooid.html)
 
