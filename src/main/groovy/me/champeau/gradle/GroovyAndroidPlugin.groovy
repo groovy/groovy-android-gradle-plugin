@@ -10,6 +10,8 @@ import org.gradle.api.tasks.compile.GroovyCompile
  */
 class GroovyAndroidPlugin implements Plugin<Project> {
 
+    private static String LATEST_SUPPORTED="0.12.0"
+
     private static List RUNTIMEJARS_COMPAT = [
             { it.runtimeJars },
             { it.bootClasspath }
@@ -53,7 +55,16 @@ class GroovyAndroidPlugin implements Plugin<Project> {
     }
 
     private String getAndroidPluginVersion(Project project) {
-        project.buildscript.configurations.classpath.resolvedConfiguration.firstLevelModuleDependencies.find { it.moduleGroup == 'com.android.tools.build' &&  it.moduleName=='gradle' }.moduleVersion
+        def dependency = project.buildscript.configurations.classpath.resolvedConfiguration.firstLevelModuleDependencies.find {
+            it.moduleGroup == 'com.android.tools.build' && it.moduleName == 'gradle'
+        }
+
+        if (dependency) {
+            return dependency.moduleVersion
+        }
+        project.logger.warn("Unable to determine Android build tools version from classpath. Falling back to default ($LATEST_SUPPORTED).")
+
+        LATEST_SUPPORTED
     }
 
     def getRuntimeJars(Project project, plugin) {
@@ -66,6 +77,9 @@ class GroovyAndroidPlugin implements Plugin<Project> {
                 index = 1
                 break
             case ~/0\.11\..*/:
+                index = 1
+                break
+            case ~/0\.12\..*/:
                 index = 1
                 break
             default:
