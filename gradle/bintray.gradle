@@ -1,16 +1,32 @@
 // Handles publication of distributions to Bintray
 
-apply plugin: 'bintray'
+apply plugin: 'com.jfrog.bintray'
 
 bintray {
     user = bintrayUsername
     key = bintrayKey
     publications = ['mavenJava']
     pkg {
-        repo = 'gradle-plugins'
-        name = 'gradle-groovy-android-plugin'
-        desc = 'Adds support for the Groovy language to Android builds'
+        repo = project.project_bintray_repo
+        name = project.name
+        desc = project.project_description
         licenses = ['Apache-2.0']
-        labels = []
+        labels = ['android','groovy']
+        publicDownloadNumbers = true
+        version {
+            repo = project.project_bintray_repo
+            userOrg = project.project_bintray_org
+            name = project.name
+            desc = project.project_description
+            licenses = ['Apache-2.0']
+            labels = ['gradle', 'plugin']
+            websiteUrl = project.project_url
+            issueTrackerUrl = project.project_issues_url
+            vcsUrl = project.project_scm
+            vcsTag = project.version
+            attributes = [
+                    'gradle-plugin': 'me.champeau.gradle.groovy-android:me.champeau.gradle:gradle-groovy-android-plugin'
+            ]
+        }
     }
 }
