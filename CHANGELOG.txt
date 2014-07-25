@@ -1,5 +1,3 @@
 0.3.0
 -----
     * Support for Android library plugin
-    * Internal changes: Upgrade to Gradle 2
-    * Internal changes: Upgrade to JFrog Bintray plugin 0.5
