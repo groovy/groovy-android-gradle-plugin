@@ -19,9 +19,9 @@ class GroovyAndroidPlugin implements Plugin<Project> {
 
     void apply(Project project) {
 
-        def androidPlugin = project.plugins.hasPlugin('android')
-        if (!androidPlugin) {
-            throw new GradleException('You must apply the Android plugin before using the groovy-android plugin')
+        def plugin = project.plugins.findPlugin('android')?:project.plugins.findPlugin('android-library')
+        if (!plugin) {
+            throw new GradleException('You must apply the Android plugin or the Android library plugin before using the groovy-android plugin')
         }
 
         def groovyPlugin = this
@@ -33,7 +33,9 @@ class GroovyAndroidPlugin implements Plugin<Project> {
                 exclude 'META-INF/groovy-release-info.properties'
             }
 
-            applicationVariants.all {
+            def variants = plugin.class.name.endsWith('.LibraryPlugin')?libraryVariants:applicationVariants
+
+            variants.all {
                 project.task("groovy${name}Compile",type: GroovyCompile) {
                     source = javaCompile.source + project.fileTree('src/main/java').include('**/*.groovy') +
                             project.fileTree('src/main/groovy').include('**/*.groovy')
@@ -43,7 +45,7 @@ class GroovyAndroidPlugin implements Plugin<Project> {
                     sourceCompatibility = '1.6'
                     targetCompatibility = '1.6'
                     doFirst {
-                        def runtimeJars = groovyPlugin.getRuntimeJars(project, project.plugins.find { it.class.name == 'com.android.build.gradle.AppPlugin' })
+                        def runtimeJars = groovyPlugin.getRuntimeJars(project, plugin)
                         classpath = project.files(runtimeJars) + classpath
                     }
                 }
