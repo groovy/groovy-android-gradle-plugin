@@ -57,9 +57,12 @@ class GroovyAndroidPlugin implements Plugin<Project> {
     }
 
     private String getAndroidPluginVersion(Project project) {
-        def dependency = project.buildscript.configurations.classpath.resolvedConfiguration.firstLevelModuleDependencies.find {
-            it.moduleGroup == 'com.android.tools.build' && it.moduleName == 'gradle'
-        }
+
+        def dependency = [project,project.rootProject].collect {
+            it.buildscript.configurations.classpath.resolvedConfiguration.firstLevelModuleDependencies.find {
+                it.moduleGroup == 'com.android.tools.build' && it.moduleName == 'gradle'
+            }
+        }.find()
 
         if (dependency) {
             return dependency.moduleVersion
