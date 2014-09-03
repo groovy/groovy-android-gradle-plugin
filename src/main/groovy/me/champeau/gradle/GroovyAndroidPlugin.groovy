@@ -33,6 +33,11 @@ class GroovyAndroidPlugin implements Plugin<Project> {
                 exclude 'META-INF/groovy-release-info.properties'
             }
 
+            // Forces Android Studio to recognize groovy folder as code
+            sourceSets {
+              main.java.srcDir('src/main/groovy')
+            }
+
             def variants = plugin.class.name.endsWith('.LibraryPlugin')?libraryVariants:applicationVariants
 
             variants.all {
