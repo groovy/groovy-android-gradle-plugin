@@ -59,13 +59,11 @@ class GroovyAndroidPlugin implements Plugin<Project> {
                 javaCompile.dependsOn("groovy${name}Compile")
                 javaCompile.enabled = false
 
-
-
                 project.task("groovy${name}TestCompile", type: GroovyCompile, dependsOn: "groovy${name}Compile") {
                     source = project.fileTree('src/androidTest/java').include('**/*.groovy') +
                             project.fileTree('src/androidTest/groovy').include('**/*.groovy')
                     destinationDir = project.file("$project.buildDir/intermediates/classes/test/$dirName")
-                    classpath = javaCompile.classpath
+                    classpath = javaCompile.classpath + project.files("$project.buildDir/intermediates/classes/$dirName")
                     groovyClasspath = classpath
                     sourceCompatibility = '1.6'
                     targetCompatibility = '1.6'
