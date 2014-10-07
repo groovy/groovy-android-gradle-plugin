@@ -36,11 +36,13 @@ class GroovyAndroidPlugin implements Plugin<Project> {
             // Forces Android Studio to recognize groovy folder as code
             sourceSets {
               main.java.srcDir('src/main/groovy')
+              androidTest.java.srcDir('src/androidTest/groovy')
             }
 
             def variants = plugin.class.name.endsWith('.LibraryPlugin')?libraryVariants:applicationVariants
 
             variants.all {
+
                 project.task("groovy${name}Compile",type: GroovyCompile) {
                     source = javaCompile.source + project.fileTree('src/main/java').include('**/*.groovy') +
                             project.fileTree('src/main/groovy').include('**/*.groovy')
@@ -56,9 +58,28 @@ class GroovyAndroidPlugin implements Plugin<Project> {
                 }
                 javaCompile.dependsOn("groovy${name}Compile")
                 javaCompile.enabled = false
+
+
+
+                project.task("groovy${name}TestCompile", type: GroovyCompile, dependsOn: "groovy${name}Compile") {
+                    source = project.fileTree('src/androidTest/java').include('**/*.groovy') +
+                            project.fileTree('src/androidTest/groovy').include('**/*.groovy')
+                    destinationDir = project.file("$project.buildDir/intermediates/classes/test/$dirName")
+                    classpath = javaCompile.classpath
+                    groovyClasspath = classpath
+                    sourceCompatibility = '1.6'
+                    targetCompatibility = '1.6'
+                    doFirst {
+                        def runtimeJars = groovyPlugin.getRuntimeJars(project, plugin)
+                        classpath = project.files(runtimeJars) + classpath
+                    }
+                }
+                def javaTestTask = project.tasks.findByName("compile${name?.capitalize()}TestJava")
+                javaTestTask?.dependsOn("groovy${name}TestCompile")
             }
         }
         project.logger.info("Detected Android plugin version ${getAndroidPluginVersion(project)}")
+
     }
 
     private String getAndroidPluginVersion(Project project) {
