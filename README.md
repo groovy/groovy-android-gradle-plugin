@@ -54,4 +54,18 @@ recommended, for performance, memory and battery life, that you use `@CompileSta
 
 Details can be found on my [blog](http://melix.github.io/blog/2014/06/grooid.html) and [here for more technical details](http://melix.github.io/blog/2014/06/grooid2.html)
 
+Setting the Java language level
+--------------------------------
+
+The default language level for both source and target is `1.6`. You can change it by giving some options. Following example changes it to `1.7`. Note that you have to change Android Studio project settings as well if you use the IDE.
+
+```groovy
+
+project.androidGroovy {
+    sourceCompatibility = '1.7'
+    targetCompatibility = '1.7'
+}
+
+```
+
 

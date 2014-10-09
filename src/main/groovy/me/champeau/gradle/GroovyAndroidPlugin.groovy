@@ -6,6 +6,11 @@ import org.gradle.api.Project
 import org.gradle.api.tasks.compile.GroovyCompile
 import org.gradle.api.tasks.compile.JavaCompile
 
+class GroovyAndroidPluginExtension {
+    def String sourceCompatibility = '1.6'
+    def String targetCompatibility = '1.6'
+}
+
 /**
  * This is the main plugin file. Put a description of your plugin here.
  */
@@ -19,6 +24,7 @@ class GroovyAndroidPlugin implements Plugin<Project> {
     ]
 
     void apply(Project project) {
+        project.extensions.create("androidGroovy", GroovyAndroidPluginExtension)
 
         def plugin = project.plugins.findPlugin('android')?:project.plugins.findPlugin('android-library')
         if (!plugin) {
@@ -62,8 +68,8 @@ class GroovyAndroidPlugin implements Plugin<Project> {
              destinationDir = javaCompile.destinationDir
              classpath = javaCompile.classpath
              groovyClasspath = classpath
-             sourceCompatibility = '1.6'
-             targetCompatibility = '1.6'
+             sourceCompatibility = project.androidGroovy.sourceCompatibility
+             targetCompatibility = project.androidGroovy.targetCompatibility
              doFirst {
                  def runtimeJars = groovyPlugin.getRuntimeJars(project, plugin)
                  classpath = project.files(runtimeJars) + classpath
