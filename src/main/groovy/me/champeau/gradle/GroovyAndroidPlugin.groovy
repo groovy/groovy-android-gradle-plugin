@@ -4,6 +4,12 @@ import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.compile.GroovyCompile
+import org.gradle.api.tasks.compile.JavaCompile
+
+class GroovyAndroidPluginExtension {
+    def String sourceCompatibility = '1.6'
+    def String targetCompatibility = '1.6'
+}
 
 /**
  * This is the main plugin file. Put a description of your plugin here.
@@ -18,6 +24,7 @@ class GroovyAndroidPlugin implements Plugin<Project> {
     ]
 
     void apply(Project project) {
+        project.extensions.create("androidGroovy", GroovyAndroidPluginExtension)
 
         def plugin = project.plugins.findPlugin('android')?:project.plugins.findPlugin('android-library')
         if (!plugin) {
@@ -42,43 +49,36 @@ class GroovyAndroidPlugin implements Plugin<Project> {
             def variants = plugin.class.name.endsWith('.LibraryPlugin')?libraryVariants:applicationVariants
 
             variants.all {
-
-                project.task("groovy${name}Compile",type: GroovyCompile) {
-                    source = javaCompile.source + project.fileTree('src/main/java').include('**/*.groovy') +
-                            project.fileTree('src/main/groovy').include('**/*.groovy')
-                    destinationDir = javaCompile.destinationDir
-                    classpath = javaCompile.classpath
-                    groovyClasspath = classpath
-                    sourceCompatibility = '1.6'
-                    targetCompatibility = '1.6'
-                    doFirst {
-                        def runtimeJars = groovyPlugin.getRuntimeJars(project, plugin)
-                        classpath = project.files(runtimeJars) + classpath
-                    }
-                }
-                javaCompile.dependsOn("groovy${name}Compile")
-                javaCompile.enabled = false
-
-                project.task("groovy${name}TestCompile", type: GroovyCompile, dependsOn: "groovy${name}Compile") {
-                    source = project.fileTree('src/androidTest/java').include('**/*.groovy') +
-                            project.fileTree('src/androidTest/groovy').include('**/*.groovy')
-                    destinationDir = project.file("$project.buildDir/intermediates/classes/test/$dirName")
-                    classpath = javaCompile.classpath + project.files("$project.buildDir/intermediates/classes/$dirName")
-                    groovyClasspath = classpath
-                    sourceCompatibility = '1.6'
-                    targetCompatibility = '1.6'
-                    doFirst {
-                        def runtimeJars = groovyPlugin.getRuntimeJars(project, plugin)
-                        classpath = project.files(runtimeJars) + classpath
-                    }
-                }
-                def javaTestTask = project.tasks.findByName("compile${name?.capitalize()}TestJava")
-                javaTestTask?.dependsOn("groovy${name}TestCompile")
+                 groovyPlugin.attachGroovyCompileTask(project, plugin, javaCompile, 'src/main')
+                 if (testVariant) {
+                     groovyPlugin.attachGroovyCompileTask(project, plugin, testVariant.javaCompile, 'src/androidTest')
+                 }
             }
         }
         project.logger.info("Detected Android plugin version ${getAndroidPluginVersion(project)}")
 
     }
+
+     private void attachGroovyCompileTask(Project project, Plugin plugin, JavaCompile javaCompile, String srcDir) {
+         def groovyPlugin = this
+         def taskName = javaCompile.name.replace("Java", "Groovy")
+         def groovyCompile = project.task(taskName, type: GroovyCompile) {
+             source = javaCompile.source + project.fileTree(new File(srcDir, 'java')).include('**/*.groovy') +
+                 project.fileTree(new File(srcDir, 'groovy')).include('**/*.groovy')
+             destinationDir = javaCompile.destinationDir
+             classpath = javaCompile.classpath
+             groovyClasspath = classpath
+             sourceCompatibility = project.androidGroovy.sourceCompatibility
+             targetCompatibility = project.androidGroovy.targetCompatibility
+             doFirst {
+                 def runtimeJars = groovyPlugin.getRuntimeJars(project, plugin)
+                 classpath = project.files(runtimeJars) + classpath
+             }
+         }
+
+         javaCompile.dependsOn(groovyCompile.name)
+         javaCompile.enabled = false
+     }
 
     private String getAndroidPluginVersion(Project project) {
 
