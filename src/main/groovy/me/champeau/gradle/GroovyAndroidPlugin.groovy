@@ -6,13 +6,9 @@ import org.gradle.api.Project
 import org.gradle.api.tasks.compile.GroovyCompile
 import org.gradle.api.tasks.compile.JavaCompile
 
-class GroovyAndroidPluginExtension {
-    def String sourceCompatibility = '1.6'
-    def String targetCompatibility = '1.6'
-}
 
 /**
- * This is the main plugin file. Put a description of your plugin here.
+ * Adds support for building Android applications using the Groovy language.
  */
 class GroovyAndroidPlugin implements Plugin<Project> {
 
