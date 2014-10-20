@@ -1,3 +1,8 @@
+0.3.1
+-----
+    * Make sure the plugin works with Android Tools 0.13+
+    * support for androidTest
+    * add the "groovy" sourceSet
 0.3.0
 -----
     * Support for Android library plugin

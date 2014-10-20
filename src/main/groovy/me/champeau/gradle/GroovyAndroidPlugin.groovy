@@ -12,7 +12,7 @@ import org.gradle.api.tasks.compile.JavaCompile
  */
 class GroovyAndroidPlugin implements Plugin<Project> {
 
-    private static String LATEST_SUPPORTED="0.12.0"
+    private static String LATEST_SUPPORTED="0.13.0"
 
     private static List RUNTIMEJARS_COMPAT = [
             { it.runtimeJars },
@@ -105,6 +105,9 @@ class GroovyAndroidPlugin implements Plugin<Project> {
                 index = 1
                 break
             case ~/0\.12\..*/:
+                index = 1
+                break
+            case ~/0\.13\..*/:
                 index = 1
                 break
             default:

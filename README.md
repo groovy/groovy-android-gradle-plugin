@@ -16,8 +16,8 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.12.2'
-        classpath 'me.champeau.gradle:gradle-groovy-android-plugin:0.3.0'
+        classpath 'com.android.tools.build:gradle:0.13.2'
+        classpath 'me.champeau.gradle:gradle-groovy-android-plugin:0.3.1'
     }
 }
 
@@ -25,7 +25,7 @@ apply plugin: 'me.champeau.gradle.groovy-android'
 ```
 
 Then you must choose which version and modules of Groovy you use. So far, Android support is available in
-the 2.4.0-beta-1 release and beyond, so you need to add the following repository to your `build.gradle` file:
+the 2.4.0-beta-3 release and beyond, so you need to add the following repository to your `build.gradle` file:
 
 ```groovy
 
