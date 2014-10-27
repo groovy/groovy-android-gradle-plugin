@@ -1,5 +1,6 @@
 package me.champeau.gradle
 
+import org.gradle.api.JavaVersion
 import org.gradle.api.tasks.compile.GroovyCompile
 import org.gradle.util.ConfigureUtil
 
@@ -15,6 +16,9 @@ class GroovyAndroidPluginExtension {
     void configure(GroovyCompile task) {
         if (configClosure) {
             ConfigureUtil.configure(configClosure, task)
+        } else {
+            task.sourceCompatibility = JavaVersion.VERSION_1_6
+            task.targetCompatibility = JavaVersion.VERSION_1_6
         }
     }
 }

@@ -17,7 +17,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:0.13.2'
-        classpath 'me.champeau.gradle:gradle-groovy-android-plugin:0.3.1'
+        classpath 'me.champeau.gradle:gradle-groovy-android-plugin:0.3.2'
     }
 }
 
@@ -45,6 +45,13 @@ dependencies {
 ```
 
 then use the `assembleDebug` task to test.
+
+Where to put sources?
+---------------------
+
+Groovy sources **must** be found inside `src/main/groovy`. Note that the plugin follows the behavior of the Groovy plugin
+in Gradle, which means that if you want to be able to have Groovy classes referencing Java classes that themselves reference
+Groovy classes, then those Java classes must be found inside `src/main/groovy` too (this is called *joint compilation*).
 
 Writing Groovy code
 -------------------
