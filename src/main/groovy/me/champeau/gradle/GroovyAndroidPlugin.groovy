@@ -59,13 +59,12 @@ class GroovyAndroidPlugin implements Plugin<Project> {
          def groovyPlugin = this
          def taskName = javaCompile.name.replace("Java", "Groovy")
          def groovyCompile = project.task(taskName, type: GroovyCompile) {
+             project.androidGroovy.configure(it)
              source = javaCompile.source + project.fileTree(new File(srcDir, 'java')).include('**/*.groovy') +
                  project.fileTree(new File(srcDir, 'groovy')).include('**/*.groovy')
              destinationDir = javaCompile.destinationDir
              classpath = javaCompile.classpath
              groovyClasspath = classpath
-             sourceCompatibility = project.androidGroovy.sourceCompatibility
-             targetCompatibility = project.androidGroovy.targetCompatibility
              doFirst {
                  def runtimeJars = groovyPlugin.getRuntimeJars(project, plugin)
                  classpath = project.files(runtimeJars) + classpath
