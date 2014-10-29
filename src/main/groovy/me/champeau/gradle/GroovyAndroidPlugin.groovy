@@ -3,8 +3,17 @@ package me.champeau.gradle
 import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.file.FileTreeElement
+import org.gradle.api.internal.file.FileResolver
+import org.gradle.api.internal.plugins.DslObject
+import org.gradle.api.internal.tasks.DefaultGroovySourceSet
+import org.gradle.api.internal.tasks.DefaultSourceSet
+import org.gradle.api.specs.Spec
+import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.compile.GroovyCompile
 import org.gradle.api.tasks.compile.JavaCompile
+
+import javax.inject.Inject
 
 
 /**
@@ -28,6 +37,7 @@ class GroovyAndroidPlugin implements Plugin<Project> {
         }
 
         def groovyPlugin = this
+
         project.android {
 
             packagingOptions {
@@ -71,6 +81,11 @@ class GroovyAndroidPlugin implements Plugin<Project> {
          }
 
          javaCompile.finalizedBy(groovyCompile)
+         javaCompile.exclude { e ->
+             // this is a dirty hack to work around the fact that we need to declare the source tree as Java sources
+             // for this to be recognized by Android Studio, so here we just exclude the files !
+             e.file.absolutePath.contains('src/main/groovy') || e.file.absolutePath.contains('src/androidTest/groovy')
+         }
      }
 
     private String getAndroidPluginVersion(Project project) {
