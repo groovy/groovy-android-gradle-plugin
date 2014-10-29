@@ -1,3 +1,11 @@
+0.3.3
+-----
+    * Fix javaCompile task referencing Groovy sources
+0.3.2
+-----
+    * Add support for Groovy compilation options
+    * Fix joint compilation bug
+    * Sources need to be in 'src/main/groovy'
 0.3.1
 -----
     * Make sure the plugin works with Android Tools 0.13+
