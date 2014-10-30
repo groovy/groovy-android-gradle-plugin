@@ -38,6 +38,22 @@ class GroovyAndroidPlugin implements Plugin<Project> {
 
         def groovyPlugin = this
 
+        def isLibraryPlugin = plugin.class.name.endsWith('.LibraryPlugin')
+
+        // IMPORTANT TO TO THIS FIRST, SEE https://groups.google.com/forum/#!msg/adt-dev/vXKzoS4nB1k/zUIa9Rp9SOIJ
+        if (isLibraryPlugin) {
+            project.android.libraryVariants.all {
+                it.productFlavors*.name.each {
+                    project.android.sourceSets.getByName(it).java.srcDir("src/$it/groovy")
+                }
+            }
+        } else {
+            project.android.applicationVariants.all {
+                it.productFlavors*.name.each {
+                    project.android.sourceSets.getByName(it).java.srcDir("src/$it/groovy")
+                }
+            }
+        }
         project.android {
 
             packagingOptions {
@@ -46,31 +62,38 @@ class GroovyAndroidPlugin implements Plugin<Project> {
                 exclude 'META-INF/groovy-release-info.properties'
             }
 
-            // Forces Android Studio to recognize groovy folder as code
-            sourceSets {
-              main.java.srcDir('src/main/groovy')
-              androidTest.java.srcDir('src/androidTest/groovy')
-            }
-
-            def variants = plugin.class.name.endsWith('.LibraryPlugin')?libraryVariants:applicationVariants
+            def variants = isLibraryPlugin ?libraryVariants:applicationVariants
 
             variants.all {
-                 groovyPlugin.attachGroovyCompileTask(project, plugin, javaCompile, 'src/main')
-                 if (testVariant) {
-                     groovyPlugin.attachGroovyCompileTask(project, plugin, testVariant.javaCompile, 'src/androidTest')
-                 }
+                project.logger.debug("Configuring Groovy variant $it.name")
+                def flavors = it.productFlavors*.name
+                groovyPlugin.attachGroovyCompileTask(project, plugin, javaCompile, ['main', *flavors])
+            }
+            testVariants.all {
+                project.logger.debug("Configuring Groovy test variant $it.name")
+                def flavors = it.productFlavors*.name
+                groovyPlugin.attachGroovyCompileTask(project, plugin, javaCompile, ['androidTest', *flavors])
+            }
+
+            // Forces Android Studio to recognize groovy folder as code
+            sourceSets {
+                main.java.srcDir('src/main/groovy')
+                androidTest.java.srcDir('src/androidTest/groovy')
             }
         }
         project.logger.info("Detected Android plugin version ${getAndroidPluginVersion(project)}")
 
+
     }
 
-     private void attachGroovyCompileTask(Project project, Plugin plugin, JavaCompile javaCompile, String srcDir) {
+     private void attachGroovyCompileTask(Project project, Plugin plugin, JavaCompile javaCompile, List<String> srcDirs) {
          def groovyPlugin = this
          def taskName = javaCompile.name.replace("Java", "Groovy")
+         def srcDirsAsString = srcDirs.collect { "src/$it/groovy" }
+         project.logger.debug("Configuring Groovy compile task [$taskName] with source directories $srcDirsAsString")
          def groovyCompile = project.task(taskName, type: GroovyCompile) {
              project.androidGroovy.configure(it)
-             source = project.fileTree(new File(srcDir, 'groovy'))
+             source = srcDirsAsString.collect { project.fileTree(project.file(it)) }
              destinationDir = javaCompile.destinationDir
              classpath = javaCompile.classpath
              groovyClasspath = classpath
@@ -84,7 +107,8 @@ class GroovyAndroidPlugin implements Plugin<Project> {
          javaCompile.exclude { e ->
              // this is a dirty hack to work around the fact that we need to declare the source tree as Java sources
              // for this to be recognized by Android Studio, so here we just exclude the files !
-             e.file.absolutePath.contains('src/main/groovy') || e.file.absolutePath.contains('src/androidTest/groovy')
+             def path = e.file.absolutePath
+             srcDirsAsString.any { path.contains(it) }
          }
      }
 
