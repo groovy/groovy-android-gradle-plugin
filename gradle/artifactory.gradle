@@ -2,11 +2,13 @@
 
 apply plugin: 'artifactory-publish'
 
+def targetRepo = project.version.endsWith('-SNAPSHOT')?'oss-snapshot-local':'oss-release-local'
+
 artifactory {
     contextUrl = 'http://oss.jfrog.org/artifactory'
     publish {
         repository {
-            repoKey = 'oss-snapshot-local'
+            repoKey = targetRepo
             username = bintrayUsername
             password = bintrayKey
         }
