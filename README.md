@@ -17,7 +17,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:0.13.2'
-        classpath 'me.champeau.gradle:gradle-groovy-android-plugin:0.3.3'
+        classpath 'me.champeau.gradle:gradle-groovy-android-plugin:0.3.4'
     }
 }
 

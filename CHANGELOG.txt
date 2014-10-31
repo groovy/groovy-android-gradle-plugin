@@ -1,3 +1,6 @@
+0.3.4
+-----
+    * Support for product flavors
 0.3.3
 -----
     * Fix javaCompile task referencing Groovy sources
