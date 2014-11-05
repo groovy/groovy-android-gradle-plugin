@@ -46,6 +46,25 @@ dependencies {
 
 then use the `assembleDebug` task to test.
 
+Should you want to test development versions of the plugin, you can add the snapshot repository and depend on a SNAPSHOT:
+
+```groovy
+
+buildscript {
+    repositories {
+        jcenter()
+        maven {
+            url = 'http://oss.jfrog.org/artifactory/oss-snapshot-local'
+        }
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:0.14.0'
+        classpath 'me.champeau.gradle:gradle-groovy-android-plugin:0.3.5-SNAPSHOT'
+    }
+}
+
+```
+
 Where to put sources?
 ---------------------
 
