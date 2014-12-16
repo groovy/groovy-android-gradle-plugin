@@ -21,7 +21,7 @@ import javax.inject.Inject
  */
 class GroovyAndroidPlugin implements Plugin<Project> {
 
-    private static String LATEST_SUPPORTED="0.14.0"
+    private static String LATEST_SUPPORTED="1.0.0"
 
     private static List RUNTIMEJARS_COMPAT = [
             { it.runtimeJars },
@@ -67,12 +67,14 @@ class GroovyAndroidPlugin implements Plugin<Project> {
             variants.all {
                 project.logger.debug("Configuring Groovy variant $it.name")
                 def flavors = it.productFlavors*.name
-                groovyPlugin.attachGroovyCompileTask(project, plugin, javaCompile, ['main', *flavors])
+                def types = it.buildType*.name
+                groovyPlugin.attachGroovyCompileTask(project, plugin, javaCompile, ['main', *flavors, *types])
             }
             testVariants.all {
                 project.logger.debug("Configuring Groovy test variant $it.name")
                 def flavors = it.productFlavors*.name
-                groovyPlugin.attachGroovyCompileTask(project, plugin, javaCompile, ['androidTest', *flavors])
+                def types = it.buildType*.name
+                groovyPlugin.attachGroovyCompileTask(project, plugin, javaCompile, ['androidTest', *flavors, *types])
             }
 
             // Forces Android Studio to recognize groovy folder as code
@@ -139,6 +141,7 @@ class GroovyAndroidPlugin implements Plugin<Project> {
             case ~/0\.12\..*/:
             case ~/0\.13\..*/:
             case ~/0\.14\..*/:
+            case ~/1\.0\..*/:
                 index = 1
                 break
             default:

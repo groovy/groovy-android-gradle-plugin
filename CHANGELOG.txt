@@ -1,6 +1,8 @@
 0.3.5
 -----
-    * Support for plugin version 0.3.5
+    * Support for plugin version 0.14
+    * Support for plugin version 1.0.0
+    * Add support for build type specific source directory
 0.3.4
 -----
     * Support for product flavors
