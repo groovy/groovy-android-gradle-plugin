@@ -17,7 +17,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:0.13.2'
-        classpath 'org.codehaus.groovy:gradle-groovy-android-plugin:0.3.5-SNAPSHOT'
+        classpath 'org.codehaus.groovy:gradle-groovy-android-plugin:0.3.5'
     }
 }
 
@@ -59,7 +59,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:0.14.0'
-        classpath 'org.codehaus.groovy:gradle-groovy-android-plugin:0.3.5-SNAPSHOT'
+        classpath 'org.codehaus.groovy:gradle-groovy-android-plugin:0.3.5'
     }
 }
 
