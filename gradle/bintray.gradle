@@ -12,6 +12,7 @@ bintray {
         repo = attr 'project_bintray_repo'
         name = attr 'name'
         desc = attr 'project_description'
+        userOrg = attr 'project_bintray_org'
         licenses = ['Apache-2.0']
         labels = ['android','groovy']
         /*
