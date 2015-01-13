@@ -1,4 +1,4 @@
-package me.champeau.gradle
+package groovyx.grooid
 
 import org.gradle.api.JavaVersion
 import org.gradle.api.tasks.compile.GroovyCompile

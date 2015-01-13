@@ -1,5 +1,7 @@
 0.3.5
 -----
+    * Moved to Groovy organization
+    * renamed from 'me.champeau.gradle.groovy-android' to 'groovyx.grooid.groovy-android'
     * Support for plugin version 0.14
     * Support for plugin version 1.0.0
     * Add support for build type specific source directory

@@ -17,15 +17,15 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:0.13.2'
-        classpath 'me.champeau.gradle:gradle-groovy-android-plugin:0.3.4'
+        classpath 'org.codehaus.groovy:gradle-groovy-android-plugin:0.3.5-SNAPSHOT'
     }
 }
 
-apply plugin: 'me.champeau.gradle.groovy-android'
+apply plugin: 'groovyx.grooid.groovy-android'
 ```
 
 Then you must choose which version and modules of Groovy you use. So far, Android support is available in
-the 2.4.0-beta-3 release and beyond, so you need to add the following repository to your `build.gradle` file:
+the 2.4.0-rc-2 release and beyond, so you need to add the following repository to your `build.gradle` file:
 
 ```groovy
 
@@ -39,7 +39,7 @@ Then you can start using Groovy by adding a dependency on the `grooid` classifie
 ```groovy
 
 dependencies {
-    compile 'org.codehaus.groovy:groovy:2.4.0-beta-3:grooid'
+    compile 'org.codehaus.groovy:groovy:2.4.0-rc-2:grooid'
 }
 
 ```
@@ -59,7 +59,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:0.14.0'
-        classpath 'me.champeau.gradle:gradle-groovy-android-plugin:0.3.5-SNAPSHOT'
+        classpath 'org.codehaus.groovy:gradle-groovy-android-plugin:0.3.5-SNAPSHOT'
     }
 }
 

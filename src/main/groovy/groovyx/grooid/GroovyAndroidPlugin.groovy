@@ -1,20 +1,10 @@
-package me.champeau.gradle
+package groovyx.grooid
 
 import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.file.FileTreeElement
-import org.gradle.api.internal.file.FileResolver
-import org.gradle.api.internal.plugins.DslObject
-import org.gradle.api.internal.tasks.DefaultGroovySourceSet
-import org.gradle.api.internal.tasks.DefaultSourceSet
-import org.gradle.api.specs.Spec
-import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.compile.GroovyCompile
 import org.gradle.api.tasks.compile.JavaCompile
-
-import javax.inject.Inject
-
 
 /**
  * Adds support for building Android applications using the Groovy language.
