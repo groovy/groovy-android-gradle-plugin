@@ -100,7 +100,8 @@ class GroovyAndroidPlugin implements Plugin<Project> {
              // this is a dirty hack to work around the fact that we need to declare the source tree as Java sources
              // for this to be recognized by Android Studio, so here we just exclude the files !
              def path = e.file.absolutePath
-             srcDirsAsString.any { path.contains(it) }
+			 // this dirty hack wasn't working on windows because of the different path styles in absolutePath
+             srcDirsAsString.any { path.contains(it) || path.contains(it.replaceAll('/','\\\\')) }
          }
      }
 
