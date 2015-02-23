@@ -11,11 +11,12 @@ import org.gradle.api.tasks.compile.JavaCompile
  */
 class GroovyAndroidPlugin implements Plugin<Project> {
 
-    private static String LATEST_SUPPORTED="1.0.0"
+    private static String LATEST_SUPPORTED="1.1.0"
 
     private static List RUNTIMEJARS_COMPAT = [
             { it.runtimeJars },
-            { it.bootClasspath }
+            { it.bootClasspath },
+            { it.androidBuilder.bootClasspath }
     ]
 
     void apply(Project project) {
@@ -133,6 +134,9 @@ class GroovyAndroidPlugin implements Plugin<Project> {
             case ~/0\.14\..*/:
             case ~/1\.0\..*/:
                 index = 1
+                break
+            case ~/1\.1\..*/:
+                index = 2
                 break
             default:
                 index = RUNTIMEJARS_COMPAT.size()-1
