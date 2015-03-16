@@ -60,6 +60,13 @@ class GroovyAndroidPlugin implements Plugin<Project> {
                 def flavors = it.productFlavors*.name
                 def types = it.buildType*.name
                 groovyPlugin.attachGroovyCompileTask(project, plugin, javaCompile, ['main', *flavors, *types])
+
+                // Unit tests (android plugin >= 1.1.0)
+                def unitTestTaskName = javaCompile.name.replace('Java', 'UnitTestJava')
+                def unitTestCompile = project[unitTestTaskName]
+                if (unitTestCompile != null) {
+                    groovyPlugin.attachGroovyCompileTask(project, plugin, unitTestCompile, ['test'])
+                }
             }
             testVariants.all {
                 project.logger.debug("Configuring Groovy test variant $it.name")
@@ -72,11 +79,10 @@ class GroovyAndroidPlugin implements Plugin<Project> {
             sourceSets {
                 main.java.srcDir('src/main/groovy')
                 androidTest.java.srcDir('src/androidTest/groovy')
+                test.java.srcDir('src/test/groovy')
             }
         }
         project.logger.info("Detected Android plugin version ${getAndroidPluginVersion(project)}")
-
-
     }
 
      private void attachGroovyCompileTask(Project project, Plugin plugin, JavaCompile javaCompile, List<String> srcDirs) {
