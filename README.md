@@ -16,8 +16,8 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.0.0'
-        classpath 'org.codehaus.groovy:gradle-groovy-android-plugin:0.3.5'
+        classpath 'com.android.tools.build:gradle:1.1.0'
+        classpath 'org.codehaus.groovy:gradle-groovy-android-plugin:0.3.6'
     }
 }
 
@@ -39,7 +39,7 @@ Then you can start using Groovy by adding a dependency on the `grooid` classifie
 ```groovy
 
 dependencies {
-    compile 'org.codehaus.groovy:groovy:2.4.1:grooid'
+    compile 'org.codehaus.groovy:groovy:2.4.3:grooid'
 }
 
 ```
@@ -58,8 +58,8 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.1.0'
-        classpath 'org.codehaus.groovy:gradle-groovy-android-plugin:0.3.6-SNAPSHOT'
+        classpath 'com.android.tools.build:gradle:1.1.3'
+        classpath 'org.codehaus.groovy:gradle-groovy-android-plugin:0.3.7-SNAPSHOT'
     }
 }
 
