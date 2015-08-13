@@ -62,7 +62,7 @@ class GroovyAndroidPlugin implements Plugin<Project> {
                 groovyPlugin.attachGroovyCompileTask(project, plugin, javaCompile, ['main', *flavors, *types])
 
                 // Unit tests (android plugin >= 1.1.0)
-                def unitTestTaskName = javaCompile.name.replace('Java', 'UnitTestJava')
+                def unitTestTaskName = javaCompile.name.replaceFirst('Java', 'UnitTestJava')
                 def unitTestCompile = project.getTasksByName(unitTestTaskName,false)
                 if (unitTestCompile) {
                     unitTestCompile.each { task ->
