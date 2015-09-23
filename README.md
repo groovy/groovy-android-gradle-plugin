@@ -29,7 +29,7 @@ the 2.4.0 release and beyond, so you need to add the following repository to you
 
 ```groovy
 
-repository {
+repositories {
    jcenter() // or mavenCentral()
 }
 ```
