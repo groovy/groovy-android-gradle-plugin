@@ -16,7 +16,8 @@ class GroovyAndroidPlugin implements Plugin<Project> {
     private static List RUNTIMEJARS_COMPAT = [
             { it.runtimeJars },
             { it.bootClasspath },
-            { it.androidBuilder.bootClasspath }
+            { it.androidBuilder.bootClasspath },
+            { it.androidBuilder.getBootClasspath(false) }
     ]
 
     void apply(Project project) {
@@ -146,6 +147,12 @@ class GroovyAndroidPlugin implements Plugin<Project> {
                 break
             case ~/1\.1\..*/:
                 index = 2
+                break
+            case ~/1\.4\.0-beta1*/:
+                index = 2
+                break
+            case ~/1\.4\.0-beta.*/:
+                index = 3
                 break
             default:
                 index = RUNTIMEJARS_COMPAT.size()-1
