@@ -100,7 +100,8 @@ class GroovyAndroidPlugin implements Plugin<Project> {
              classpath = javaCompile.classpath
              groovyClasspath = classpath
              doFirst {
-                 def runtimeJars = groovyPlugin.getRuntimeJars(project, plugin)
+                 def pluginVersion = getAndroidPluginVersion(project)
+                 def runtimeJars = groovyPlugin.getRuntimeJars(pluginVersion, plugin)
                  classpath = project.files(runtimeJars) + classpath
              }
          }
@@ -115,7 +116,7 @@ class GroovyAndroidPlugin implements Plugin<Project> {
          }
      }
 
-    private String getAndroidPluginVersion(Project project) {
+    String getAndroidPluginVersion(Project project) {
 
         def dependency = [project,project.rootProject].collect {
             it.buildscript.configurations.classpath.resolvedConfiguration.firstLevelModuleDependencies.find {
@@ -131,9 +132,15 @@ class GroovyAndroidPlugin implements Plugin<Project> {
         LATEST_SUPPORTED
     }
 
-    def getRuntimeJars(Project project, plugin) {
+    def getRuntimeJars(pluginVersion, plugin) {
+        int index = getRuntimeJarsIndex(pluginVersion)
+        def fun = RUNTIMEJARS_COMPAT[index]
+        fun(plugin)
+    }
+
+    int getRuntimeJarsIndex(pluginVersion) {
         int index
-        switch (getAndroidPluginVersion(project)) {
+        switch (pluginVersion) {
             case ~/0\.9\..*/:
                 index = 0
                 break
@@ -148,6 +155,12 @@ class GroovyAndroidPlugin implements Plugin<Project> {
             case ~/1\.1\..*/:
                 index = 2
                 break
+            case ~/1\.2\..*/:
+                index = 2
+                break
+            case ~/1\.3\..*/:
+                index = 2
+                break
             case ~/1\.4\.0-beta1*/:
                 index = 2
                 break
@@ -155,9 +168,8 @@ class GroovyAndroidPlugin implements Plugin<Project> {
                 index = 3
                 break
             default:
-                index = RUNTIMEJARS_COMPAT.size()-1
+                index = RUNTIMEJARS_COMPAT.size() - 1
         }
-        def fun = RUNTIMEJARS_COMPAT[index]
-        fun(plugin)
+        index
     }
 }
