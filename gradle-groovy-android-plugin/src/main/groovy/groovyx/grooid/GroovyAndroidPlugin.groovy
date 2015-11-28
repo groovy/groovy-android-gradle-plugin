@@ -96,8 +96,6 @@ class GroovyAndroidPlugin implements Plugin<Project> {
             project.androidGroovy.configure(it)
             source = srcDirsAsString.collect { project.fileTree(project.file(it)) }
             destinationDir = javaCompile.destinationDir
-            classpath = javaCompile.classpath
-            groovyClasspath = classpath
             doFirst {
                 def pluginVersion = getAndroidPluginVersion(project)
                 def runtimeJars = getRuntimeJars(pluginVersion, plugin)
@@ -105,6 +103,12 @@ class GroovyAndroidPlugin implements Plugin<Project> {
             }
         }
 
+        javaCompile.doLast {
+             // set Groovy compilation task's classpath when executing relevant Java compilation task,
+             // to use the latest classpath which may be updated by other tasks
+             groovyCompile.classpath = javaCompile.classpath
+             groovyCompile.groovyClasspath = javaCompile.classpath
+        }
         javaCompile.finalizedBy(groovyCompile)
         javaCompile.exclude { e ->
             // this is a dirty hack to work around the fact that we need to declare the source tree as Java sources
