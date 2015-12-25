@@ -30,3 +30,7 @@ Thumbs.db
 *.iml
 .gradle
 build/
+
+# Gradle Wrapper
+# Force include the wrapper jar
+!gradle/wrapper/gradle-wrapper.jar
