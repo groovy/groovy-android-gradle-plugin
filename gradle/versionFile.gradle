@@ -1,0 +1,12 @@
+task writeVersionNumberFile {
+  def versionFile = file("src/main/resources/groovyx/gradle-groovy-android-plugin-version.txt")
+  inputs.property "version", project.version
+  outputs.file versionFile
+
+  doFirst {
+    assert versionFile.parentFile.mkdirs() || versionFile.parentFile.directory
+    versionFile.text = project.version
+  }
+}
+
+processResources.dependsOn writeVersionNumberFile

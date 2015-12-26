@@ -1,0 +1,41 @@
+apply plugin: 'groovy'
+apply plugin: 'maven'
+apply from: "$rootDir/gradle/credentials.gradle"
+apply from: "$rootDir/gradle/publishing.gradle"
+apply from: "$rootDir/gradle/bintray.gradle"
+apply from: "$rootDir/gradle/artifactory.gradle"
+apply from: "$rootDir/gradle/versionFile.gradle"
+
+compileGroovy.options.encoding = 'UTF-8'
+
+buildscript {
+    dependencies {
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.4'
+        classpath 'org.jfrog.buildinfo:build-info-extractor-gradle:4.0.0'
+    }
+}
+
+description = 'Groovy support for Android with the Gradle build tool - http://www.groovy-lang.org'
+
+sourceCompatibility = JavaVersion.VERSION_1_6
+targetCompatibility = JavaVersion.VERSION_1_6
+
+dependencies {
+  compile localGroovy()
+  compile gradleApi()
+
+  testCompile gradleTestKit()
+  testCompile 'org.spockframework:spock-core:1.0-groovy-2.4', {
+    exclude group: "org.codehaus.groovy", module: "groovy-all"
+  }
+}
+
+test {
+  dependsOn install
+}
+
+
+task release {
+    description = "Releases a version of the plugin on Artifactory and Bintray"
+    dependsOn artifactoryPublish, bintrayUpload
+}

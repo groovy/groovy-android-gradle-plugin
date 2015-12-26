@@ -1,0 +1,11 @@
+plugins.withType(MavenPlugin) {
+  ext.localRepoUrl = new File(rootProject.buildDir, 'localrepo').toURI()
+
+  install {
+    repositories {
+      mavenDeployer {
+        repository(url: localRepoUrl)
+      }
+    }
+  }
+}

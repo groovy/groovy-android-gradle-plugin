@@ -1,28 +1,17 @@
-apply plugin: 'idea'
-apply from: 'gradle/credentials.gradle'
-apply from: 'gradle/compile.gradle'
-apply from: 'gradle/publishing.gradle'
-apply from: 'gradle/bintray.gradle'
-apply from: 'gradle/artifactory.gradle'
+allprojects {
+  version = '0.3.8-SNAPSHOT'
+  group = 'org.codehaus.groovy'
+}
 
-buildscript {
+subprojects {
+  apply from: "$rootDir/gradle/projectLocalRepo.gradle"
+  apply from: "$rootDir/gradle/androidGroovyLocal.gradle"
+
+  buildscript {
     repositories {
-        jcenter()
+      jcenter()
     }
-    dependencies {
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.4'
-        classpath 'org.jfrog.buildinfo:build-info-extractor-gradle:4.0.0'
-    }
-}
-
-dependencies {
-    compile localGroovy()
-    compile gradleApi()
-}
-
-task release {
-    description = "Releases a version of the plugin on Artifactory and Bintray"
-    dependsOn artifactoryPublish, bintrayUpload
+  }
 }
 
 task wrapper(type: Wrapper) {

@@ -1,0 +1,18 @@
+/*
+    For projects using the groovy-android-gradle-plugin, replace the module dependencies with project dependencies
+    so that they build against the source instead of the published versions.
+ */
+
+import groovyx.grooid.GroovyAndroidPlugin
+
+plugins.matching { it instanceof GroovyAndroidPlugin }.all {
+  configurations.all { configuration ->
+    def deps = dependencies.toList().findAll { it instanceof ModuleDependency && it.group == 'org.codehaus.groovy' }
+    deps.each { dependency ->
+      dependencies.remove(dependency)
+      project.dependencies {
+        delegate."$configuration.name" project(":$dependency.name")
+      }
+    }
+  }
+}
