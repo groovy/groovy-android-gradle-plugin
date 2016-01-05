@@ -112,3 +112,36 @@ project.androidGroovy {
 }
 
 ```
+
+Android `packagingOptions`
+--------------------------
+
+Groovy Extension Modules and Global transformations both need a file
+descriptor in order to work. Android packaging has a restriction
+related to files having the same name located in the same path.
+
+If you are using several Groovy libraries containing extension modules
+or/and global transformations, Android may complain about those files.
+
+You can simply add the following rule:
+
+```groovy
+
+packagingOptions {
+    exclude 'META-INF/services/org.codehaus.groovy.transform.ASTTransformation'
+    exclude 'META-INF/services/org.codehaus.groovy.runtime.ExtensionModule'
+}
+
+```
+
+There is no problem excluding global transformation descriptors because
+those are only used at compile time, never at runtime.
+
+The problem comes with module extensions. Unless you statically
+compile classes using extension modules with @CompileStatic they won't
+be available at runtime and you'll have a runtime exception.
+
+There is an alternative. The
+[`emerger`](https://github.com/kaleidos/emerger) gradle plugin add
+those excludes for you and merges all extension module descriptors in
+a single file which will be available at runtime.
