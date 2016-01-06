@@ -2,6 +2,11 @@ script: ./gradlew -q -s -PbuildInfo.build.number=$TRAVIS_BUILD_NUMBER -PbuildInf
   -PbuildInfo.buildAgent.name=$USER -PbuildInfo.principal=$USER clean build artifactoryPublish
 jdk:
 - openjdk7
+before_install:
+  - cat /etc/hosts # optionally check the content *before*
+  - sudo hostname "$(hostname | cut -c1-63)"
+  - sed -e "s/^\\(127\\.0\\.0\\.1.*\\)/\\1 $(hostname | cut -c1-63)/" /etc/hosts | sudo tee /etc/hosts
+  - cat /etc/hosts # optionally check the content *after*
 env:
   global:
   - secure: XmUpm/CUBmjCwTUIRblUyKbYNcZzFBKhufI5y5sQb42zyzqG7QIpgbIdGDC2xulJ672hixeBKtGSJ3fvAHZ6uFhAKXsh0/cPexc2FR14A5O99PP8zL3QGGgaFDOqv2AZ4lnULBmwtqJLqcWBzhQ2q8Uua3J83EUIjK6j8s0Ek10=
