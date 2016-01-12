@@ -9,8 +9,3 @@ before_install:
 
 script: ./gradlew -q -s -PbuildInfo.build.number=$TRAVIS_BUILD_NUMBER -PbuildInfo.buildUrl=https://travis-ci.org/${TRAVIS_REPO_SLUG}/builds/${TRAVIS_JOB_ID}
   -PbuildInfo.buildAgent.name=$USER -PbuildInfo.principal=$USER --debug --info clean build check artifactoryPublish
-
-env:
-  global:
-    - secure: "See92hJFx83PTyMKGJWMUCXre5zPy/ik8yJzad4df4lIrtUQklr7rQkNzkHqYoHidIUJ59oK8cDTn7Kx6k8XsQr48VdkbGWZAUUyPCxXaX21OvE4pJp4shgDSxJupNbD+4aehpXgDlC4KbTvmqIZVMg3DcYnMRuEgLiHIk3tJhg="
-    - secure: "dQ49VZpcq5GXQJsIVSc616b52OOToyv92IpZBqeHpshROeswKTyV00PEvTiPspk/NTKeK9xUJPNvddgJqADSAGYcQbvEN7v35lOKQtoF2H+wlz5BDFuRbmyFt2DJLMYGZ1MY+lbCZXf7sWZHITh2q9iI0hC/bjcVnadJB6nQrlI="
