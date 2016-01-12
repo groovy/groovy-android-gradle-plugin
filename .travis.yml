@@ -12,5 +12,5 @@ script: ./gradlew -q -s -PbuildInfo.build.number=$TRAVIS_BUILD_NUMBER -PbuildInf
 
 env:
   global:
-  - secure: XmUpm/CUBmjCwTUIRblUyKbYNcZzFBKhufI5y5sQb42zyzqG7QIpgbIdGDC2xulJ672hixeBKtGSJ3fvAHZ6uFhAKXsh0/cPexc2FR14A5O99PP8zL3QGGgaFDOqv2AZ4lnULBmwtqJLqcWBzhQ2q8Uua3J83EUIjK6j8s0Ek10=
-  - secure: cAyM6BbLYSW4p+f1J9LbLNxK9EGpPs+IpeudbSsQ8ZVUNFjykhRYjmHLr8IKwioxRMab+zka1Rn4t5oyJiQ7OILZaDq8WJQxbqDIAJNY5+ysieDYA4OsUauPJZqcccd/iJYnqkBGSHUhskpB+epI+xlDaz4Cm+RGFhoIGZMtMOo=
+    - secure: "See92hJFx83PTyMKGJWMUCXre5zPy/ik8yJzad4df4lIrtUQklr7rQkNzkHqYoHidIUJ59oK8cDTn7Kx6k8XsQr48VdkbGWZAUUyPCxXaX21OvE4pJp4shgDSxJupNbD+4aehpXgDlC4KbTvmqIZVMg3DcYnMRuEgLiHIk3tJhg="
+    - secure: "dQ49VZpcq5GXQJsIVSc616b52OOToyv92IpZBqeHpshROeswKTyV00PEvTiPspk/NTKeK9xUJPNvddgJqADSAGYcQbvEN7v35lOKQtoF2H+wlz5BDFuRbmyFt2DJLMYGZ1MY+lbCZXf7sWZHITh2q9iI0hC/bjcVnadJB6nQrlI="
