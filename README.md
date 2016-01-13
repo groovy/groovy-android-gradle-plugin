@@ -58,7 +58,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.1.3'
+        classpath 'com.android.tools.build:gradle:1.5.0'
         classpath 'org.codehaus.groovy:gradle-groovy-android-plugin:0.3.8-SNAPSHOT'
     }
 }
