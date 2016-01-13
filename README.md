@@ -138,10 +138,9 @@ There is no problem excluding global transformation descriptors because
 those are only used at compile time, never at runtime.
 
 The problem comes with module extensions. Unless you statically
-compile classes using extension modules with @CompileStatic they won't
+compile classes using extension modules with `@CompileStatic` they won't
 be available at runtime and you'll have a runtime exception.
 
-There is an alternative. The
-[`emerger`](https://github.com/kaleidos/emerger) gradle plugin add
+There is an alternative. The [emerger](https://github.com/kaleidos/emerger) gradle plugin add
 those excludes for you and merges all extension module descriptors in
 a single file which will be available at runtime.
