@@ -1,0 +1,18 @@
+apply plugin: 'groovy'
+apply from: '../gradle/versionFile.gradle'
+
+repositories {
+  jcenter()
+}
+
+dependencies {
+  compile localGroovy()
+  compile gradleApi()
+}
+
+sourceSets {
+  main {
+    groovy.srcDirs = ["src/main/groovy", "../gradle-groovy-android-plugin/src/main/groovy"]
+    resources.srcDirs = ["src/main/resources", "../gradle-groovy-android-plugin/src/main/resources"]
+  }
+}

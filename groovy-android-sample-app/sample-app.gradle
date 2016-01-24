@@ -1,0 +1,57 @@
+buildscript {
+  dependencies {
+    classpath 'com.android.tools.build:gradle:1.5.0'
+    classpath 'org.codehaus.groovy:gradle-groovy-android-plugin:0.3.7'
+  }
+}
+
+apply plugin: 'com.android.application'
+apply plugin: 'groovyx.grooid.groovy-android'
+
+repositories {
+  jcenter()
+}
+
+android {
+  compileSdkVersion 23
+  buildToolsVersion "21.1.2"
+
+  defaultConfig {
+    minSdkVersion 16
+    targetSdkVersion 23
+
+    versionCode 1
+    versionName '1.0.0'
+
+    signingConfig signingConfigs.debug
+  }
+
+  signingConfigs {
+    debug {
+      storeFile rootProject.file('debug.keystore')
+      storePassword 'android'
+      keyAlias 'androiddebugkey'
+      keyPassword 'android'
+    }
+  }
+
+  buildTypes {
+    debug {
+      applicationIdSuffix '.dev'
+    }
+  }
+
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_7
+    targetCompatibility JavaVersion.VERSION_1_7
+  }
+
+  lintOptions {
+    disable 'MissingRegistered', // lint can't detect Groovy Activities
+    'InvalidPackage' // lint see references in the grooid jar to unavailable java classes
+  }
+}
+
+dependencies {
+  compile 'org.codehaus.groovy:groovy:2.4.5:grooid'
+}

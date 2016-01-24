@@ -1,5 +1,16 @@
-language: groovy
-jdk: openjdk7
+language: android
+
+android:
+  components:
+    - tools
+    - platform-tools
+    - build-tools-23.0.2
+    - android-23
+    - extra-google-m2repository
+    - extra-android-m2repository
+
+jdk:
+  - oraclejdk8
 
 before_install:
   - cat /etc/hosts # optionally check the content *before*
@@ -8,4 +19,12 @@ before_install:
   - cat /etc/hosts # optionally check the content *after*
 
 script: ./gradlew -q -s -PbuildInfo.build.number=$TRAVIS_BUILD_NUMBER -PbuildInfo.buildUrl=https://travis-ci.org/${TRAVIS_REPO_SLUG}/builds/${TRAVIS_JOB_ID}
-  -PbuildInfo.buildAgent.name=$USER -PbuildInfo.principal=$USER --debug --info clean build check artifactoryPublish
+  -PbuildInfo.buildAgent.name=$USER -PbuildInfo.principal=$USER --debug --info clean assemble check artifactoryPublish
+
+branches:
+  except:
+    - gh-pages
+
+cache:
+  directories:
+    - $HOME/.gradle
