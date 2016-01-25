@@ -99,8 +99,10 @@ class GroovyAndroidPlugin implements Plugin<Project> {
             classpath = javaCompile.classpath
             groovyClasspath = classpath
             doFirst {
-                // update Groovy compilation task's classpath, to use the latest classpath which may be updated by other tasks
-                // !!!Note: groovyCompile should execute after javaCompile
+                // update the classpath of groovyCompile task, to use the latest classpath which may be updated
+                // by other tasks, task "prepareComAndroidSupportSupportV42311Library" for example when using
+                // "com.android.support:support-v4:23.1.1"
+                // see https://github.com/groovy/groovy-android-gradle-plugin/pull/69
                 classpath = javaCompile.classpath
                 groovyClasspath = javaCompile.classpath // maybe don't need update this groovyClasspath
                 // add Android's bootstrap classpath
