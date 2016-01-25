@@ -104,7 +104,7 @@ class GroovyAndroidPlugin implements Plugin<Project> {
                 // "com.android.support:support-v4:23.1.1"
                 // see https://github.com/groovy/groovy-android-gradle-plugin/pull/69
                 classpath = javaCompile.classpath
-                groovyClasspath = javaCompile.classpath // maybe don't need update this groovyClasspath
+                groovyClasspath = classpath
                 // add Android's bootstrap classpath
                 def pluginVersion = getAndroidPluginVersion(project)
                 def runtimeJars = getRuntimeJars(pluginVersion, plugin)
