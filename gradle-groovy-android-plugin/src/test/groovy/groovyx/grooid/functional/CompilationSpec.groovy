@@ -78,7 +78,7 @@ class CompilationSpec extends FunctionalSpec {
       </manifest>
     """.trim()
 
-    file('src/main/res/activity_main.xml') << """
+    file('src/main/res/layout/activity_main.xml') << """
       <?xml version="1.0" encoding="utf-8"?>
       <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
           android:layout_width="match_parent"
@@ -119,6 +119,7 @@ class CompilationSpec extends FunctionalSpec {
     then:
     noExceptionThrown()
     file('build/outputs/apk/test-app-debug.apk').exists()
+    file('build/intermediates/classes/debug/groovyx/grooid/test/MainActivity.class').exists()
 
     where:
     // test common configs that touches the different way to access the classpath
@@ -177,15 +178,16 @@ class CompilationSpec extends FunctionalSpec {
 
     file('src/main/AndroidManifest.xml') << '<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="groovyx.grooid.test"/>'
 
-    file('src/main/groovyx/grooid/test/Test.groovy') << """
+    file('src/main/groovy/groovyx/grooid/test/Test.groovy') << """
       package groovyx.grooid.test
 
+      import android.util.Log
       import groovy.transform.CompileStatic
 
       @CompileStatic
       class Test {
-        static void TestMethod() {
-          println 'test method!'
+        static void testMethod() {
+          Log.d(Test.name, 'Testing')
         }
       }
     """
@@ -197,6 +199,8 @@ class CompilationSpec extends FunctionalSpec {
     noExceptionThrown()
     file('build/outputs/aar/test-lib-debug.aar').exists()
     file('build/outputs/aar/test-lib-release.aar').exists()
+    file('build/intermediates/classes/debug/groovyx/grooid/test/Test.class').exists()
+    file('build/intermediates/classes/release/groovyx/grooid/test/Test.class').exists()
 
     where:
     // test common configs that touches the different way to access the classpath
