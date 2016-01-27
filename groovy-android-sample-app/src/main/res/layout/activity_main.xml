@@ -1,15 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<groovyx.grooid.example.BetterViewAnimator
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 >
 
-  <TextView
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="Hello Groovy!"
-      android:gravity="center"
-      android:textAppearance="?android:textAppearanceLarge"
+  <ImageView
+      android:id="@+id/main_image"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      tools:background="#ff00ff"
   />
 
-</FrameLayout>
+  <ProgressBar
+      android:id="@+id/main_progress"
+      android:indeterminate="true"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+  />
+
+  <Button
+      android:id="@+id/main_load_data"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/load_data"
+      android:layout_gravity="center"
+  />
+
+</groovyx.grooid.example.BetterViewAnimator>

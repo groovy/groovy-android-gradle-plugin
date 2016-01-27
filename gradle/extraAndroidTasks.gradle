@@ -1,0 +1,49 @@
+// add extra android tasks
+def installAll = tasks.create('installAll')
+installAll.description = 'Install all applications.'
+
+project.android.applicationVariants.all { variant ->
+
+  installAll.dependsOn(variant.install)
+  installAll.group = variant.install.group
+
+  def adb = new File(project.android.sdkDirectory as File, '/platform-tools/adb')
+
+  def variantName = variant.name.capitalize()
+  def flavor = variant.flavorName
+  def buildType = variant.buildType.name
+
+  task "run$variantName"(type: Exec, dependsOn: "install$variantName", group: 'run') {
+    description = "Builds and runs the $variantName of the application."
+
+    doFirst {
+      def manifestText = new File(buildDir as File,
+          "intermediates/manifests/full/$flavor/$buildType/AndroidManifest.xml").text
+
+      def manifest = new XmlSlurper().parseText(manifestText)
+      def startActivity = manifest.application.activity.find { node ->
+        node.'intent-filter'.action.find {
+          it.'@android:name' == 'android.intent.action.MAIN'
+        }
+      }.'@android:name'
+
+      commandLine "bash", "-c", "$adb shell am start -n ${manifest.@package}/$startActivity"
+    }
+  }
+
+  task "reinstall$variantName"(type: Exec, group: 'install') {
+    description = "Attempts to install the previous built $variantName apk instead of using install$variantName"
+
+    doFirst {
+      def alignedFile = project.file(buildDir, "/outputs/apk/$project.name-${buildType}.apk")
+      def unalignedFile = project.file(buildDir, "/outputs/apk/$project.name-$buildType-unaligned.apk")
+
+      def apk = alignedFile.exists() ? alignedFile : unalignedFile
+
+      commandLine "bash", "-c", "$adb install -r $apk"
+    }
+  }
+
+  // run lint on any build type when assemble is run
+  variant.assemble.dependsOn "lint$variantName"
+}

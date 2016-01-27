@@ -7,6 +7,7 @@ buildscript {
 
 apply plugin: 'com.android.application'
 apply plugin: 'groovyx.grooid.groovy-android'
+apply from: "$rootDir/gradle/extraAndroidTasks.gradle"
 
 repositories {
   jcenter()
@@ -47,11 +48,11 @@ android {
   }
 
   lintOptions {
-    disable 'MissingRegistered', // lint can't detect Groovy Activities
-    'InvalidPackage' // lint see references in the grooid jar to unavailable java classes
+    disable 'InvalidPackage' // lint sees references in the grooid jar to unavailable java classes
   }
 }
 
 dependencies {
   compile 'org.codehaus.groovy:groovy:2.4.5:grooid'
+  compile 'com.arasthel:swissknife:1.4.0'
 }
