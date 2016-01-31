@@ -18,12 +18,16 @@ class MainActivity extends Activity {
   @InjectView(R.id.main_content) BetterViewAnimator mainContent
   @InjectView(R.id.main_image) ImageView image
 
+  private GroovyImageService imageService
+
   @Override void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState)
     contentView = R.layout.activity_main
     SwissKnife.inject(this)
 
     mainContent.displayedChildId = R.id.main_load_data
+
+    GroovySampleApplication.get(this).groovyImageService
   }
 
   @OnClick(R.id.main_load_data) void loadDataButtonClick() {
@@ -33,11 +37,7 @@ class MainActivity extends Activity {
 
   @OnBackground
   private void loadImage() {
-    def inputStream = new URL(
-        'https://raw.githubusercontent.com/apache/groovy/master/xdocs/images/groovy-logo.png')
-        .newInputStream()
-
-    def drawable = new BitmapDrawable(inputStream)
+    def drawable = new BitmapDrawable(imageService.groovyImageInputStream)
     displayImage(drawable)
   }
 

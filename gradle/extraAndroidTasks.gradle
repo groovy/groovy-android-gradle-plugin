@@ -46,4 +46,7 @@ project.android.applicationVariants.all { variant ->
 
   // run lint on any build type when assemble is run
   variant.assemble.dependsOn "lint$variantName"
+
+  // The default 'assemble' task only applies to normal variants. Add test variants as well.
+  tasks.getByName('assemble').dependsOn variant.assemble
 }
