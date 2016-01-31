@@ -16,7 +16,7 @@ class BetterViewAnimator extends ViewAnimator {
   public void setDisplayedChildId(@IdRes int id) {
     if (displayedChildId == id) return
 
-    def value = (0..childCount).find {
+    def value = (0..(childCount - 1)).find {
       getChildAt(it as int).id == id
     }
 

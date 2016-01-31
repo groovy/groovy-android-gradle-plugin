@@ -25,6 +25,8 @@ android {
     versionName '1.0.0'
 
     signingConfig signingConfigs.debug
+
+    testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
   }
 
   signingConfigs {
@@ -55,4 +57,13 @@ android {
 dependencies {
   compile 'org.codehaus.groovy:groovy:2.4.5:grooid'
   compile 'com.arasthel:swissknife:1.4.0'
+
+  androidTestCompile 'com.android.support.test:runner:0.4.1'
+  androidTestCompile 'com.android.support.test:rules:0.4.1'
+
+  testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
+}
+
+configurations.all {
+  resolutionStrategy.force 'com.android.support:support-annotations:23.0.1'
 }
