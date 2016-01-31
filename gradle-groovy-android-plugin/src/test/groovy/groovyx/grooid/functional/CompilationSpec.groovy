@@ -38,6 +38,8 @@ class CompilationSpec extends FunctionalSpec {
 
           versionCode 1
           versionName '1.0.0'
+
+          testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
         }
 
         buildTypes {
@@ -54,6 +56,16 @@ class CompilationSpec extends FunctionalSpec {
 
       dependencies {
         compile 'org.codehaus.groovy:groovy:2.4.5:grooid'
+
+        androidTestCompile 'com.android.support.test:runner:0.4.1'
+        androidTestCompile 'com.android.support.test:rules:0.4.1'
+
+        testCompile 'junit:junit:4.12'
+      }
+
+      // force unit test types to be assembled too
+      android.testVariants.all { variant ->
+        tasks.getByName('assemble').dependsOn variant.assemble
       }
     """
 
@@ -112,14 +124,48 @@ class CompilationSpec extends FunctionalSpec {
       }
     """
 
-    when:
-    runWithVersion gradleVersion, 'assemble'
+    file('src/androidTest/groovy/groovyx/grooid/test/AndroidTest.groovy') << """
+      package groovyx.grooid.test
 
+      import android.support.test.runner.AndroidJUnit4
+      import android.test.suitebuilder.annotation.SmallTest
+      import groovy.transform.CompileStatic
+      import org.junit.Before
+      import org.junit.Test
+      import org.junit.runner.RunWith
+
+      @RunWith(AndroidJUnit4)
+      @SmallTest
+      @CompileStatic
+      class AndroidTest {
+        @Test void shouldCompile() {
+          assert 5 * 2 == 10
+        }
+      }
+    """
+
+    file('src/test/groovy/groovyx/grooid/test/JvmTest.groovy') << """
+      package groovyx.grooid.test
+
+      import org.junit.Test
+
+      class JvmTest {
+        @Test void shouldCompile() {
+          assert 10 * 2 == 20
+        }
+      }
+    """
+
+    when:
+    runWithVersion gradleVersion, 'assemble', 'test'
 
     then:
     noExceptionThrown()
     file('build/outputs/apk/test-app-debug.apk').exists()
     file('build/intermediates/classes/debug/groovyx/grooid/test/MainActivity.class').exists()
+    file('build/intermediates/classes/androidTest/debug/groovyx/grooid/test/AndroidTest.class').exists()
+    file('build/intermediates/classes/test/debug/groovyx/grooid/test/JvmTest.class').exists()
+    file('build/intermediates/classes/test/release/groovyx/grooid/test/JvmTest.class').exists()
 
     where:
     // test common configs that touches the different way to access the classpath
@@ -173,6 +219,16 @@ class CompilationSpec extends FunctionalSpec {
 
       dependencies {
         compile 'org.codehaus.groovy:groovy:2.4.5:grooid'
+
+        androidTestCompile 'com.android.support.test:runner:0.4.1'
+        androidTestCompile 'com.android.support.test:rules:0.4.1'
+
+        testCompile 'junit:junit:4.12'
+      }
+
+      // force unit test types to be assembled too
+      android.testVariants.all { variant ->
+        tasks.getByName('assemble').dependsOn variant.assemble
       }
     """
 
@@ -192,8 +248,41 @@ class CompilationSpec extends FunctionalSpec {
       }
     """
 
+    file('src/androidTest/groovy/groovyx/grooid/test/AndroidTest.groovy') << """
+      package groovyx.grooid.test
+
+      import android.support.test.runner.AndroidJUnit4
+      import android.test.suitebuilder.annotation.SmallTest
+      import groovy.transform.CompileStatic
+      import org.junit.Before
+      import org.junit.Test
+      import org.junit.runner.RunWith
+
+      @RunWith(AndroidJUnit4)
+      @SmallTest
+      @CompileStatic
+      class AndroidTest {
+        @Test
+        void shouldCompile() {
+          assert 5 == 5
+        }
+      }
+    """
+
+    file('src/test/groovy/groovyx/grooid/test/JvmTest.groovy') << """
+      package groovyx.grooid.test
+
+      import org.junit.Test
+
+      class JvmTest {
+        @Test void shouldCompile() {
+          assert 10 * 2 == 20
+        }
+      }
+    """
+
     when:
-    runWithVersion gradleVersion, 'assemble'
+    runWithVersion gradleVersion, 'assemble', 'test'
 
     then:
     noExceptionThrown()
@@ -201,6 +290,9 @@ class CompilationSpec extends FunctionalSpec {
     file('build/outputs/aar/test-lib-release.aar').exists()
     file('build/intermediates/classes/debug/groovyx/grooid/test/Test.class').exists()
     file('build/intermediates/classes/release/groovyx/grooid/test/Test.class').exists()
+    file('build/intermediates/classes/androidTest/debug/groovyx/grooid/test/AndroidTest.class').exists()
+    file('build/intermediates/classes/test/debug/groovyx/grooid/test/JvmTest.class').exists()
+    file('build/intermediates/classes/test/release/groovyx/grooid/test/JvmTest.class').exists()
 
     where:
     // test common configs that touches the different way to access the classpath
