@@ -9,9 +9,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'groovyx.grooid.groovy-android'
 apply from: "$rootDir/gradle/extraAndroidTasks.gradle"
 
-repositories {
-  jcenter()
-}
+description = 'Sample project showing how to use Goovy on Android - http://www.groovy-lang.org'
 
 android {
   compileSdkVersion 23
