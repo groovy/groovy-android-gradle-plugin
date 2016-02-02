@@ -3,6 +3,10 @@ allprojects {
   group = 'org.codehaus.groovy'
 }
 
+allprojects {
+  apply from: "$rootDir/gradle/credentials.gradle"
+}
+
 subprojects {
   apply from: "$rootDir/gradle/projectLocalRepo.gradle"
   apply from: "$rootDir/gradle/androidGroovyLocal.gradle"
