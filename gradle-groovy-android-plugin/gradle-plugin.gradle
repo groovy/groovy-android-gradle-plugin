@@ -4,6 +4,7 @@ apply from: "$rootDir/gradle/publishing.gradle"
 apply from: "$rootDir/gradle/bintray.gradle"
 apply from: "$rootDir/gradle/artifactory.gradle"
 apply from: "$rootDir/gradle/versionFile.gradle"
+apply from: "$rootDir/gradle/codenarc.gradle"
 
 compileGroovy.options.encoding = 'UTF-8'
 
