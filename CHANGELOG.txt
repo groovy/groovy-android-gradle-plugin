@@ -1,3 +1,6 @@
+0.3.8
+-----
+    * Fixes issues for users not on Java 8. Supports Java 6+
 0.3.7
 -----
     * Support for Android Gradle plugin 1.2.0 - 1.5.0
