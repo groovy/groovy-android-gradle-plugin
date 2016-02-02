@@ -18,6 +18,15 @@ subprojects {
   }
 }
 
+task tagRelease(type: Exec) {
+  def tagString = "RELEASE_${version.replace('.', '_')}"
+  commandLine 'bash', '-c',
+"""
+  git tag $tagString
+  git push -q https://$project.githubToken@github.com/groovy/groovy-android-gradle-plugin.git $tagString > /dev/null 2>&1
+"""
+}
+
 task wrapper(type: Wrapper) {
     gradleVersion = '2.10'
 }

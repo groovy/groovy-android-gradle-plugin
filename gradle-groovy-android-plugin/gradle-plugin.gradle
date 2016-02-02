@@ -34,8 +34,7 @@ test {
   dependsOn install
 }
 
-
 task release {
     description = "Releases a version of the plugin on Artifactory and Bintray"
-    dependsOn artifactoryPublish, bintrayUpload
+    dependsOn artifactoryPublish, bintrayUpload, rootProject.tasks.tagRelease
 }
