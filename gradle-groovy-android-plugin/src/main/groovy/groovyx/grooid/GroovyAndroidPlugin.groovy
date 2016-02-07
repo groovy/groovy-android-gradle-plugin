@@ -10,9 +10,9 @@ import org.gradle.api.tasks.compile.JavaCompile
  * Adds support for building Android applications using the Groovy language.
  */
 class GroovyAndroidPlugin implements Plugin<Project> {
-    private static String LATEST_SUPPORTED = "1.1.0"
+    private static final String LATEST_SUPPORTED = '1.1.0'
 
-    private static List RUNTIMEJARS_COMPAT = [
+    private static final List RUNTIMEJARS_COMPAT = [
             { it.runtimeJars },
             { it.bootClasspath },
             { it.androidBuilder.bootClasspath }, // returns List<File>
@@ -59,7 +59,7 @@ class GroovyAndroidPlugin implements Plugin<Project> {
                 project.logger.debug("Configuring Groovy variant $it.name")
                 def flavors = it.productFlavors*.name
                 def types = it.buildType*.name
-                groovyPlugin.attachGroovyCompileTask(project, plugin, javaCompile, ['main', *flavors, *types])
+                attachGroovyCompileTask(project, plugin, javaCompile, ['main', *flavors, *types])
 
                 // Unit tests (android plugin >= 1.1.0)
                 def unitTestTaskName = javaCompile.name.replaceFirst('Java', 'UnitTestJava')
@@ -74,7 +74,7 @@ class GroovyAndroidPlugin implements Plugin<Project> {
                 project.logger.debug("Configuring Groovy test variant $it.name")
                 def flavors = it.productFlavors*.name
                 def types = it.buildType*.name
-                groovyPlugin.attachGroovyCompileTask(project, plugin, javaCompile, ['androidTest', *flavors, *types])
+                attachGroovyCompileTask(project, plugin, javaCompile, ['androidTest', *flavors, *types])
             }
 
             // Forces Android Studio to recognize groovy folder as code
@@ -137,7 +137,7 @@ class GroovyAndroidPlugin implements Plugin<Project> {
         return LATEST_SUPPORTED
     }
 
-    private static def getRuntimeJars(String pluginVersion, Plugin plugin) {
+    private static getRuntimeJars(String pluginVersion, Plugin plugin) {
         int index = getRuntimeJarsIndex(pluginVersion)
         def fun = RUNTIMEJARS_COMPAT[index]
         return fun(plugin)
