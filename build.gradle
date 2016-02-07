@@ -30,7 +30,3 @@ task tagRelease(type: Exec) {
   git push -q https://$project.githubToken@github.com/groovy/groovy-android-gradle-plugin.git $tagString > /dev/null 2>&1
 """
 }
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '2.10'
-}
