@@ -1,7 +1,27 @@
+/*
+ * Copyright 2016 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package groovyx.grooid.functional
 
 import spock.lang.Unroll
 
+/**
+ * These tests are intented to test all standard functionality of the groovy android plugin
+ * with different android build tools versions.
+ */
 class CompilationSpec extends FunctionalSpec {
 
   @Unroll
@@ -30,7 +50,7 @@ class CompilationSpec extends FunctionalSpec {
 
       android {
         compileSdkVersion 23
-        buildToolsVersion "21.1.2"
+        buildToolsVersion '23.0.2'
 
         defaultConfig {
           minSdkVersion 16
@@ -49,9 +69,20 @@ class CompilationSpec extends FunctionalSpec {
         }
 
         compileOptions {
-          sourceCompatibility $javaVersion
-          targetCompatibility $javaVersion
+          sourceCompatibility '$javaVersion'
+          targetCompatibility '$javaVersion'
         }
+      }
+
+      androidGroovy {
+        options {
+          configure(groovyOptions) {
+            encoding = 'UTF-8'
+            forkOptions.jvmArgs = ['-noverify']
+          }
+          sourceCompatibility = '$javaVersion'
+          targetCompatibility = '$javaVersion'
+         }
       }
 
       dependencies {
@@ -108,6 +139,28 @@ class CompilationSpec extends FunctionalSpec {
       </FrameLayout>
     """.trim()
 
+    // create Java class to ensure this compile correctly along with groovy classes
+    file('src/main/java/groovyx/grooid/test/SimpleJava.java') << """
+      package groovyx.grooid.test;
+
+      public class SimpleJava {
+        public static int getInt() {
+          return 1337;
+        }
+      }
+    """
+
+    // create Java class in groovy folder to ensure this compile correctly along with groovy classes
+    file('src/main/groovy/groovyx/grooid/test/SimpleJavaGroovy.java') << """
+      package groovyx.grooid.test;
+
+      public class SimpleJavaGroovy {
+        public static int getInt() {
+          return 2;
+        }
+      }
+    """
+
     file('src/main/groovy/groovyx/grooid/test/MainActivity.groovy') << """
       package groovyx.grooid.test
 
@@ -120,6 +173,9 @@ class CompilationSpec extends FunctionalSpec {
         @Override void onCreate(Bundle savedInstanceState) {
           super.onCreate(savedInstanceState)
           contentView = R.layout.activity_main
+
+          def someValue = SimpleJava.int
+          def result = someValue * SimpleJavaGroovy.int
         }
       }
     """
@@ -170,9 +226,10 @@ class CompilationSpec extends FunctionalSpec {
     where:
     // test common configs that touches the different way to access the classpath
     javaVersion | androidPluginVersion | gradleVersion
-    '1.6'       | '1.3.0' | '2.2' // android plugin requires 2.2.
-    '1.6'       | '1.5.0' | '2.10'
-    '1.7'       | '1.5.0' | '2.10'
+    '1.6'       | '1.1.0'              | '2.2' // android plugin requires 2.2 here.
+    '1.6'       | '1.3.0'              | '2.2' // android plugin requires 2.2 here.
+    '1.6'       | '1.5.0'              | '2.10'
+    '1.7'       | '1.5.0'              | '2.10'
   }
 
   @Unroll
@@ -201,7 +258,7 @@ class CompilationSpec extends FunctionalSpec {
 
       android {
         compileSdkVersion 23
-        buildToolsVersion "21.1.2"
+        buildToolsVersion '23.0.2'
 
         defaultConfig {
           minSdkVersion 16
@@ -212,8 +269,8 @@ class CompilationSpec extends FunctionalSpec {
         }
 
         compileOptions {
-          sourceCompatibility $javaVersion
-          targetCompatibility $javaVersion
+          sourceCompatibility '$javaVersion'
+          targetCompatibility '$javaVersion'
         }
       }
 
@@ -232,7 +289,32 @@ class CompilationSpec extends FunctionalSpec {
       }
     """
 
-    file('src/main/AndroidManifest.xml') << '<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="groovyx.grooid.test"/>'
+    file('src/main/AndroidManifest.xml') << """
+      <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+        package="groovyx.grooid.test"/>
+    """
+
+    // create Java class to ensure this compiles correctly along with groovy classes
+    file('src/main/java/groovyx/grooid/test/SimpleJava.java') << """
+      package groovyx.grooid.test;
+
+      public class SimpleJava {
+        public static int getInt() {
+          return 1;
+        }
+      }
+    """
+
+    // create Java class in groovy folder to ensure this compile correctly along with groovy classes
+    file('src/main/groovy/groovyx/grooid/test/SimpleJavaGroovy.java') << """
+      package groovyx.grooid.test;
+
+      public class SimpleJavaGroovy {
+        public static int getInt() {
+          return 2;
+        }
+      }
+    """
 
     file('src/main/groovy/groovyx/grooid/test/Test.groovy') << """
       package groovyx.grooid.test
@@ -243,7 +325,7 @@ class CompilationSpec extends FunctionalSpec {
       @CompileStatic
       class Test {
         static void testMethod() {
-          Log.d(Test.name, 'Testing')
+          Log.d(Test.name, "Testing \${SimpleJava.int} \${SimpleJavaGroovy.int}")
         }
       }
     """
@@ -297,8 +379,9 @@ class CompilationSpec extends FunctionalSpec {
     where:
     // test common configs that touches the different way to access the classpath
     javaVersion | androidPluginVersion | gradleVersion
-    '1.6'       | '1.3.0' | '2.2' // android plugin requires 2.2.
-    '1.6'       | '1.5.0' | '2.10'
-    '1.7'       | '1.5.0' | '2.10'
+    '1.6'       | '1.1.0'              | '2.2' // android plugin requires 2.2 here.
+    '1.6'       | '1.3.0'              | '2.2' // android plugin requires 2.2 here.
+    '1.6'       | '1.5.0'              | '2.10'
+    '1.7'       | '1.5.0'              | '2.10'
   }
 }

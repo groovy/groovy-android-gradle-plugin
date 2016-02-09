@@ -1,9 +1,18 @@
-buildscript {
-  dependencies {
-    classpath 'com.android.tools.build:gradle:1.5.0'
-    classpath 'org.codehaus.groovy:gradle-groovy-android-plugin:0.3.8'
-  }
-}
+/*
+ * Copyright 2016 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 apply plugin: 'com.android.application'
 apply plugin: 'groovyx.grooid.groovy-android'
@@ -13,7 +22,7 @@ description = 'Sample project showing how to use Goovy on Android - http://www.g
 
 android {
   compileSdkVersion 23
-  buildToolsVersion "21.1.2"
+  buildToolsVersion '23.0.2'
 
   defaultConfig {
     minSdkVersion 16
@@ -52,15 +61,13 @@ android {
   }
 }
 
-project.androidGroovy {
-    options {
-        configure(groovyOptions) {
-            encoding = 'UTF-8'
-            forkOptions.jvmArgs = ['-noverify'] // maybe necessary if you use Google Play Services
-        }
-        sourceCompatibility = '1.7'
-        targetCompatibility = '1.7'
+androidGroovy {
+  options {
+    configure(groovyOptions) {
+      encoding = 'UTF-8'
+      forkOptions.jvmArgs = ['-noverify'] // maybe necessary if you use Google Play Services
     }
+  }
 }
 
 dependencies {

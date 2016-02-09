@@ -83,32 +83,17 @@ Details can be found on my [blog](http://melix.github.io/blog/2014/06/grooid.htm
 Configuring the Groovy compilation options
 ------------------------------------------
 
-The default language level for both source and target is `1.6`. You can change it by giving some options. Following example changes it to `1.7`. Note that you have to change Android Studio project settings as well if you use the IDE.
+Similarly, the Groovy compilation tasks can be configured in the `androidGroovy` block using the `options` block:
 
 ```groovy
 
-project.androidGroovy {
-    options {
-        sourceCompatibility = '1.7'
-        targetCompatibility = '1.7'
+androidGroovy {
+  options {
+    configure(groovyOptions) {
+      encoding = 'UTF-8'
+      forkOptions.jvmArgs = ['-noverify'] // maybe necessary if you use Google Play Services
     }
-}
-
-```
-
-Similarily, the Groovy compilation tasks can be configured in the `androidGroovy` block using the `options` block:
-
-```groovy
-
-project.androidGroovy {
-    options {
-        configure(groovyOptions) {
-            encoding = 'UTF-8'
-            forkOptions.jvmArgs = ['-noverify'] // maybe necessary if you use Google Play Services
-        }
-        sourceCompatibility = '1.7'
-        targetCompatibility = '1.7'
-    }
+  }
 }
 
 ```

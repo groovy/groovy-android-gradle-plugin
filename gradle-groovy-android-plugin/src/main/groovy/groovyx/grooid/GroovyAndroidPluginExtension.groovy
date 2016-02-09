@@ -1,6 +1,22 @@
+/*
+ * Copyright 2016 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package groovyx.grooid
 
-import org.gradle.api.JavaVersion
+import groovy.transform.PackageScope
 import org.gradle.api.tasks.compile.GroovyCompile
 import org.gradle.util.ConfigureUtil
 
@@ -8,17 +24,17 @@ import org.gradle.util.ConfigureUtil
  * Configuration specific to the Groovy+Android plugin.
  */
 class GroovyAndroidPluginExtension {
-    private Closure<Void> configClosure
-    void options(Closure<Void> config) {
-        configClosure = config
-    }
 
-    void configure(GroovyCompile task) {
-        if (configClosure) {
-            ConfigureUtil.configure(configClosure, task)
-        } else {
-            task.sourceCompatibility = JavaVersion.VERSION_1_6
-            task.targetCompatibility = JavaVersion.VERSION_1_6
-        }
-    }
+  private Closure<Void> configClosure
+
+  void options(Closure<Void> config) {
+      configClosure = config
+  }
+
+  @PackageScope
+  void configure(GroovyCompile task) {
+      if (configClosure) {
+          ConfigureUtil.configure(configClosure, task)
+      }
+  }
 }
