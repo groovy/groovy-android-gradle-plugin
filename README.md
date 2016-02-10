@@ -3,7 +3,7 @@ Groovy language support for Android
 
 [![Build Status](https://travis-ci.org/groovy/groovy-android-gradle-plugin.svg?branch=master)](https://travis-ci.org/groovy/groovy-android-gradle-plugin)
 
-This plugin adds support for writing Android applications using the [Groovy language](http://groovy.codehaus.org).
+This plugin adds support for writing Android applications using the [Groovy language](http://groovy-lang.org).
 
 Usage
 -----
