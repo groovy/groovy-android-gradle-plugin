@@ -8,6 +8,7 @@
       android:allowBackup="true"
       android:label="@string/application_name"
       android:icon="@mipmap/ic_launcher"
+      android:name=".GroovySampleApplication"
   >
     <activity
         android:name=".MainActivity"
