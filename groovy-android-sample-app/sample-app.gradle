@@ -52,6 +52,17 @@ android {
   }
 }
 
+project.androidGroovy {
+    options {
+        configure(groovyOptions) {
+            encoding = 'UTF-8'
+            forkOptions.jvmArgs = ['-noverify'] // maybe necessary if you use Google Play Services
+        }
+        sourceCompatibility = '1.7'
+        targetCompatibility = '1.7'
+    }
+}
+
 dependencies {
   compile 'org.codehaus.groovy:groovy:2.4.5:grooid'
   compile 'com.arasthel:swissknife:1.4.0'
