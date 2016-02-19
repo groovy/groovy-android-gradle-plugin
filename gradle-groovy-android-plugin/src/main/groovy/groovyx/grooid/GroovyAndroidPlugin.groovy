@@ -1,168 +1,212 @@
+/*
+ * Copyright 2016 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package groovyx.grooid
 
+import com.android.build.gradle.BaseExtension
+import com.android.build.gradle.BasePlugin
+import com.android.build.gradle.api.AndroidSourceSet
+import com.android.build.gradle.internal.VariantManager
+import com.android.build.gradle.internal.variant.BaseVariantData
+import com.android.build.gradle.internal.variant.BaseVariantOutputData
+import com.android.builder.model.SourceProvider
+import groovy.transform.CompileStatic
 import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.internal.HasConvention
+import org.gradle.api.internal.file.FileResolver
+import org.gradle.api.internal.tasks.DefaultGroovySourceSet
+import org.gradle.api.tasks.GroovySourceSet
+import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.compile.GroovyCompile
-import org.gradle.api.tasks.compile.JavaCompile
 
 /**
  * Adds support for building Android applications using the Groovy language.
  */
 class GroovyAndroidPlugin implements Plugin<Project> {
-    private static final String LATEST_SUPPORTED = '1.1.0'
 
-    private static final List RUNTIMEJARS_COMPAT = [
-            { it.runtimeJars },
-            { it.bootClasspath },
-            { it.androidBuilder.bootClasspath }, // returns List<File>
-            { it.androidBuilder.getBootClasspath(false) } // returns List<Files>
-    ]
+  public static final String ANDROID_GROOVY_EXTENSION_NAME = 'androidGroovy'
 
-    void apply(Project project) {
-        project.extensions.create("androidGroovy", GroovyAndroidPluginExtension)
+  private Project project
 
-        def plugin = project.plugins.findPlugin('android') ?: project.plugins.findPlugin('android-library')
-        if (!plugin) {
-            throw new GradleException('You must apply the Android plugin or the Android library plugin before using the groovy-android plugin')
-        }
+  @CompileStatic
+  void apply(Project project) {
+    this.project = project
 
-        def groovyPlugin = this
-
-        def isLibraryPlugin = plugin.class.name.endsWith('.LibraryPlugin')
-
-        // IMPORTANT TO TO THIS FIRST, SEE https://groups.google.com/forum/#!msg/adt-dev/vXKzoS4nB1k/zUIa9Rp9SOIJ
-        if (isLibraryPlugin) {
-            project.android.libraryVariants.all {
-                it.productFlavors*.name.each {
-                    project.android.sourceSets.getByName(it).java.srcDir("src/$it/groovy")
-                }
-            }
-        } else {
-            project.android.applicationVariants.all {
-                it.productFlavors*.name.each {
-                    project.android.sourceSets.getByName(it).java.srcDir("src/$it/groovy")
-                }
-            }
-        }
-
-        project.android {
-            packagingOptions {
-                // workaround for http://stackoverflow.com/questions/20673625/android-gradle-plugin-0-7-0-duplicate-files-during-packaging-of-apk
-                exclude 'META-INF/LICENSE.txt'
-                exclude 'META-INF/groovy-release-info.properties'
-            }
-
-            def variants = isLibraryPlugin ? libraryVariants : applicationVariants
-
-            variants.all {
-                project.logger.debug("Configuring Groovy variant $it.name")
-                def flavors = it.productFlavors*.name
-                def types = it.buildType*.name
-                attachGroovyCompileTask(project, plugin, javaCompile, ['main', *flavors, *types])
-
-                // Unit tests (android plugin >= 1.1.0)
-                def unitTestTaskName = javaCompile.name.replaceFirst('Java', 'UnitTestJava')
-                def unitTestCompile = project.getTasksByName(unitTestTaskName, false)
-                if (unitTestCompile) {
-                    unitTestCompile.each { task ->
-                        groovyPlugin.attachGroovyCompileTask(project, plugin, task, ['test'])
-                    }
-                }
-            }
-            testVariants.all {
-                project.logger.debug("Configuring Groovy test variant $it.name")
-                def flavors = it.productFlavors*.name
-                def types = it.buildType*.name
-                attachGroovyCompileTask(project, plugin, javaCompile, ['androidTest', *flavors, *types])
-            }
-
-            // Forces Android Studio to recognize groovy folder as code
-            sourceSets {
-                main.java.srcDir('src/main/groovy')
-                androidTest.java.srcDir('src/androidTest/groovy')
-                test.java.srcDir('src/test/groovy')
-            }
-        }
-        project.logger.info("Detected Android plugin version ${getAndroidPluginVersion(project)}")
+    BasePlugin basePlugin = getAndroidBasePlugin(project)
+    if (!basePlugin) {
+        throw new GradleException('You must apply the Android plugin or the Android library plugin before using the groovy-android plugin')
     }
 
+    project.extensions.create(ANDROID_GROOVY_EXTENSION_NAME, GroovyAndroidPluginExtension)
 
-    private void attachGroovyCompileTask(Project project, Plugin plugin, JavaCompile javaCompile, List<String> srcDirs) {
-        def taskName = javaCompile.name.replace("Java", "Groovy")
-        def srcDirsAsString = srcDirs.collect { "src/$it/groovy" }
-        project.logger.debug("Configuring Groovy compile task [$taskName] with source directories $srcDirsAsString")
-        def groovyCompile = project.task(taskName, type: GroovyCompile) {
-            project.androidGroovy.configure(it)
-            source = srcDirsAsString.collect { project.fileTree(project.file(it)) }
-            destinationDir = javaCompile.destinationDir
-            classpath = javaCompile.classpath
-            groovyClasspath = classpath
-            doFirst {
-                // update the classpath of groovyCompile task, to use the latest classpath which may be updated
-                // by other tasks, task "prepareComAndroidSupportSupportV42311Library" for example when using
-                // "com.android.support:support-v4:23.1.1"
-                // see https://github.com/groovy/groovy-android-gradle-plugin/pull/69
-                classpath = javaCompile.classpath
-                groovyClasspath = classpath
-                // add Android's bootstrap classpath
-                def pluginVersion = getAndroidPluginVersion(project)
-                def runtimeJars = getRuntimeJars(pluginVersion, plugin)
-                classpath = project.files(runtimeJars) + classpath
-            }
-        }
+    androidExtension.sourceSets.all { AndroidSourceSet sourceSet ->
+      if (sourceSet instanceof HasConvention) {
+        def sourceSetName = sourceSet.name
 
-        javaCompile.finalizedBy(groovyCompile)
-        javaCompile.exclude { e ->
-            // this is a dirty hack to work around the fact that we need to declare the source tree as Java sources
-            // for this to be recognized by Android Studio, so here we just exclude the files !
-            def path = e.file.absolutePath
-            // this dirty hack wasn't working on windows because of the different path styles in absolutePath
-            srcDirsAsString.any { path.contains(it) || path.contains(it.replaceAll('/', '\\\\')) }
-        }
+        def sourceSetPath = project.file("src/$sourceSetName/groovy")
+
+        // add so Android Studio will recognize groovy files can see these
+        sourceSet.java.srcDirs.add(sourceSetPath)
+
+        // create groovy source set so we can access it later
+        def groovySourceSet = new DefaultGroovySourceSet(sourceSetName, fileResolver)
+        sourceSet.convention.plugins.put('groovy', groovySourceSet)
+        def groovyDirSet = groovySourceSet.groovy
+        groovyDirSet.srcDir(sourceSetPath)
+
+        project.logger.debug("Created groovy sourceDirectorySet at ${groovyDirSet.srcDirs}")
+      }
     }
 
-    private static String getAndroidPluginVersion(Project project) {
-        def dependency = [project, project.rootProject].collect {
-            it.buildscript.configurations.classpath.resolvedConfiguration.firstLevelModuleDependencies.find {
-                it.moduleGroup == 'com.android.tools.build' && it.moduleName == 'gradle'
-            }
-        }.find()
+    project.afterEvaluate { Project afterProject ->
+      def androidPlugin = getAndroidBasePlugin(afterProject)
+      def variantManager = getVariantManager(androidPlugin)
 
-        if (dependency) {
-            return dependency.moduleVersion
-        }
-        project.logger.warn("Unable to determine Android build tools version from classpath. Falling back to default ($LATEST_SUPPORTED).")
+      processVariantData(variantManager.variantDataList, androidExtension, androidPlugin)
+    }
+  }
 
-        return LATEST_SUPPORTED
+  private void processVariantData(
+      List<BaseVariantData<? extends BaseVariantOutputData>> variantDataList,
+      BaseExtension androidExtension, BasePlugin androidPlugin) {
+
+    variantDataList.each { variantData ->
+      def variantDataName = variantData.name
+      project.logger.debug("Process variant [$variantDataName]")
+
+      def javaTask = getJavaTask(variantData)
+      if (javaTask == null) {
+        project.logger.info("GROOVY: javaTask is missing for $variantDataName, so Groovy files won't be compiled for it")
+        return
+      }
+
+      def taskName = javaTask.name.replace('Java', 'Groovy')
+      def groovyTask = project.tasks.create(taskName, GroovyCompile)
+
+      // do before configuration so users can override
+      groovyTask.targetCompatibility = javaTask.targetCompatibility
+      groovyTask.sourceCompatibility = javaTask.sourceCompatibility
+      project.extensions.getByName(ANDROID_GROOVY_EXTENSION_NAME).configure(groovyTask)
+
+      groovyTask.destinationDir = javaTask.destinationDir
+      groovyTask.description = "Compiles the $variantDataName in groovy."
+      groovyTask.classpath = javaTask.classpath
+      groovyTask.setDependsOn(javaTask.dependsOn)
+      groovyTask.groovyClasspath = javaTask.classpath
+
+      def providers = variantData.variantConfiguration.sortedSourceProviders
+      providers.each { SourceProvider provider ->
+        def javaSrcDirs = (provider as AndroidSourceSet).java.srcDirs
+        def groovySourceSet = (provider as HasConvention).convention.plugins['groovy'] as GroovySourceSet
+        def groovySourceDirectorySet = groovySourceSet.groovy
+        groovyTask.source(groovySourceDirectorySet)
+
+        groovySourceDirectorySet.srcDirs(*(javaSrcDirs as List))
+      }
+
+
+      def additionalSourceFiles = getGeneratedSourceDirs(variantData)
+      groovyTask.source(*additionalSourceFiles)
+
+      groovyTask.doFirst { GroovyCompile task ->
+        def androidRunTime = project.files(getRuntimeJars(androidPlugin, androidExtension))
+        task.classpath = androidRunTime + javaTask.classpath
+        task.groovyClasspath = task.classpath
+      }
+
+      javaTask.finalizedBy(groovyTask)
+    }
+  }
+
+  @CompileStatic
+  private static BasePlugin getAndroidBasePlugin(Project project) {
+    def plugin = project.plugins.findPlugin('android') ?:
+        project.plugins.findPlugin('android-library')
+
+    return plugin as BasePlugin
+  }
+
+  @CompileStatic
+  private BaseExtension getAndroidExtension() {
+    return project.extensions.getByName('android') as BaseExtension
+  }
+
+  private static getRuntimeJars(BasePlugin plugin, BaseExtension extension) {
+    if (plugin.metaClass.getMetaMethod('getRuntimeJarList')) {
+      return plugin.runtimeJarList
+    } else if (extension.metaClass.getMetaMethod('getBootClasspath')) {
+      return extension.bootClasspath
     }
 
-    private static getRuntimeJars(String pluginVersion, Plugin plugin) {
-        int index = getRuntimeJarsIndex(pluginVersion)
-        def fun = RUNTIMEJARS_COMPAT[index]
-        return fun(plugin)
+    return plugin.bootClasspath
+  }
+
+  private static SourceTask getJavaTask(BaseVariantData baseVariantData) {
+    if (baseVariantData.metaClass.getMetaProperty('javaCompileTask')) {
+      return baseVariantData.javaCompileTask
+    } else if (baseVariantData.metaClass.getMetaProperty('javaCompilerTask')) {
+      return baseVariantData.javaCompilerTask
+    }
+    return null
+  }
+
+  @CompileStatic
+  private static List<File> getGeneratedSourceDirs(BaseVariantData variantData) {
+    def getJavaSourcesMethod = variantData.metaClass.getMetaMethod('getJavaSources')
+    if (getJavaSourcesMethod.returnType.metaClass == objectArrayMetaClass) {
+      return variantData.javaSources.findAll { it instanceof File } as List<File>
     }
 
-    private static int getRuntimeJarsIndex(pluginVersion) {
-        switch (pluginVersion) {
-            case ~/0\.9\..*/:
-                return 0
-            case ~/0\.10\..*/:
-            case ~/0\.11\..*/:
-            case ~/0\.12\..*/:
-            case ~/0\.13\..*/:
-            case ~/0\.14\..*/:
-            case ~/1\.0\..*/:
-                return 1
-            case ~/1\.1\..*/:
-            case ~/1\.2\..*/:
-            case ~/1\.3\..*/:
-            case ~/1\.4\.0-beta1*/:
-                return 2
-            case ~/1\.4\.0-beta.*/:
-                return 3
-            default:
-                return RUNTIMEJARS_COMPAT.size() - 1
-        }
+    List<File> result = []
+
+    if (variantData.scope.generateRClassTask != null) {
+      result << variantData.scope.RClassSourceOutputDir
     }
+
+    if (variantData.scope.generateBuildConfigTask != null) {
+      result << variantData.scope.buildConfigSourceOutputDir
+    }
+
+    if (variantData.scope.getAidlCompileTask() != null) {
+      result << variantData.scope.aidlSourceOutputDir
+    }
+
+    if (variantData.scope.globalScope.extension.dataBinding.enabled) {
+      result << variantData.scope.classOutputForDataBinding
+    }
+
+    if (!variantData.variantConfiguration.renderscriptNdkModeEnabled
+        && variantData.scope.renderscriptCompileTask != null) {
+      result << variantData.scope.renderscriptSourceOutputDir
+    }
+
+    return result
+  }
+
+  private FileResolver getFileResolver() {
+    return project.fileResolver
+  }
+
+  private static VariantManager getVariantManager(BasePlugin plugin) {
+    return plugin.variantManager
+  }
+
+  private static MetaClass getObjectArrayMetaClass() {
+    return Object[].metaClass
+  }
 }
