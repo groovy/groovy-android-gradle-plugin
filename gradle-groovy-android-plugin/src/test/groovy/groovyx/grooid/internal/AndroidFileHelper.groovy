@@ -14,27 +14,17 @@
  * limitations under the License.
  */
 
-package groovyx.grooid
+package groovyx.grooid.internal
 
-import groovy.transform.PackageScope
-import org.gradle.api.tasks.compile.GroovyCompile
-import org.gradle.util.ConfigureUtil
-
-/**
- * Configuration specific to the Groovy+Android plugin.
- */
-class GroovyAndroidPluginExtension {
-
-  private Closure<Void> configClosure
-
-  void options(Closure<Void> config) {
-      configClosure = config
-  }
-
-  @PackageScope
-  void configure(GroovyCompile task) {
-      if (configClosure) {
-          ConfigureUtil.configure(configClosure, task)
-      }
+trait AndroidFileHelper implements FileHelper {
+  /**
+   * Creates a simple android manifest that will make the Android Plugin happy.
+   */
+  void createSimpleAndroidManifest() {
+    file('src/main/AndroidManifest.xml') << """
+     <?xml version="1.0" encoding="utf-8"?>
+      <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="groovyx.grooid.test" />
+    """.trim()
   }
 }

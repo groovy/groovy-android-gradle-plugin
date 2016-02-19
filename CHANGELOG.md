@@ -1,7 +1,9 @@
 0.3.9
 -----
-    * GroovyCompile's targetCompatibility and sourceCompatibility are automatically set based off of
-      JavaCompile's
+    * GroovyCompile's targetCompatibility and sourceCompatibility are automatically set 
+      based off of JavaCompile's
+    * Custom groovy sourceSets added. Java directories may be used to java be joint 
+      compiled with groovy 
 0.3.8
 -----
     * Fixes issues for users not on Java 8. Supports Java 6+
