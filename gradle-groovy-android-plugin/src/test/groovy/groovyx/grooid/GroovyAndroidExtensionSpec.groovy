@@ -16,6 +16,7 @@
 
 package groovyx.grooid
 
+import groovyx.grooid.internal.AndroidPluginHelper
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.api.tasks.compile.GroovyCompile
@@ -24,24 +25,22 @@ import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
-import static groovyx.grooid.GroovyAndroidPlugin.ANDROID_GROOVY_EXTENSION_NAME
 
-class GroovyAndroidPluginExtensionSpec extends Specification {
+class GroovyAndroidExtensionSpec extends Specification implements AndroidPluginHelper {
   @Rule TemporaryFolder dir
 
   GroovyCompile groovyTask
   Project project
-  GroovyAndroidPluginExtension extension
 
   def setup() {
     project = ProjectBuilder.builder().withProjectDir(dir.root).build()
-    extension = project.extensions.create(ANDROID_GROOVY_EXTENSION_NAME, GroovyAndroidPluginExtension)
-    groovyTask = project.tasks.create('Test Groovy Compile', GroovyCompile)
-    project.evaluate()
+    applyAppPlugin()
   }
 
   def "should set options on groovy compile"() {
     given:
+    groovyTask = project.tasks.create('Test Groovy Compile', GroovyCompile)
+
     project.androidGroovy {
       options { // must be explicit here as spock does not resolve like gradle
         project.configure(groovyTask.groovyOptions) {
@@ -61,5 +60,31 @@ class GroovyAndroidPluginExtensionSpec extends Specification {
     groovyTask.targetCompatibility == '1.7'
     groovyTask.groovyOptions.encoding == 'UTF-8'
     groovyTask.groovyOptions.forkOptions.jvmArgs == ['-noverify']
+  }
+
+  def "should add groovy source directories to groovy extension"() {
+    given:
+    def expectedSourceDirs = ['test/groovy/test', 'src/main/groovy']
+
+    when:
+    project.androidGroovy {
+      sourceSets {
+        main {
+          groovy {
+            srcDirs = expectedSourceDirs
+          }
+        }
+      }
+    }
+
+    def srcDirs = extension.sourceSetsContainer.getByName('main').groovy.srcDirs
+
+    // this is to get around a weird bug where absolute path of dir.root does not actually
+    // return the fill path missing the /private folder at the beginning (OSX).
+    def sourcesDirStrings = srcDirs.collect{ it.path.split('/')[-3..-1].join('/') }
+
+    then:
+    noExceptionThrown()
+    sourcesDirStrings == expectedSourceDirs
   }
 }

@@ -29,10 +29,12 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.internal.HasConvention
 import org.gradle.api.internal.file.FileResolver
-import org.gradle.api.internal.tasks.DefaultGroovySourceSet
 import org.gradle.api.tasks.GroovySourceSet
 import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.compile.GroovyCompile
+import org.gradle.internal.reflect.Instantiator
+
+import javax.inject.Inject
 
 /**
  * Adds support for building Android applications using the Groovy language.
@@ -42,8 +44,14 @@ class GroovyAndroidPlugin implements Plugin<Project> {
   public static final String ANDROID_GROOVY_EXTENSION_NAME = 'androidGroovy'
 
   private Project project
+  private GroovyAndroidExtension extension
 
-  @CompileStatic
+  private final Instantiator instantiator
+
+  @Inject GroovyAndroidPlugin(Instantiator instantiator) {
+    this.instantiator = instantiator
+  }
+
   void apply(Project project) {
     this.project = project
 
@@ -52,7 +60,7 @@ class GroovyAndroidPlugin implements Plugin<Project> {
         throw new GradleException('You must apply the Android plugin or the Android library plugin before using the groovy-android plugin')
     }
 
-    project.extensions.create(ANDROID_GROOVY_EXTENSION_NAME, GroovyAndroidPluginExtension)
+    extension = project.extensions.create(ANDROID_GROOVY_EXTENSION_NAME, GroovyAndroidExtension, project, instantiator, fileResolver)
 
     androidExtension.sourceSets.all { AndroidSourceSet sourceSet ->
       if (sourceSet instanceof HasConvention) {
@@ -64,12 +72,12 @@ class GroovyAndroidPlugin implements Plugin<Project> {
         sourceSet.java.srcDirs.add(sourceSetPath)
 
         // create groovy source set so we can access it later
-        def groovySourceSet = new DefaultGroovySourceSet(sourceSetName, fileResolver)
-        sourceSet.convention.plugins.put('groovy', groovySourceSet)
+        def groovySourceSet = extension.sourceSetsContainer.maybeCreate(sourceSetName)
+        sourceSet.convention.plugins['groovy'] = groovySourceSet
         def groovyDirSet = groovySourceSet.groovy
         groovyDirSet.srcDir(sourceSetPath)
 
-        project.logger.debug("Created groovy sourceDirectorySet at ${groovyDirSet.srcDirs}")
+        project.logger.debug("Created groovy sourceDirectorySet at $groovyDirSet.srcDirs")
       }
     }
 
@@ -91,17 +99,17 @@ class GroovyAndroidPlugin implements Plugin<Project> {
 
       def javaTask = getJavaTask(variantData)
       if (javaTask == null) {
-        project.logger.info("GROOVY: javaTask is missing for $variantDataName, so Groovy files won't be compiled for it")
+        project.logger.info("javaTask is missing for $variantDataName, so Groovy files won't be compiled for it")
         return
       }
 
       def taskName = javaTask.name.replace('Java', 'Groovy')
       def groovyTask = project.tasks.create(taskName, GroovyCompile)
 
-      // do before configuration so users can override
+      // do before configuration so users can override / don't break backwards compatibility
       groovyTask.targetCompatibility = javaTask.targetCompatibility
       groovyTask.sourceCompatibility = javaTask.sourceCompatibility
-      project.extensions.getByName(ANDROID_GROOVY_EXTENSION_NAME).configure(groovyTask)
+      extension.configure(groovyTask)
 
       groovyTask.destinationDir = javaTask.destinationDir
       groovyTask.description = "Compiles the $variantDataName in groovy."
@@ -111,12 +119,16 @@ class GroovyAndroidPlugin implements Plugin<Project> {
 
       def providers = variantData.variantConfiguration.sortedSourceProviders
       providers.each { SourceProvider provider ->
-        def javaSrcDirs = (provider as AndroidSourceSet).java.srcDirs
-        def groovySourceSet = (provider as HasConvention).convention.plugins['groovy'] as GroovySourceSet
+        def groovySourceSet = provider.convention.plugins['groovy'] as GroovySourceSet
         def groovySourceDirectorySet = groovySourceSet.groovy
         groovyTask.source(groovySourceDirectorySet)
 
-        groovySourceDirectorySet.srcDirs(*(javaSrcDirs as List))
+        // Exclude any java files that may be included in both java and groovy source sets
+        javaTask.exclude { file ->
+          project.logger.debug("Exclude java file $file.file")
+          project.logger.debug("Eexlude against groovy files $groovySourceSet.groovy.files")
+          file.file in groovySourceSet.groovy.files
+        }
       }
 
 

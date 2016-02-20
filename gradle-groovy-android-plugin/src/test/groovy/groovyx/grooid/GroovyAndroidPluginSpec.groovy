@@ -16,10 +16,9 @@
 
 package groovyx.grooid
 
-import com.android.build.gradle.AppPlugin
-import com.android.build.gradle.LibraryPlugin
 import com.android.build.gradle.api.AndroidSourceSet
-import groovyx.grooid.internal.FileHelper
+import groovyx.grooid.internal.AndroidFileHelper
+import groovyx.grooid.internal.AndroidPluginHelper
 import org.gradle.api.Project
 import org.gradle.api.tasks.GroovySourceSet
 import org.gradle.testfixtures.ProjectBuilder
@@ -30,7 +29,7 @@ import spock.lang.Unroll
 
 import static groovyx.grooid.GroovyAndroidPlugin.ANDROID_GROOVY_EXTENSION_NAME
 
-class GroovyAndroidPluginSpec extends Specification implements FileHelper {
+class GroovyAndroidPluginSpec extends Specification implements AndroidFileHelper, AndroidPluginHelper {
 
   @Rule TemporaryFolder dir
 
@@ -90,11 +89,7 @@ class GroovyAndroidPluginSpec extends Specification implements FileHelper {
     }
 
     // Android Plugin Reqires this file to exist with parsable XML
-    file('src/main/AndroidManifest.xml') << """
-     <?xml version="1.0" encoding="utf-8"?>
-      <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="groovyx.grooid.test" />
-    """.trim()
+    createSimpleAndroidManifest()
 
     when:
     project.evaluate()
@@ -125,11 +120,7 @@ class GroovyAndroidPluginSpec extends Specification implements FileHelper {
     }
 
     // Android Plugin Reqires this file to exist with parsable XML
-    file('src/main/AndroidManifest.xml') << """
-     <?xml version="1.0" encoding="utf-8"?>
-      <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="groovyx.grooid.test" />
-    """.trim()
+    createSimpleAndroidManifest()
 
     when:
     project.evaluate()
@@ -145,16 +136,6 @@ class GroovyAndroidPluginSpec extends Specification implements FileHelper {
     version | _
     '1.6'   | _
     '1.7'   | _
-  }
-
-  private void applyAppPlugin() {
-    project.pluginManager.apply(AppPlugin)
-    project.pluginManager.apply(GroovyAndroidPlugin)
-  }
-
-  private void applyLibraryPlugin() {
-    project.pluginManager.apply(LibraryPlugin)
-    project.pluginManager.apply(GroovyAndroidPlugin)
   }
 }
 
