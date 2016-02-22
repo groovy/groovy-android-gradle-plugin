@@ -22,8 +22,6 @@ apply from: "$rootDir/gradle/artifactory.gradle"
 apply from: "$rootDir/gradle/versionFile.gradle"
 apply from: "$rootDir/gradle/codenarc.gradle"
 
-compileGroovy.options.encoding = 'UTF-8'
-
 description = 'Groovy support for Android with the Gradle build tool - http://www.groovy-lang.org'
 
 sourceCompatibility = JavaVersion.VERSION_1_6
@@ -33,7 +31,7 @@ dependencies {
   compile localGroovy()
   compile gradleApi()
 
-  compile 'com.android.tools.build:gradle:1.5.0'
+  compile "com.android.tools.build:gradle:$androidPluginVersion"
 
   testCompile gradleTestKit()
   testCompile 'org.spockframework:spock-core:1.0-groovy-2.4', {
@@ -41,11 +39,27 @@ dependencies {
   }
 }
 
-test {
-  dependsOn install
+task fullTest(type: Test) {
+  description = 'Run all tests - this will run all compilation specs with all the different android plugin versions'
+
+  dependsOn check
+
+  systemProperty 'allTests', true
 }
 
 task release {
     description = 'Releases a version of the plugin on Artifactory and Bintray'
     dependsOn artifactoryPublish, bintrayUpload, rootProject.tasks.tagRelease
+}
+
+tasks.withType(Test) {
+  systemProperty 'androidPluginVersion', androidPluginVersion
+
+  environment "GRADLE_USER_HOME", gradle.gradleUserHomeDir
+
+  dependsOn install
+
+  testLogging {
+    exceptionFormat "full"
+  }
 }

@@ -15,10 +15,9 @@
  */
 
 /*
-    For projects using the groovy-android-gradle-plugin, replace the module dependencies with project dependencies
-    so that they build against the source instead of the published versions.
+  For projects using the groovy-android-gradle-plugin, replace the module dependencies with project dependencies
+  so that they build against the source instead of the published versions.
  */
-
 import groovyx.grooid.GroovyAndroidPlugin
 
 plugins.matching { it instanceof GroovyAndroidPlugin }.all {
