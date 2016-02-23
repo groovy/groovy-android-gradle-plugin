@@ -45,6 +45,10 @@ subprojects {
   }
 }
 
+ext {
+  androidPluginVersion = androidPluginVersion
+}
+
 task tagRelease(type: Exec) {
   def tagString = "RELEASE_${version.replace('.', '_')}"
   commandLine 'bash', '-c',
@@ -52,4 +56,14 @@ task tagRelease(type: Exec) {
   git tag $tagString
   git push -q https://$project.githubToken@github.com/groovy/groovy-android-gradle-plugin.git $tagString > /dev/null 2>&1
 """
+}
+
+/**
+ * Return the Android Gradle Plugin version for the buildscript so it may be used through out the project, and only
+ * one place to set this value.
+ */
+String getAndroidPluginVersion() {
+  return project.buildscript.configurations.classpath.resolvedConfiguration.firstLevelModuleDependencies.find {
+    it.moduleGroup == 'com.android.tools.build' && it.moduleName == 'gradle'
+  }.moduleVersion
 }

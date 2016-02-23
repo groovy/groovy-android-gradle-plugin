@@ -14,28 +14,14 @@
  * limitations under the License.
  */
 
-apply plugin: 'groovy'
-apply plugin: 'idea'
-apply from: '../gradle/versionFile.gradle'
+package groovyx.grooid.internal
 
-ext {
-  androidVersion = '1.5.0'
-}
+abstract class TestProperties {
+  static boolean isAllTests() {
+    return System.getProperty('allTests', 'false') == 'true'
+  }
 
-repositories {
-  jcenter()
-}
-
-dependencies {
-  compile localGroovy()
-  compile gradleApi()
-
-  compile "com.android.tools.build:gradle:$androidVersion"
-}
-
-sourceSets {
-  main {
-    groovy.srcDirs = ['src/main/groovy', '../gradle-groovy-android-plugin/src/main/groovy']
-    resources.srcDirs = ['src/main/resources', '../gradle-groovy-android-plugin/src/main/resources']
+  static String getAndroidPluginVersion() {
+    return System.getProperty('androidPluginVersion')
   }
 }

@@ -64,8 +64,7 @@ android {
 androidGroovy {
   options {
     configure(groovyOptions) {
-      encoding = 'UTF-8'
-      forkOptions.jvmArgs = ['-noverify'] // maybe necessary if you use Google Play Services
+      forkOptions.jvmArgs = ['-noverify']
     }
   }
 }

@@ -27,7 +27,7 @@ import spock.lang.Specification
 
 abstract class FunctionalSpec extends Specification implements FileHelper {
 
-  static final String PLUGIN_VERSION = FunctionalSpec.classLoader.getResource("groovyx/gradle-groovy-android-plugin-version.txt").text.trim()
+  static final String PLUGIN_VERSION = FunctionalSpec.classLoader.getResource('groovyx/gradle-groovy-android-plugin-version.txt').text.trim()
 
   @Rule TemporaryFolder dir
 
@@ -50,11 +50,11 @@ abstract class FunctionalSpec extends Specification implements FileHelper {
   }
 
   private static File getTestKitDir() {
-    def gradleUserHome = System.getenv("GRADLE_USER_HOME")
+    def gradleUserHome = System.getenv('GRADLE_USER_HOME')
     if (!gradleUserHome) {
-      gradleUserHome = new File(System.getProperty("user.home"), ".gradle").absolutePath
+      gradleUserHome = new File(System.getProperty('user.home'), '.gradle').absolutePath
     }
-    return new File(gradleUserHome, "testkit")
+    return new File(gradleUserHome, 'testkit')
   }
 
   File getLocalRepo() {

@@ -16,13 +16,19 @@
 
 package groovyx.grooid.functional
 
-import static groovyx.grooid.internal.TestProperties.androidPluginVersion
+import spock.lang.IgnoreIf
+import spock.lang.Unroll
+
+import static groovyx.grooid.internal.TestProperties.allTests
 
 /**
- * These tests are intended to test all standard functionality of the groovy android plugin.
+ * Complete test suite to ensure the plugin works with the different versions of android gradle plugin.
+ * This will only be run if the system property of 'allTests' is set to true
  */
-class CompilationSpec extends FunctionalSpec {
+class FullCompilationSpec extends FunctionalSpec {
 
+  @Unroll
+  @IgnoreIf({ !allTests })
   def "should compile android app with java:#javaVersion, android plugin:#androidPluginVersion"() {
     given:
     file("settings.gradle") << "rootProject.name = 'test-app'"
@@ -67,17 +73,20 @@ class CompilationSpec extends FunctionalSpec {
         }
 
         compileOptions {
-          sourceCompatibility '1.7'
-          targetCompatibility '1.7'
+          sourceCompatibility '$javaVersion'
+          targetCompatibility '$javaVersion'
         }
       }
 
       androidGroovy {
         options {
           configure(groovyOptions) {
+            encoding = 'UTF-8'
             forkOptions.jvmArgs = ['-noverify']
           }
-        }
+          sourceCompatibility = '$javaVersion'
+          targetCompatibility = '$javaVersion'
+         }
       }
 
       dependencies {
@@ -208,7 +217,7 @@ class CompilationSpec extends FunctionalSpec {
     """
 
     when:
-    run 'assemble', 'test'
+    runWithVersion gradleVersion, 'assemble', 'test'
 
     then:
     noExceptionThrown()
@@ -217,8 +226,18 @@ class CompilationSpec extends FunctionalSpec {
     file('build/intermediates/classes/androidTest/debug/groovyx/grooid/test/AndroidTest.class').exists()
     file('build/intermediates/classes/test/debug/groovyx/grooid/test/JvmTest.class').exists()
     file('build/intermediates/classes/test/release/groovyx/grooid/test/JvmTest.class').exists()
+
+    where:
+    // test common configs that touches the different way to access the classpath
+    javaVersion | androidPluginVersion | gradleVersion
+    '1.6'       | '1.1.0'              | '2.2' // android plugin requires 2.2 here.
+    '1.6'       | '1.3.0'              | '2.2' // android plugin requires 2.2 here.
+    '1.6'       | '1.5.0'              | '2.10'
+    '1.7'       | '1.5.0'              | '2.10'
   }
 
+  @Unroll
+  @IgnoreIf({ !allTests })
   def "should compile android library with java:#javaVersion and android plugin:#androidPluginVersion"() {
     given:
     file("settings.gradle") << "rootProject.name = 'test-lib'"
@@ -255,8 +274,8 @@ class CompilationSpec extends FunctionalSpec {
         }
 
         compileOptions {
-          sourceCompatibility '1.7'
-          targetCompatibility '1.7'
+          sourceCompatibility '$javaVersion'
+          targetCompatibility '$javaVersion'
         }
       }
 
@@ -350,7 +369,7 @@ class CompilationSpec extends FunctionalSpec {
     """
 
     when:
-    run 'assemble', 'test'
+    runWithVersion gradleVersion, 'assemble', 'test'
 
     then:
     noExceptionThrown()
@@ -361,5 +380,13 @@ class CompilationSpec extends FunctionalSpec {
     file('build/intermediates/classes/androidTest/debug/groovyx/grooid/test/AndroidTest.class').exists()
     file('build/intermediates/classes/test/debug/groovyx/grooid/test/JvmTest.class').exists()
     file('build/intermediates/classes/test/release/groovyx/grooid/test/JvmTest.class').exists()
+
+    where:
+    // test common configs that touches the different way to access the classpath
+    javaVersion | androidPluginVersion | gradleVersion
+    '1.6'       | '1.1.0'              | '2.2' // android plugin requires 2.2 here.
+    '1.6'       | '1.3.0'              | '2.2' // android plugin requires 2.2 here.
+    '1.6'       | '1.5.0'              | '2.10'
+    '1.7'       | '1.5.0'              | '2.10'
   }
 }
