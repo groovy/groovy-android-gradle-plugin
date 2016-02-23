@@ -50,6 +50,9 @@ ext {
 }
 
 task tagRelease(type: Exec) {
+  description = 'Tag the release and push it to github'
+  group = 'Publishing'
+
   def tagString = "RELEASE_${version.replace('.', '_')}"
   commandLine 'bash', '-c',
 """
