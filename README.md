@@ -119,6 +119,20 @@ androidGroovy {
 
 See [GroovyCompile](https://docs.gradle.org/current/dsl/org.gradle.api.tasks.compile.GroovyCompile.html) for more options.
 
+Only Use GroovyC
+----------------
+
+For integration with previous projects or for working with generated files (such as BuildConfg)
+it may be desirable to only have GroovyC run in order to have Java files reference Groovy files.
+In order to do this the flag `skipJavaC` in the androidGroovy block should be set to true.
+
+```groovy
+androidGroovy {
+  skipJavaC = true
+}
+```
+
+This will remove all the files from the JavaC tasks and them all to GroovyC.
 
 Android `packagingOptions`
 --------------------------

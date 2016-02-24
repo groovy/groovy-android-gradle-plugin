@@ -124,7 +124,7 @@ class GroovyAndroidPluginSpec extends Specification implements AndroidFileHelper
 
     when:
     project.evaluate()
-    def groovyTasks = project.tasks.findAll { it.name.contains('Groovy') }
+    def groovyTasks = project.tasks.findAll { it.name.contains('Groovyc') }
 
     then:
     groovyTasks.each { task ->

@@ -129,6 +129,13 @@ class GroovyAndroidPlugin implements Plugin<Project> {
           project.logger.debug("Eexlude against groovy files $groovySourceSet.groovy.files")
           file.file in groovySourceSet.groovy.files
         }
+
+        if (extension.skipJavaC) {
+          groovyTask.source(*(javaTask.source.files as List))
+          javaTask.exclude {
+            true
+          }
+        }
       }
 
 

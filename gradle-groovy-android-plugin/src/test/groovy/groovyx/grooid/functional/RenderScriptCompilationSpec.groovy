@@ -16,12 +16,17 @@
 
 package groovyx.grooid.functional
 
+import spock.lang.IgnoreIf
+
 import javax.imageio.ImageIO
 import java.awt.image.BufferedImage
+
+import static groovyx.grooid.internal.TestProperties.allTests
 
 /**
  * Ensure that projects with renderscript compile properly.
  */
+@IgnoreIf({ !allTests})
 class RenderScriptCompilationSpec extends FunctionalSpec {
 
   def "should compile with renderscript"() {

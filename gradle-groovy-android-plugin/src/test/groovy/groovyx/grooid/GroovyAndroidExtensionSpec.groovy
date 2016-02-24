@@ -16,6 +16,7 @@
 
 package groovyx.grooid
 
+import groovyx.grooid.internal.AndroidFileHelper
 import groovyx.grooid.internal.AndroidPluginHelper
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
@@ -25,11 +26,10 @@ import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
+class GroovyAndroidExtensionSpec extends Specification implements AndroidPluginHelper, AndroidFileHelper {
 
-class GroovyAndroidExtensionSpec extends Specification implements AndroidPluginHelper {
   @Rule TemporaryFolder dir
 
-  GroovyCompile groovyTask
   Project project
 
   def setup() {
@@ -39,7 +39,7 @@ class GroovyAndroidExtensionSpec extends Specification implements AndroidPluginH
 
   def "should set options on groovy compile"() {
     given:
-    groovyTask = project.tasks.create('Test Groovy Compile', GroovyCompile)
+    def groovyTask = project.tasks.create('Test Groovy Compile', GroovyCompile)
 
     project.androidGroovy {
       options { // must be explicit here as spock does not resolve like gradle
@@ -86,5 +86,36 @@ class GroovyAndroidExtensionSpec extends Specification implements AndroidPluginH
     then:
     noExceptionThrown()
     sourcesDirStrings == expectedSourceDirs
+  }
+
+  def "should add all sources to groovyCompile"() {
+    given:
+    // Android Plugin Requires this file to exist with parsable XML
+    createSimpleAndroidManifest()
+    file('src/main/java/Java.java') << ''
+    file('src/main/groovy/Groovy.groovy') << ''
+    file('src/test/java/TestJava.java') << ''
+    file('src/test/groovy/TestGroovy.groovy') << ''
+    file('src/androidTest/java/AndroidTestJava.java') << ''
+    file('src/androidTest/groovy/AndroidTestGroovy.groovy') << ''
+
+    project.android {
+      buildToolsVersion '21.1.2'
+      compileSdkVersion 23
+    }
+
+    project.androidGroovy {
+      skipJavaC = true
+    }
+
+    when:
+    project.evaluate()
+    def groovyTasks = project.tasks.findAll { it.name.contains('Groovyc') }
+    def javaTasks = project.tasks.findAll { it.name.contains('Javac') }
+
+    then:
+    javaTasks.each { assert it.source.empty }
+    groovyTasks.each { assert !it.source.empty }
+    extension.skipJavaC
   }
 }

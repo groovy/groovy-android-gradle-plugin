@@ -25,10 +25,10 @@ import static groovyx.grooid.internal.TestProperties.allTests
  * Complete test suite to ensure the plugin works with the different versions of android gradle plugin.
  * This will only be run if the system property of 'allTests' is set to true
  */
+@IgnoreIf({ !allTests })
 class FullCompilationSpec extends FunctionalSpec {
 
   @Unroll
-  @IgnoreIf({ !allTests })
   def "should compile android app with java:#javaVersion, android plugin:#androidPluginVersion"() {
     given:
     file("settings.gradle") << "rootProject.name = 'test-app'"
@@ -237,7 +237,6 @@ class FullCompilationSpec extends FunctionalSpec {
   }
 
   @Unroll
-  @IgnoreIf({ !allTests })
   def "should compile android library with java:#javaVersion and android plugin:#androidPluginVersion"() {
     given:
     file("settings.gradle") << "rootProject.name = 'test-lib'"
