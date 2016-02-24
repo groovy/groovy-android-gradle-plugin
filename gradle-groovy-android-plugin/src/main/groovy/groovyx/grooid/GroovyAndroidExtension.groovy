@@ -32,9 +32,19 @@ import org.gradle.util.ConfigureUtil
  */
 class GroovyAndroidExtension {
 
-  private Closure<Void> configClosure
+  /**
+   * Setting this flag to true will have only groovyc run instead of javac then groovyc run
+   * This will effectively have all code (java and groovy) be joint compiled. This is
+   * useful for adding groovy into older projects, and for having generated
+   * code be able to utilize groovy code.
+   *
+   * @param skipJavaC
+   */
+  boolean skipJavaC
 
   final NamedDomainObjectContainer<GroovySourceSet> sourceSetsContainer
+
+  private Closure<Void> configClosure
 
   GroovyAndroidExtension(Project project, Instantiator instantiator, FileResolver fileResolver) {
     sourceSetsContainer = project.container(GroovySourceSet, new AndroidGroovySourceSetFactory(instantiator, fileResolver))
