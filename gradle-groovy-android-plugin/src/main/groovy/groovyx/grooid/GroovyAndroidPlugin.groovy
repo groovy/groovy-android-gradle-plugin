@@ -69,7 +69,7 @@ class GroovyAndroidPlugin implements Plugin<Project> {
         def sourceSetPath = project.file("src/$sourceSetName/groovy")
 
         // add so Android Studio will recognize groovy files can see these
-        sourceSet.java.srcDirs.add(sourceSetPath)
+        sourceSet.java.srcDir(sourceSetPath)
 
         // create groovy source set so we can access it later
         def groovySourceSet = extension.sourceSetsContainer.maybeCreate(sourceSetName)
