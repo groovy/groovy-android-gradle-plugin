@@ -159,7 +159,6 @@ class SkipJavaCSpec extends FunctionalSpec {
     """
 
     when:
-    copyTestDir()
     run 'assemble'
 
     then:
