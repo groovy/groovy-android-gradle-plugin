@@ -43,7 +43,7 @@ class MainActivity extends Activity {
 
     mainContent.displayedChildId = R.id.main_load_data
 
-    GroovySampleApplication.get(this).groovyImageService
+    imageService = GroovySampleApplication.get(this).groovyImageService
   }
 
   @OnClick(R.id.main_load_data) void loadDataButtonClick() {
