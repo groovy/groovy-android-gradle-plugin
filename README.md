@@ -64,7 +64,7 @@ Where to put sources?
 ---------------------
 
 Groovy sources may be placed in `src/main/groovy`, `src/test/groovy`, `src/androidTest/groovy` and any `src/${buildVariant}/groovy` 
-configured buy default. A default project will have the `release` and `debug` variants but these can be configured with build
+configured by default. A default project will have the `release` and `debug` variants but these can be configured with build
 types and flavors. See the [android plugin docs](https://sites.google.com/a/android.com/tools/tech-docs/new-build-system/user-guide#TOC-Build-Types)
 for more about configuring different build variants.
 
