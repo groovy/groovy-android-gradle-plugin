@@ -67,14 +67,6 @@ android {
   }
 }
 
-androidGroovy {
-  options {
-    configure(groovyOptions) {
-      forkOptions.jvmArgs = ['-noverify']
-    }
-  }
-}
-
 dependencies {
   compile 'org.codehaus.groovy:groovy:2.4.5:grooid'
   compile 'com.arasthel:swissknife:1.4.0'
