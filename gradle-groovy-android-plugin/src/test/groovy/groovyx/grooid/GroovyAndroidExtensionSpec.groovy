@@ -18,6 +18,7 @@ package groovyx.grooid
 
 import groovyx.grooid.internal.AndroidFileHelper
 import groovyx.grooid.internal.AndroidPluginHelper
+import groovyx.grooid.internal.TestProperties
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.api.tasks.compile.GroovyCompile
@@ -100,8 +101,8 @@ class GroovyAndroidExtensionSpec extends Specification implements AndroidPluginH
     file('src/androidTest/groovy/AndroidTestGroovy.groovy') << ''
 
     project.android {
-      buildToolsVersion '21.1.2'
-      compileSdkVersion 23
+      buildToolsVersion TestProperties.getBuildToolsVersion()
+      compileSdkVersion TestProperties.getCompileSdkVersion()
     }
 
     project.androidGroovy {

@@ -22,11 +22,11 @@ description = 'Sample project showing how to use Goovy on Android - http://www.g
 
 android {
   compileSdkVersion 23
-  buildToolsVersion '23.0.2'
+  buildToolsVersion rootProject.buildToolsVersion
 
   defaultConfig {
     minSdkVersion 16
-    targetSdkVersion 23
+    targetSdkVersion rootProject.compileSdkVersion
 
     versionCode 1
     versionName '1.0.0'
