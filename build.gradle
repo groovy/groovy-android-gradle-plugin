@@ -47,6 +47,8 @@ subprojects {
 
 ext {
   androidPluginVersion = androidPluginVersion
+  buildToolsVersion = '23.0.2'
+  compileSdkVersion = 23
 }
 
 task tagRelease(type: Exec) {

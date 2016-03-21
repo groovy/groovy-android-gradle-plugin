@@ -20,6 +20,8 @@ import spock.lang.IgnoreIf
 import spock.lang.Unroll
 
 import static groovyx.grooid.internal.TestProperties.allTests
+import static groovyx.grooid.internal.TestProperties.buildToolsVersion
+import static groovyx.grooid.internal.TestProperties.compileSdkVersion
 
 /**
  * Complete test suite to ensure the plugin works with the different versions of android gradle plugin.
@@ -53,12 +55,12 @@ class FullCompilationSpec extends FunctionalSpec {
       }
 
       android {
-        compileSdkVersion 23
-        buildToolsVersion '23.0.2'
+        compileSdkVersion $compileSdkVersion
+        buildToolsVersion '$buildToolsVersion'
 
         defaultConfig {
           minSdkVersion 16
-          targetSdkVersion 23
+          targetSdkVersion $compileSdkVersion
 
           versionCode 1
           versionName '1.0.0'
@@ -261,12 +263,12 @@ class FullCompilationSpec extends FunctionalSpec {
       }
 
       android {
-        compileSdkVersion 23
-        buildToolsVersion '23.0.2'
+        compileSdkVersion $compileSdkVersion
+        buildToolsVersion '$buildToolsVersion'
 
         defaultConfig {
           minSdkVersion 16
-          targetSdkVersion 23
+          targetSdkVersion $compileSdkVersion
 
           versionCode 1
           versionName '1.0.0'

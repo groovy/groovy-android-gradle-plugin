@@ -19,6 +19,9 @@ package groovyx.grooid.functional
 import spock.lang.IgnoreIf
 
 import static groovyx.grooid.internal.TestProperties.allTests
+import static groovyx.grooid.internal.TestProperties.androidPluginVersion
+import static groovyx.grooid.internal.TestProperties.buildToolsVersion
+import static groovyx.grooid.internal.TestProperties.compileSdkVersion
 
 @IgnoreIf({ !allTests })
 class SourceSetSpec extends FunctionalSpec {
@@ -33,7 +36,7 @@ class SourceSetSpec extends FunctionalSpec {
           jcenter()
         }
         dependencies {
-          classpath 'com.android.tools.build:gradle:1.5.0'
+          classpath 'com.android.tools.build:gradle:$androidPluginVersion'
           classpath 'org.codehaus.groovy:gradle-groovy-android-plugin:$PLUGIN_VERSION'
         }
       }
@@ -46,12 +49,12 @@ class SourceSetSpec extends FunctionalSpec {
       }
 
       android {
-        compileSdkVersion 23
-        buildToolsVersion '23.0.2'
+        compileSdkVersion $compileSdkVersion
+        buildToolsVersion '$buildToolsVersion'
 
         defaultConfig {
           minSdkVersion 16
-          targetSdkVersion 23
+          targetSdkVersion $compileSdkVersion
 
           versionCode 1
           versionName '1.0.0'
@@ -174,7 +177,7 @@ class SourceSetSpec extends FunctionalSpec {
           jcenter()
         }
         dependencies {
-          classpath 'com.android.tools.build:gradle:1.5.0'
+          classpath 'com.android.tools.build:gradle:$androidPluginVersion'
           classpath 'org.codehaus.groovy:gradle-groovy-android-plugin:$PLUGIN_VERSION'
         }
       }
@@ -187,12 +190,12 @@ class SourceSetSpec extends FunctionalSpec {
       }
 
       android {
-        compileSdkVersion 23
-        buildToolsVersion '23.0.2'
+        compileSdkVersion $compileSdkVersion
+        buildToolsVersion '$buildToolsVersion'
 
         defaultConfig {
           minSdkVersion 16
-          targetSdkVersion 23
+          targetSdkVersion $compileSdkVersion
 
           versionCode 1
           versionName '1.0.0'

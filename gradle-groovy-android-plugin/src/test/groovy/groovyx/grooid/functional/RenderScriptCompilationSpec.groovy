@@ -22,6 +22,9 @@ import javax.imageio.ImageIO
 import java.awt.image.BufferedImage
 
 import static groovyx.grooid.internal.TestProperties.allTests
+import static groovyx.grooid.internal.TestProperties.androidPluginVersion
+import static groovyx.grooid.internal.TestProperties.buildToolsVersion
+import static groovyx.grooid.internal.TestProperties.compileSdkVersion
 
 /**
  * Ensure that projects with renderscript compile properly.
@@ -39,7 +42,7 @@ class RenderScriptCompilationSpec extends FunctionalSpec {
           jcenter()
         }
         dependencies {
-          classpath 'com.android.tools.build:gradle:1.5.0'
+          classpath 'com.android.tools.build:gradle:$androidPluginVersion'
           classpath 'org.codehaus.groovy:gradle-groovy-android-plugin:$PLUGIN_VERSION'
         }
       }
@@ -52,12 +55,12 @@ class RenderScriptCompilationSpec extends FunctionalSpec {
       }
 
       android {
-        compileSdkVersion 23
-        buildToolsVersion '23.0.2'
+        compileSdkVersion $compileSdkVersion
+        buildToolsVersion '$buildToolsVersion'
 
         defaultConfig {
           minSdkVersion 16
-          targetSdkVersion 23
+          targetSdkVersion $compileSdkVersion
 
           versionCode 1
           versionName '1.0.0'

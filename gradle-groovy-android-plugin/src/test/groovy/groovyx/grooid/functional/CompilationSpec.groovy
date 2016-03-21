@@ -17,6 +17,8 @@
 package groovyx.grooid.functional
 
 import static groovyx.grooid.internal.TestProperties.androidPluginVersion
+import static groovyx.grooid.internal.TestProperties.buildToolsVersion
+import static groovyx.grooid.internal.TestProperties.compileSdkVersion
 
 /**
  * These tests are intended to test all standard functionality of the groovy android plugin.
@@ -47,12 +49,12 @@ class CompilationSpec extends FunctionalSpec {
       }
 
       android {
-        compileSdkVersion 23
-        buildToolsVersion '23.0.2'
+        compileSdkVersion $compileSdkVersion
+        buildToolsVersion '$buildToolsVersion'
 
         defaultConfig {
           minSdkVersion 16
-          targetSdkVersion 23
+          targetSdkVersion $compileSdkVersion
 
           versionCode 1
           versionName '1.0.0'
@@ -69,14 +71,6 @@ class CompilationSpec extends FunctionalSpec {
         compileOptions {
           sourceCompatibility '1.7'
           targetCompatibility '1.7'
-        }
-      }
-
-      androidGroovy {
-        options {
-          configure(groovyOptions) {
-            forkOptions.jvmArgs = ['-noverify']
-          }
         }
       }
 
@@ -243,12 +237,12 @@ class CompilationSpec extends FunctionalSpec {
       }
 
       android {
-        compileSdkVersion 23
-        buildToolsVersion '23.0.2'
+        compileSdkVersion $compileSdkVersion
+        buildToolsVersion '$buildToolsVersion'
 
         defaultConfig {
           minSdkVersion 16
-          targetSdkVersion 23
+          targetSdkVersion $compileSdkVersion
 
           versionCode 1
           versionName '1.0.0'

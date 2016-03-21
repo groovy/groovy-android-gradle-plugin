@@ -54,6 +54,8 @@ task release {
 
 tasks.withType(Test) {
   systemProperty 'androidPluginVersion', androidPluginVersion
+  systemProperty 'buildToolsVersion', buildToolsVersion
+  systemProperty 'compileSdkVersion', compileSdkVersion
 
   environment "GRADLE_USER_HOME", gradle.gradleUserHomeDir
 

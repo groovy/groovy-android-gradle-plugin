@@ -19,6 +19,7 @@ package groovyx.grooid
 import com.android.build.gradle.api.AndroidSourceSet
 import groovyx.grooid.internal.AndroidFileHelper
 import groovyx.grooid.internal.AndroidPluginHelper
+import groovyx.grooid.internal.TestProperties
 import org.gradle.api.Project
 import org.gradle.api.tasks.GroovySourceSet
 import org.gradle.testfixtures.ProjectBuilder
@@ -84,8 +85,8 @@ class GroovyAndroidPluginSpec extends Specification implements AndroidFileHelper
     given:
     applyAppPlugin()
     project.android {
-      buildToolsVersion '21.1.2'
-      compileSdkVersion 23
+      buildToolsVersion TestProperties.getBuildToolsVersion()
+      compileSdkVersion TestProperties.getCompileSdkVersion()
     }
 
     // Android Plugin Reqires this file to exist with parsable XML
@@ -110,8 +111,8 @@ class GroovyAndroidPluginSpec extends Specification implements AndroidFileHelper
     given:
     applyAppPlugin()
     project.android {
-      buildToolsVersion '21.1.2'
-      compileSdkVersion 23
+      buildToolsVersion TestProperties.getBuildToolsVersion()
+      compileSdkVersion TestProperties.getCompileSdkVersion()
 
       compileOptions {
         sourceCompatibility version

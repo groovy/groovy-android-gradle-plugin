@@ -24,4 +24,13 @@ abstract class TestProperties {
   static String getAndroidPluginVersion() {
     return System.getProperty('androidPluginVersion')
   }
+
+  static String getBuildToolsVersion() {
+    return System.getProperty('buildToolsVersion')
+  }
+
+  static int getCompileSdkVersion() {
+    String prop = System.getProperty('compileSdkVersion')
+    return Integer.parseInt(prop)
+  }
 }
