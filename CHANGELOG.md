@@ -1,3 +1,6 @@
+0.3.10
+------
+    * Fixed problem with the plugin being applied to projects using Gradle 2.12
 0.3.9
 -----
     * GroovyCompile's targetCompatibility and sourceCompatibility are automatically set 
