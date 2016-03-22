@@ -31,7 +31,7 @@ import static groovyx.grooid.internal.TestProperties.compileSdkVersion
 class FullCompilationSpec extends FunctionalSpec {
 
   @Unroll
-  def "should compile android app with java:#javaVersion, android plugin:#androidPluginVersion"() {
+  def "should compile android app with java:#javaVersion, android plugin:#androidPluginVersion, gradle version: #gradleVersion"() {
     given:
     file("settings.gradle") << "rootProject.name = 'test-app'"
 
@@ -235,11 +235,12 @@ class FullCompilationSpec extends FunctionalSpec {
     '1.6'       | '1.1.0'              | '2.2' // android plugin requires 2.2 here.
     '1.6'       | '1.3.0'              | '2.2' // android plugin requires 2.2 here.
     '1.6'       | '1.5.0'              | '2.10'
-    '1.7'       | '1.5.0'              | '2.10'
+    '1.7'       | '1.5.0'              | '2.11'
+    '1.7'       | '1.5.0'              | '2.12' // added due to breaking changes in gradle 2.12
   }
 
   @Unroll
-  def "should compile android library with java:#javaVersion and android plugin:#androidPluginVersion"() {
+  def "should compile android library with java:#javaVersion and android plugin:#androidPluginVersion, gradle version:#gradleVersion"() {
     given:
     file("settings.gradle") << "rootProject.name = 'test-lib'"
 
@@ -389,5 +390,7 @@ class FullCompilationSpec extends FunctionalSpec {
     '1.6'       | '1.3.0'              | '2.2' // android plugin requires 2.2 here.
     '1.6'       | '1.5.0'              | '2.10'
     '1.7'       | '1.5.0'              | '2.10'
+    '1.7'       | '1.5.0'              | '2.11'
+    '1.7'       | '1.5.0'              | '2.12'
   }
 }
