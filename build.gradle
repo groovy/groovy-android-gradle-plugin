@@ -30,7 +30,7 @@ buildscript {
 apply from: "$rootDir/gradle/idea/idea.gradle"
 
 allprojects {
-  version = '0.3.10-SNAPSHOT'
+  version = '0.3.11-SNAPSHOT'
   group = 'org.codehaus.groovy'
 
   apply from: "$rootDir/gradle/credentials.gradle"
