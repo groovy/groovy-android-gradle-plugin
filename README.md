@@ -17,7 +17,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:1.5.0'
-        classpath 'org.codehaus.groovy:gradle-groovy-android-plugin:0.3.8'
+        classpath 'org.codehaus.groovy:gradle-groovy-android-plugin:0.3.10'
     }
 }
 
@@ -37,7 +37,7 @@ Then you can start using Groovy by adding a dependency on the `grooid` classifie
 
 ```groovy
 dependencies {
-    compile 'org.codehaus.groovy:groovy:2.4.5:grooid'
+    compile 'org.codehaus.groovy:groovy:2.4.6:grooid'
 }
 ```
 
@@ -55,7 +55,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:1.5.0'
-        classpath 'org.codehaus.groovy:gradle-groovy-android-plugin:0.3.9-SNAPSHOT'
+        classpath 'org.codehaus.groovy:gradle-groovy-android-plugin:0.3.11-SNAPSHOT'
     }
 }
 ```
