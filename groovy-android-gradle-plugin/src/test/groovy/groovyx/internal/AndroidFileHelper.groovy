@@ -14,20 +14,17 @@
  * limitations under the License.
  */
 
-// Handles publication of distributions to Bintray
+package groovyx.internal
 
-apply plugin: 'com.jfrog.bintray'
-
-bintray {
-    user = bintrayUsername
-    key = bintrayKey
-    publications = ['mavenJava']
-    pkg {
-        repo = 'gradle-plugins'
-        name = project.name
-        desc = 'Adds support for the Groovy language to Android'
-        userOrg = 'groovy'
-        licenses = ['Apache-2.0']
-        labels = ['android','groovy']
-    }
+trait AndroidFileHelper implements FileHelper {
+  /**
+   * Creates a simple android manifest that will make the Android Plugin happy.
+   */
+  void createSimpleAndroidManifest() {
+    file('src/main/AndroidManifest.xml') << """
+     <?xml version="1.0" encoding="utf-8"?>
+      <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="groovyx.test" />
+    """.trim()
+  }
 }

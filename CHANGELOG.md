@@ -1,3 +1,6 @@
+1.0.0
+-----
+    * Renamed plugin id from 'groovyx.grooid.groovy-android' to 'groovyx.android'
 0.3.10
 ------
     * Fixed problem with the plugin being applied to projects using Gradle 2.12

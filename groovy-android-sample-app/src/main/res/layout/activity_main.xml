@@ -15,7 +15,7 @@
   ~ limitations under the License.
   -->
 
-<groovyx.grooid.example.BetterViewAnimator
+<groovyx.example.BetterViewAnimator
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_content"
@@ -46,4 +46,4 @@
       android:layout_gravity="center"
   />
 
-</groovyx.grooid.example.BetterViewAnimator>
+</groovyx.example.BetterViewAnimator>

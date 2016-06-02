@@ -14,20 +14,28 @@
  * limitations under the License.
  */
 
-/*
-  For projects using the groovy-android-gradle-plugin, replace the module dependencies with project dependencies
-  so that they build against the source instead of the published versions.
- */
-import groovyx.GroovyAndroidPlugin
+package groovyx.internal
 
-plugins.matching { it instanceof GroovyAndroidPlugin }.all {
-  configurations.all { configuration ->
-    def deps = dependencies.toList().findAll { it instanceof ModuleDependency && it.group == 'org.codehaus.groovy' && it.name == 'groovy-android-gradle-plugin' }
-    deps.each { dependency ->
-      dependencies.remove(dependency)
-      project.dependencies {
-        delegate."$configuration.name" project(":$dependency.name")
-      }
-    }
+import com.android.build.gradle.AppPlugin
+import com.android.build.gradle.LibraryPlugin
+import groovyx.GroovyAndroidExtension
+import groovyx.GroovyAndroidPlugin
+import org.gradle.api.Project
+
+trait AndroidPluginHelper {
+  void applyAppPlugin() {
+    project.pluginManager.apply(AppPlugin)
+    project.pluginManager.apply(GroovyAndroidPlugin)
   }
+
+  void applyLibraryPlugin() {
+    project.pluginManager.apply(LibraryPlugin)
+    project.pluginManager.apply(GroovyAndroidPlugin)
+  }
+
+  GroovyAndroidExtension getExtension() {
+    project.extensions.getByType(GroovyAndroidExtension)
+  }
+
+  abstract Project getProject()
 }

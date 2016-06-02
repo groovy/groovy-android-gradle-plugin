@@ -19,59 +19,60 @@ apply plugin: 'maven-publish'
 
 // custom tasks for creating source/javadoc jars
 task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
+  classifier = 'sources'
+  from sourceSets.main.allSource
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
+  classifier = 'javadoc'
+  from javadoc.destinationDir
 }
 
 // add javadoc/source jar tasks as artifacts
 artifacts {
-    archives sourcesJar, javadocJar
+  archives sourcesJar, javadocJar
 }
 
 publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
+  publications {
+    mavenJava(MavenPublication) {
+      from components.java
 
-            artifact sourcesJar {
-                classifier "sources"
-            }
+      artifact sourcesJar {
+        classifier "sources"
+      }
 
-            artifact javadocJar {
-                classifier "javadoc"
-            }
+      artifact javadocJar {
+        classifier "javadoc"
+      }
 
-            pom.withXml {
-                def Node root = asNode()
-                root.appendNode('name', 'Gradle Plugin for Groovy on Android')
-                root.appendNode('description', project.project_description)
-                root.appendNode('url', project.project_url)
+      pom.withXml {
+        def Node root = asNode()
+        root.appendNode('name', 'Gradle Plugin for Groovy on Android')
+        root.appendNode('description', 'Adds support for the Groovy language to Android builds')
+        root.appendNode('url', 'https://github.com/groovy/groovy-android-gradle-plugin')
 
-                def issues = root.appendNode( 'issueManagement' )
-                issues.appendNode( 'system', 'github' )
-                issues.appendNode( 'url', project.project_issues_url )
+        def issues = root.appendNode( 'issueManagement' )
+        issues.appendNode('system', 'github' )
+        issues.appendNode('url', 'https://github.com/groovy/groovy-android-gradle-plugin/issues')
 
-                def scm = root.appendNode( 'scm' )
-                scm.appendNode( 'url', project.project_scm )
-                scm.appendNode( 'connection', project.project_connection)
-                scm.appendNode( 'developerConnection', project.project_dev_connection )
+        def scm = root.appendNode( 'scm' )
+        scm.appendNode( 'url', 'https://github.com/groovy/groovy-android-gradle-plugin')
+        scm.appendNode( 'connection', 'scm:git:https://github.com/groovy/groovy-android-gradle-plugin.git')
+        scm.appendNode( 'developerConnection', 'scm:git:git@github.com:groovy/groovy-android-gradle-plugin.git')
 
-                def license = root.appendNode( 'licenses' ).appendNode( 'license' );
-                license.appendNode( 'name', 'The Apache Software License, Version 2.0' )
-                license.appendNode( 'url', 'http://www.apache.org/licenses/LICENSE-2.0.txt' )
-                license.appendNode( 'distribution', 'repo' )
+        def license = root.appendNode('licenses').appendNode('license')
+        license.appendNode( 'name', 'The Apache Software License, Version 2.0' )
+        license.appendNode( 'url', 'http://www.apache.org/licenses/LICENSE-2.0.txt' )
+        license.appendNode( 'distribution', 'repo' )
 
-                def dev = root.appendNode( 'developers' ).appendNode( 'developer' );
-                dev.appendNode( 'id', project.project_vendor )
-                dev.appendNode( 'name', project.project_vendor_name )
-                dev.appendNode( 'organization', 'Groovy' )
-                dev.appendNode( 'organizationUrl', 'http://groovy.codehaus.org' )
-            }
-        }
+        def dev = root.appendNode('developers').appendNode('developer')
+        dev.appendNode('id', 'groovy')
+        dev.appendNode('name', 'Cedric Champeau')
+        dev.appendNode('name', 'Andrew Reitz')
+        dev.appendNode('organization', 'Groovy' )
+        dev.appendNode('organizationUrl', 'http://www.groovy-lang.org' )
+      }
     }
+  }
 }

@@ -14,20 +14,18 @@
  * limitations under the License.
  */
 
-// Handles publication of distributions to Bintray
+package groovyx.example
 
-apply plugin: 'com.jfrog.bintray'
+import android.app.Application
+import android.content.Context
+import groovy.transform.CompileStatic
 
-bintray {
-    user = bintrayUsername
-    key = bintrayKey
-    publications = ['mavenJava']
-    pkg {
-        repo = 'gradle-plugins'
-        name = project.name
-        desc = 'Adds support for the Groovy language to Android'
-        userOrg = 'groovy'
-        licenses = ['Apache-2.0']
-        labels = ['android','groovy']
-    }
+@CompileStatic
+class GroovySampleApplication extends Application {
+
+  final GroovyImageService groovyImageService = new GroovyImageService()
+
+  static GroovySampleApplication get(Context context) {
+    return context.applicationContext as GroovySampleApplication
+  }
 }

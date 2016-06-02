@@ -20,19 +20,22 @@ buildscript {
   }
 
   dependencies {
-    classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.4'
-    classpath 'org.jfrog.buildinfo:build-info-extractor-gradle:4.0.0'
-    classpath 'com.android.tools.build:gradle:1.5.0'
-    classpath 'org.codehaus.groovy:gradle-groovy-android-plugin:0.3.8'
+    classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.6'
+    classpath 'org.jfrog.buildinfo:build-info-extractor-gradle:3.2.0'
+    classpath 'com.android.tools.build:gradle:2.1.0'
+    classpath 'com.github.ben-manes:gradle-versions-plugin:0.12.0'
+    //noinspection GradleDynamicVersion (this gets replaced by androidGroovyLocal.gradle)
+    classpath 'org.codehaus.groovy:gradle-groovy-android-plugin:+'
   }
 }
 
 apply from: "$rootDir/gradle/idea/idea.gradle"
 
 allprojects {
-  version = '0.3.11-SNAPSHOT'
+  version = '1.0.0-SNAPSHOT'
   group = 'org.codehaus.groovy'
 
+  apply plugin: 'com.github.ben-manes.versions'
   apply from: "$rootDir/gradle/credentials.gradle"
 }
 
@@ -47,8 +50,8 @@ subprojects {
 
 ext {
   androidPluginVersion = androidPluginVersion
-  buildToolsVersion = '23.0.2'
-  compileSdkVersion = 23
+  buildToolsVersion = '24.0.0'
+  compileSdkVersion = 24
 }
 
 task tagRelease(type: Exec) {
@@ -59,7 +62,7 @@ task tagRelease(type: Exec) {
   commandLine 'bash', '-c',
 """
   git tag $tagString
-  git push -q https://$project.githubToken@github.com/groovy/groovy-android-gradle-plugin.git $tagString > /dev/null 2>&1
+  git push -q "https://$project.githubToken@github.com/groovy/groovy-android-gradle-plugin.git" $tagString > /dev/null 2>&1
 """
 }
 

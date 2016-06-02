@@ -15,7 +15,7 @@
  */
 
 task writeVersionNumberFile {
-  def versionFile = file("src/main/resources/groovyx/gradle-groovy-android-plugin-version.txt")
+  def versionFile = file("src/main/resources/groovyx/groovy-android-gradle-plugin-version.txt")
   inputs.property "version", project.version
   outputs.file versionFile
 

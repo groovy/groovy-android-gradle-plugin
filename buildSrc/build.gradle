@@ -19,7 +19,7 @@ apply plugin: 'idea'
 apply from: '../gradle/versionFile.gradle'
 
 ext {
-  androidVersion = '1.5.0'
+  androidVersion = '2.1.0'
 }
 
 repositories {
@@ -35,7 +35,7 @@ dependencies {
 
 sourceSets {
   main {
-    groovy.srcDirs = ['src/main/groovy', '../gradle-groovy-android-plugin/src/main/groovy']
-    resources.srcDirs = ['src/main/resources', '../gradle-groovy-android-plugin/src/main/resources']
+    groovy.srcDirs = ['src/main/groovy', '../groovy-android-gradle-plugin/src/main/groovy']
+    resources.srcDirs = ['src/main/resources', '../groovy-android-gradle-plugin/src/main/resources']
   }
 }
