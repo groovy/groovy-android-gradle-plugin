@@ -238,7 +238,7 @@ class FullCompilationSpec extends FunctionalSpec {
     '1.7'       | '1.5.0'              | '2.11'
     '1.7'       | '1.5.0'              | '2.12' // added due to breaking changes in gradle 2.12
     '1.7'       | '2.0.0'              | '2.13'
-    '1.7'       | '2.1.0'              | '2.14'
+    '1.7'       | '2.1.2'              | '2.14'
   }
 
   @Unroll
@@ -395,6 +395,6 @@ class FullCompilationSpec extends FunctionalSpec {
     '1.7'       | '1.5.0'              | '2.11'
     '1.7'       | '1.5.0'              | '2.12'
     '1.7'       | '2.0.0'              | '2.13'
-    '1.7'       | '2.1.0'              | '2.13'
+    '1.7'       | '2.1.2'              | '2.14'
   }
 }

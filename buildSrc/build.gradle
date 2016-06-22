@@ -19,7 +19,7 @@ apply plugin: 'idea'
 apply from: '../gradle/versionFile.gradle'
 
 ext {
-  androidVersion = '2.1.0'
+  androidGradleVersion = '2.1.2'
 }
 
 repositories {
@@ -30,7 +30,7 @@ dependencies {
   compile localGroovy()
   compile gradleApi()
 
-  compile "com.android.tools.build:gradle:$androidVersion"
+  compile "com.android.tools.build:gradle:$androidGradleVersion"
 }
 
 sourceSets {

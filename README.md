@@ -16,8 +16,8 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.1.0'
-        classpath 'org.codehaus.groovy:gradle-groovy-android-plugin:1.0.0'
+        classpath 'com.android.tools.build:gradle:2.1.2'
+        classpath 'org.codehaus.groovy:groovy-android-gradle-plugin:1.0.0'
     }
 }
 
@@ -54,8 +54,8 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.1.0'
-        classpath 'org.codehaus.groovy:gradle-groovy-android-plugin:1.0.1-SNAPSHOT'
+        classpath 'com.android.tools.build:gradle:2.1.2'
+        classpath 'org.codehaus.groovy:groovy-android-gradle-plugin:1.0.1-SNAPSHOT'
     }
 }
 ```
