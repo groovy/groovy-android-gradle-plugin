@@ -16,7 +16,7 @@
   -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="groovyx.grooid.example">
+    package="groovyx.example">
 
   <uses-permission android:name="android.permission.INTERNET"/>
 
@@ -24,10 +24,10 @@
       android:allowBackup="true"
       android:label="@string/application_name"
       android:icon="@mipmap/ic_launcher"
-      android:name=".GroovySampleApplication"
+      android:name="groovyx.example.GroovySampleApplication"
   >
     <activity
-        android:name=".MainActivity"
+        android:name="groovyx.example.MainActivity"
         android:label="@string/application_name">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>

@@ -15,13 +15,13 @@
  */
 
 apply plugin: 'com.android.application'
-apply plugin: 'groovyx.grooid.groovy-android'
+apply plugin: 'groovyx.android'
 apply from: "$rootDir/gradle/extraAndroidTasks.gradle"
 
 description = 'Sample project showing how to use Goovy on Android - http://www.groovy-lang.org'
 
 android {
-  compileSdkVersion 23
+  compileSdkVersion 24
   buildToolsVersion rootProject.buildToolsVersion
 
   defaultConfig {
@@ -68,7 +68,7 @@ android {
 }
 
 dependencies {
-  compile 'org.codehaus.groovy:groovy:2.4.5:grooid'
+  compile 'org.codehaus.groovy:groovy:2.4.6:grooid'
   compile 'com.arasthel:swissknife:1.4.0'
 
   androidTestCompile 'com.android.support.test:runner:0.4.1'

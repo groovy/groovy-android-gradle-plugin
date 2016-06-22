@@ -5,7 +5,7 @@ What kind of issue is this?
        Overflow](https://stackoverflow.com/questions/tagged/groovy-android) with the android-groovy tag.
 
  - [ ] Bug report. If you’ve found a bug, spend the time to write a failing test. Bugs with tests
-       get fixed. See [here](https://github.com/groovy/groovy-android-gradle-plugin/tree/master/gradle-groovy-android-plugin/src/test/groovy/groovyx/grooid)
+       get fixed. See [here](https://github.com/groovy/groovy-android-gradle-plugin/tree/master/gradle-groovy-android-plugin/src/test/groovy/groovyx)
        for some example tests.
 
  - [ ] Feature Request. Start by telling us what problem you’re trying to solve. Often a solution

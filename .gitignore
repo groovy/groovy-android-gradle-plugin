@@ -1,5 +1,5 @@
 # Ignore version files written out by gradle
-gradle-groovy-android-plugin-version.txt
+groovy-android-gradle-plugin-version.txt
 
 #built application files
 *.apk

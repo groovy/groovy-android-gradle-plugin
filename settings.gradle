@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-include 'gradle-groovy-android-plugin'
+include 'groovy-android-gradle-plugin'
 include 'groovy-android-sample-app'
 
 rootProject.name = 'groovy-android'

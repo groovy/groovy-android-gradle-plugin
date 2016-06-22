@@ -16,12 +16,12 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.5.0'
-        classpath 'org.codehaus.groovy:gradle-groovy-android-plugin:0.3.10'
+        classpath 'com.android.tools.build:gradle:2.1.0'
+        classpath 'org.codehaus.groovy:gradle-groovy-android-plugin:1.0.0'
     }
 }
 
-apply plugin: 'groovyx.grooid.groovy-android'
+apply plugin: 'groovyx.android'
 ```
 
 Then you must choose which version and modules of Groovy you use. So far, Android support is available in
@@ -54,8 +54,8 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.5.0'
-        classpath 'org.codehaus.groovy:gradle-groovy-android-plugin:0.3.11-SNAPSHOT'
+        classpath 'com.android.tools.build:gradle:2.1.0'
+        classpath 'org.codehaus.groovy:gradle-groovy-android-plugin:1.0.1-SNAPSHOT'
     }
 }
 ```
@@ -98,6 +98,19 @@ that you use `@CompileStatic` wherever possible.
 
 Details can be found on Melix's [blog](http://melix.github.io/blog/2014/06/grooid.html) and [here for more technical details](http://melix.github.io/blog/2014/06/grooid2.html)
 
+Including Groovy Libraries
+--------------------------------
+
+In order to include groovy libraries that include the groovy or groovy-all jars, you will need to exclude the 
+groovy jars allowing the grooid jar to be the one to be compiled against.
+
+For example to use the groovy-xml library you would need to do
+```groovy
+compile ('org.codehaus.groovy:groovy-xml:2.4.3') {
+    exclude group: 'org.codehaus.groovy'
+}
+```
+
 
 Configuring the Groovy compilation options
 ------------------------------------------
@@ -118,11 +131,13 @@ androidGroovy {
 ```
 
 See [GroovyCompile](https://docs.gradle.org/current/dsl/org.gradle.api.tasks.compile.GroovyCompile.html) for more options.
+See [Example Application](https://github.com/pieces029/is-taylor-swift-single-groovy-android/blob/master/build.gradle) for
+an example of using these settings to enable custom compilation options.
 
 Only Use GroovyC
 ----------------
 
-For integration with previous projects or for working with generated files (such as BuildConfg)
+For integration with previous projects or for working with generated files (such as BuildConfig)
 it may be desirable to only have GroovyC run in order to have Java files reference Groovy files.
 In order to do this the flag `skipJavaC` in the androidGroovy block should be set to true.
 
@@ -133,6 +148,42 @@ androidGroovy {
 ```
 
 This will remove all the files from the JavaC tasks and them all to GroovyC.
+
+Annotation Processing
+---------------------
+To use annotation processing `javaAnnotationProcessing` must be set to true in `groovyOptions`
+
+```groovy
+androidGroovy {
+  options {
+    configure(groovyOptions) {
+      javaAnnotationProcessing = true
+    }
+  }
+}
+```
+
+Also note that `skipJavaC` must not be set to true. The java compilation process needs to run in order to 
+trigger the annoation processors.
+
+A useful but not required tool is [android-apt](https://bitbucket.org/hvisser/android-apt) which helps android
+studio pick up generated files so that auto-complete works correctly. Please note that this plugin must be added after
+the groovy android plugin.
+
+For more examples of annotation processing setup see 
+[Example Dagger Application](https://github.com/pieces029/is-taylor-swift-single-groovy-android)
+and [Example Databinding Application](https://github.com/pieces029/groovy-android-data-binding)
+
+Data Binding
+------------
+
+Databinding is actually annotation processing but hidden behind Android Studio and a Gradle plugin which sets up
+everything for you. Because of this you will need to use the [android-apt](https://bitbucket.org/hvisser/android-apt)
+plugin in order to see any of the generated output files. Regular Java projects to not need this since Android Studio
+knows where these are generated for Java source code.
+
+The setup for Databinding and Annotation Processing are the same, so refer to the previous section in order to 
+enable annoation processing.
 
 Android `packagingOptions`
 --------------------------

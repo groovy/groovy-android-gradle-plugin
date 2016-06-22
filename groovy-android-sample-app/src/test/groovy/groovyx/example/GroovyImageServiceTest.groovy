@@ -14,20 +14,26 @@
  * limitations under the License.
  */
 
-// Handles publication of distributions to Bintray
+package groovyx.example
 
-apply plugin: 'com.jfrog.bintray'
+import spock.lang.Specification
 
-bintray {
-    user = bintrayUsername
-    key = bintrayKey
-    publications = ['mavenJava']
-    pkg {
-        repo = 'gradle-plugins'
-        name = project.name
-        desc = 'Adds support for the Groovy language to Android'
-        userOrg = 'groovy'
-        licenses = ['Apache-2.0']
-        labels = ['android','groovy']
-    }
+/**
+ * Class to test the {@link GroovyImageService}.
+ *
+ * Note: There is no @CompileStatic because this is run on the JVM instead of Android, and there
+ * for is not required.
+ *
+ * Note: this is not a good test, it's just a example of how to do JVM testing.
+ */
+class GroovyImageServiceTest extends Specification {
+
+  def "should download groovy image"() {
+    given:
+    def imageService = new GroovyImageService()
+    InputStream stream = imageService.groovyImageInputStream
+
+    expect:
+    assert stream != null
+  }
 }

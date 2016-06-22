@@ -14,20 +14,19 @@
  * limitations under the License.
  */
 
-// Handles publication of distributions to Bintray
+package groovyx.api
 
-apply plugin: 'com.jfrog.bintray'
+import org.gradle.api.tasks.GroovySourceSet
 
-bintray {
-    user = bintrayUsername
-    key = bintrayKey
-    publications = ['mavenJava']
-    pkg {
-        repo = 'gradle-plugins'
-        name = project.name
-        desc = 'Adds support for the Groovy language to Android'
-        userOrg = 'groovy'
-        licenses = ['Apache-2.0']
-        labels = ['android','groovy']
-    }
+/**
+ * A {@code AndroidGroovySourceSet} represents a logical group of Java, and Groovy sources.
+ */
+interface AndroidGroovySourceSet extends GroovySourceSet {
+
+  /**
+   * Returns the name of this source set.
+   *
+   * @return The name. Never returns null.
+   */
+  String getName()
 }
