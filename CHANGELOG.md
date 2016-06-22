@@ -1,6 +1,7 @@
 1.0.0
 -----
     * Renamed plugin id from 'groovyx.grooid.groovy-android' to 'groovyx.android'
+    * Renamed plugin name from 'groovy-android-gradle-plugin' to 'gradle-groovy-android-plugin' 
 0.3.10
 ------
     * Fixed problem with the plugin being applied to projects using Gradle 2.12
@@ -10,7 +11,7 @@
       based off of JavaCompile's
     * Custom groovy sourceSets added. Java directories may be used to java be joint 
       compiled with groovy 
-    * Added flag in androidGroovy to skip JavaCompile and have GroovyCompile to all
+    * Added flag in androidGroovy to skip JavaCompile and have GroovyCompile do all
       compilation.
 0.3.8
 -----
