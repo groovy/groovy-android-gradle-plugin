@@ -29,5 +29,6 @@ bintray {
         userOrg = 'groovy'
         licenses = ['Apache-2.0']
         labels = ['android','groovy']
+        vcsUrl = 'https://github.com/groovy/groovy-android-gradle-plugin.git'
     }
 }

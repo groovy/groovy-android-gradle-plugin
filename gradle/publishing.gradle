@@ -59,7 +59,7 @@ publishing {
         def scm = root.appendNode( 'scm' )
         scm.appendNode( 'url', 'https://github.com/groovy/groovy-android-gradle-plugin')
         scm.appendNode( 'connection', 'scm:git:https://github.com/groovy/groovy-android-gradle-plugin.git')
-        scm.appendNode( 'developerConnection', 'scm:git:git@github.com:groovy/groovy-android-gradle-plugin.git')
+        scm.appendNode( 'developerConnection', 'scm:git:git@github.com/groovy/groovy-android-gradle-plugin.git')
 
         def license = root.appendNode('licenses').appendNode('license')
         license.appendNode( 'name', 'The Apache Software License, Version 2.0' )
@@ -69,7 +69,6 @@ publishing {
         def dev = root.appendNode('developers').appendNode('developer')
         dev.appendNode('id', 'groovy')
         dev.appendNode('name', 'Cedric Champeau')
-        dev.appendNode('name', 'Andrew Reitz')
         dev.appendNode('organization', 'Groovy' )
         dev.appendNode('organizationUrl', 'http://www.groovy-lang.org' )
       }
