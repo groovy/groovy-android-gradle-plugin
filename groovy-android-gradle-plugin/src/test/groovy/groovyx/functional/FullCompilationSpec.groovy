@@ -37,6 +37,11 @@ class FullCompilationSpec extends FunctionalSpec {
 
     buildFile << """
       buildscript {
+        // Workaround for com.android.application plugin failing when
+        // trying to run tests with gradle versions older than 2.14.1
+        // TODO: check compatibility issues
+        System.properties['com.android.build.gradle.overrideVersionCheck'] = 'true'
+
         repositories {
           maven { url "${localRepo.toURI()}" }
           jcenter()
@@ -239,6 +244,7 @@ class FullCompilationSpec extends FunctionalSpec {
     '1.7'       | '1.5.0'              | '2.12' // added due to breaking changes in gradle 2.12
     '1.7'       | '2.0.0'              | '2.13'
     '1.7'       | '2.1.2'              | '2.14'
+    '1.7'       | '2.2.0-rc2'          | '2.14.1'
   }
 
   @Unroll
@@ -396,5 +402,6 @@ class FullCompilationSpec extends FunctionalSpec {
     '1.7'       | '1.5.0'              | '2.12'
     '1.7'       | '2.0.0'              | '2.13'
     '1.7'       | '2.1.2'              | '2.14'
+    '1.7'       | '2.2.0-rc2'          | '2.14.1'
   }
 }

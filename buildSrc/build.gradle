@@ -19,7 +19,7 @@ apply plugin: 'idea'
 apply from: '../gradle/versionFile.gradle'
 
 ext {
-  androidGradleVersion = '2.1.2'
+  androidGradleVersion = '2.2.0-rc2'
 }
 
 repositories {
