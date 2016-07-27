@@ -25,7 +25,7 @@ import static groovyx.internal.TestProperties.compileSdkVersion
  */
 class CompilationSpec extends FunctionalSpec {
 
-  def "should compile android app with java:#javaVersion, android plugin:#androidPluginVersion"() {
+  def "should compile android app"() {
     given:
     file("settings.gradle") << "rootProject.name = 'test-app'"
 
@@ -213,7 +213,7 @@ class CompilationSpec extends FunctionalSpec {
     file('build/intermediates/classes/test/release/groovyx/test/JvmTest.class').exists()
   }
 
-  def "should compile android library with java:#javaVersion and android plugin:#androidPluginVersion"() {
+  def "should compile android library"() {
     given:
     file("settings.gradle") << "rootProject.name = 'test-lib'"
 
