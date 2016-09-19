@@ -68,15 +68,15 @@ android {
 }
 
 dependencies {
-  compile 'org.codehaus.groovy:groovy:2.4.6:grooid'
+  compile "org.codehaus.groovy:groovy:$groovyVersion:grooid"
   compile 'com.arasthel:swissknife:1.4.0'
 
-  androidTestCompile 'com.android.support.test:runner:0.4.1'
-  androidTestCompile 'com.android.support.test:rules:0.4.1'
+  androidTestCompile "com.android.support.test:runner:$androidSupportTestVersion"
+  androidTestCompile "com.android.support.test:rules:$androidSupportTestVersion"
 
-  testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
+  testCompile "org.spockframework:spock-core:$spockVersion"
 }
 
 configurations.all {
-  resolutionStrategy.force 'com.android.support:support-annotations:23.0.1'
+  resolutionStrategy.force "com.android.support:support-annotations:24.2.1"
 }
