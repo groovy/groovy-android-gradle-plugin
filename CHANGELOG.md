@@ -1,3 +1,6 @@
+1.1.0
+-----
+    * Support for 2.2.0 of Android Gradle Plugin
 1.0.0
 -----
     * Renamed plugin id from 'groovyx.grooid.groovy-android' to 'groovyx.android'
