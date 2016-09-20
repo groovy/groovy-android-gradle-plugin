@@ -1,0 +1,227 @@
+= Groovy language support for Android
+:groovy: ./groovy-android-sample-app
+
+link:https://travis-ci.org/groovy/groovy-android-gradle-plugin[image:https://travis-ci.org/groovy/groovy-android-gradle-plugin.svg?branch=master[Build Status]]
+
+This plugin adds http://groovy-lang.org[Groovy language] support for Android applications and libraries.
+
+== Quick Start
+Use a https://github.com/pledbrook/lazybones[lazybones] template from
+https://github.com/rvanderwerf/grooid-templates[grooid-template]
+
+== Usage
+
+Edit your `build.gradle` file with the following:
+
+[source, groovy]
+----
+include::./build.gradle[lines=17..24]
+  }
+}
+
+include::{groovy}/sample-app.gradle[lines=17..18]
+----
+
+The latest version can be found https://github.com/groovy/groovy-android-gradle-plugin/releases[here]
+
+Then you must choose which version of Groovy you use. So far, Android support is available in
+the 2.4.0 release and beyond, you will need to add the following repository to your `build.gradle` file:
+
+[source, groovy, indent=0]
+----
+include::./build.gradle[lines=45..47]
+----
+
+Then you can start using Groovy by adding the groovy dependency with the `grooid` classifier:
+
+[source, groovy, indent=0]
+----
+include::{groovy}/sample-app.gradle[lines=70..71]
+}
+----
+
+where `$groovyVersion` should be released with a version from https://bintray.com/groovy/maven/groovy[here].
+Then use the `assembleDebug` task to test out your build and make sure everything compiles.
+
+Should you want to test development versions of the plugin, you can add the snapshot repository and
+depend on a SNAPSHOT:
+
+[source, groovy]
+----
+include::./build.gradle[lines=17..19]
+    maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local' }
+  }
+}
+include::./build.gradle[lines=22..23]
+    classpath "org.codehaus.groovy:groovy-android-gradle-plugin:$version-SNAPSHOT"
+  }
+}
+----
+
+Go http://oss.jfrog.org/oss-snapshot-local/org/codehaus/groovy/groovy-android-gradle-plugin/[here]
+to see what the latest SNAPSHOT version is.
+
+== Where to put sources?
+
+Groovy sources may be placed in `src/main/groovy`, `src/test/groovy`, `src/androidTest/groovy` and any `src/${buildVariant}/groovy`
+configured by default. A default project will have the `release` and `debug` variants but these can be configured with build
+types and flavors. See the https://sites.google.com/a/android.com/tools/tech-docs/new-build-system/user-guide#TOC-Build-Types[android plugin docs]
+for more about configuring different build variants.
+
+Extra groovy sources may be added in a similar fashion as the https://sites.google.com/a/android.com/tools/tech-docs/new-build-system/user-guide#TOC-Sourcesets-and-Dependencies[android plugin]
+using the `androidGroovy.sourceSets` block. This is especially useful for sharing code between the different test types, and also
+allows you to add Groovy to a previous project. For example
+
+[source, groovy]
+----
+androidGroovy {
+  sourceSets {
+    main {
+      groovy {
+        srcDirs += 'src/main/java'
+      }
+    }
+  }
+}
+----
+
+would add all of the Java files in `src/main/java` directory to the Groovy
+compile task. These files will be removed from the Java compile task,
+instead being compiled by the Groovy compile, and will allow for the Java sources
+to make references to the Groovy sources (joint compilation).
+Please note, that you may need to also add these extra directories to the Java
+source sets in the android plugin for Android Studio to recognize the Groovy
+files as source.
+
+== Writing Groovy Code
+
+This plugin has been successfully tested with Android Studio and will make no attempts to add support for other IDEs.
+This plugin will let you write an application in Groovy but it is recommended, for performance, memory and battery life,
+that you use `@CompileStatic` wherever possible.
+
+Details can be found on Melix's http://melix.github.io/blog/2014/06/grooid.html[blog]
+and http://melix.github.io/blog/2014/06/grooid2.html[here for more technical details]
+
+== Including Groovy Libraries
+
+In order to include libraries written in groovy that include the groovy or
+groovy-all jars, you will need to exclude the groovy dependency allowing the
+grooid jar to be the one to be compiled against.
+
+For example to use the groovy-xml library you would simply need to do exclude
+the group `org.codehaus.groovy`.
+
+[source, groovy]
+----
+compile ('org.codehaus.groovy:groovy-xml:2.4.3') {
+    exclude group: 'org.codehaus.groovy'
+}
+----
+
+
+== Configuring the Groovy compilation options
+
+The Groovy compilation tasks can be configured in the `androidGroovy` block using the `options` block:
+
+[source, groovy]
+----
+androidGroovy {
+  options {
+    configure(groovyOptions) {
+      encoding = 'UTF-8'
+      forkOptions.jvmArgs = ['-noverify'] // maybe necessary if you use Google Play Services
+    }
+  }
+}
+----
+
+See https://docs.gradle.org/current/dsl/org.gradle.api.tasks.compile.GroovyCompile.html[GroovyCompile]
+for more options.
+See https://github.com/pieces029/is-taylor-swift-single-groovy-android/blob/master/build.gradle[Example Application]
+for an example of using these settings to enable custom compilation options.
+
+== Only Use GroovyC
+
+For integration with plain java projects or for working with generated files
+(such as BuildConfig) it may be desirable to only have GroovyC run in order to
+have Java files reference Groovy files. This is roughly the equivalent of placing
+all java source files into the groovy source directory (including auto
+generated files like BuildConfig). In order to only have GroovyC run simply set
+the flag `skipJavaC` in the `androidGroovy` block to true.
+
+[source, groovy]
+----
+androidGroovy {
+  skipJavaC = true
+}
+----
+
+== Annotation Processing
+
+To use annotation processing `javaAnnotationProcessing` must be set to true in `groovyOptions`
+
+[source, groovy]
+----
+androidGroovy {
+  options {
+    configure(groovyOptions) {
+      javaAnnotationProcessing = true
+    }
+  }
+}
+----
+
+NOTE: `skipJavaC` must not be set to true. The java compilation
+process needs to run in order to trigger the annotation processors.
+
+A useful but not required tool is https://bitbucket.org/hvisser/android-apt[android-apt]
+which helps android studio pick up generated files so that auto-complete works
+correctly.
+
+IMPORTANT: https://bitbucket.org/hvisser/android-apt[android-apt] must be
+applied after the groovy android plugin.
+
+For more examples of annotation processing setup see
+https://github.com/pieces029/is-taylor-swift-single-groovy-android[Example Dagger Application]
+and https://github.com/pieces029/groovy-android-data-binding[Example Databinding Application]
+
+== Data Binding
+
+Databinding is actually annotation processing but hidden behind Android Studio
+and a Gradle plugin. Because of this you will need to use the https://bitbucket.org/hvisser/android-apt[android-apt]
+in order to see any of the generated output files.
+
+The setup for Databinding and <<Annotation Processing>> are the same, refer to the
+previous section in order to enable <<Annotation Processing>>.
+
+== Android `packagingOptions`
+
+Groovy Extension Modules and Global transformations both need a file
+descriptor in order to work. Android packaging has a restriction
+related to files having the same name located in the same path.
+
+If you are using several Groovy libraries containing extension modules
+and/or global transformations, Android may complain about those files.
+
+You can simply add the following rule:
+
+[source, groovy]
+----
+android {
+  packagingOptions {
+      exclude 'META-INF/services/org.codehaus.groovy.transform.ASTTransformation'
+      exclude 'META-INF/services/org.codehaus.groovy.runtime.ExtensionModule'
+  }
+}
+----
+
+There are no problems excluding global transformation descriptors because
+those are only used at compile time, never at runtime.
+
+The problem comes with module extensions. Unless you statically
+compile classes using extension modules with `@CompileStatic` they won't
+be available at runtime and you'll get a runtime exception.
+
+There is an alternative. The https://github.com/kaleidos/emerger[emerger]
+gradle plugin will add excludes for you and merges all extension module
+descriptors into a single file which will be available at runtime.
