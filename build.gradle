@@ -20,19 +20,18 @@ buildscript {
   }
 
   dependencies {
+    classpath 'com.android.tools.build:gradle:2.2.0'
+    classpath 'org.codehaus.groovy:groovy-android-gradle-plugin:1.0.0'
     classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.6'
     classpath 'org.jfrog.buildinfo:build-info-extractor-gradle:3.2.0'
-    classpath 'com.android.tools.build:gradle:2.2.0'
     classpath 'com.github.ben-manes:gradle-versions-plugin:0.12.0'
-    //noinspection GradleDynamicVersion (this gets replaced by androidGroovyLocal.gradle)
-    classpath 'org.codehaus.groovy:groovy-android-gradle-plugin:+'
   }
 }
 
 apply from: "$rootDir/gradle/idea/idea.gradle"
 
 allprojects {
-  version = '1.0.1-SNAPSHOT'
+  version = '1.1.0-SNAPSHOT'
   group = 'org.codehaus.groovy'
 
   apply plugin: 'com.github.ben-manes.versions'
