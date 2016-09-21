@@ -16,6 +16,7 @@
 
 apply plugin: 'groovy'
 apply plugin: 'maven'
+apply plugin: 'nebula.optional-base'
 apply from: "$rootDir/gradle/publishing.gradle"
 apply from: "$rootDir/gradle/bintray.gradle"
 apply from: "$rootDir/gradle/artifactory.gradle"
@@ -31,7 +32,7 @@ dependencies {
   compile localGroovy()
   compile gradleApi()
 
-  compile "com.android.tools.build:gradle:$androidPluginVersion"
+  compile "com.android.tools.build:gradle:$androidPluginVersion", optional
 
   testCompile gradleTestKit()
   testCompile "org.spockframework:spock-core:$spockVersion", {

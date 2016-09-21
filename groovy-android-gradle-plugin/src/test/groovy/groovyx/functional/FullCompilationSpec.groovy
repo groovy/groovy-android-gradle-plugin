@@ -37,11 +37,6 @@ class FullCompilationSpec extends FunctionalSpec {
 
     buildFile << """
       buildscript {
-        // Workaround for com.android.application plugin failing when
-        // trying to run tests with gradle versions older than 2.14.1
-        // TODO: check compatibility issues
-        System.properties['com.android.build.gradle.overrideVersionCheck'] = 'true'
-
         repositories {
           maven { url "${localRepo.toURI()}" }
           jcenter()
@@ -80,8 +75,8 @@ class FullCompilationSpec extends FunctionalSpec {
         }
 
         compileOptions {
-          sourceCompatibility '$javaVersion'
-          targetCompatibility '$javaVersion'
+          sourceCompatibility $javaVersion
+          targetCompatibility $javaVersion
         }
       }
 
@@ -91,8 +86,6 @@ class FullCompilationSpec extends FunctionalSpec {
             encoding = 'UTF-8'
             forkOptions.jvmArgs = ['-noverify']
           }
-          sourceCompatibility = '$javaVersion'
-          targetCompatibility = '$javaVersion'
          }
       }
 
@@ -224,6 +217,7 @@ class FullCompilationSpec extends FunctionalSpec {
     """
 
     when:
+    copyTestDir()
     runWithVersion gradleVersion, 'assemble', 'test'
 
     then:
@@ -236,17 +230,17 @@ class FullCompilationSpec extends FunctionalSpec {
 
     where:
     // test common configs that touches the different way to access the classpath
-    javaVersion | androidPluginVersion | gradleVersion
-    '1.6'       | '1.1.0'              | '2.10'
-    '1.6'       | '1.3.0'              | '2.10'
-    '1.6'       | '1.5.0'              | '2.10'
-    '1.7'       | '1.5.0'              | '2.11'
-    '1.7'       | '1.5.0'              | '2.12' // added due to breaking changes in gradle 2.12
-    '1.7'       | '2.0.0'              | '2.13'
-    '1.7'       | '2.1.2'              | '2.14'
-    '1.7'       | '2.2.0'              | '2.14.1'
-    '1.7'       | '2.2.0'              | '3.0'
-    '1.7'       | '2.2.0'              | '3.1'
+    javaVersion                     | androidPluginVersion | gradleVersion
+    'JavaVersion.VERSION_1_6'       | '1.1.0'              | '2.2'
+    'JavaVersion.VERSION_1_6'       | '1.3.0'              | '2.2'
+    'JavaVersion.VERSION_1_6'       | '1.5.0'              | '2.10'
+    'JavaVersion.VERSION_1_7'       | '1.5.0'              | '2.11'
+    'JavaVersion.VERSION_1_7'       | '1.5.0'              | '2.12' // added due to breaking changes in gradle 2.12
+    'JavaVersion.VERSION_1_7'       | '2.0.0'              | '2.13'
+    'JavaVersion.VERSION_1_7'       | '2.1.2'              | '2.14'
+    'JavaVersion.VERSION_1_7'       | '2.2.0'              | '2.14.1'
+    'JavaVersion.VERSION_1_7'       | '2.2.0'              | '3.0'
+    'JavaVersion.VERSION_1_7'       | '2.2.0'              | '3.1'
   }
 
   @Unroll
@@ -286,8 +280,8 @@ class FullCompilationSpec extends FunctionalSpec {
         }
 
         compileOptions {
-          sourceCompatibility '$javaVersion'
-          targetCompatibility '$javaVersion'
+          sourceCompatibility $javaVersion
+          targetCompatibility $javaVersion
         }
       }
 
@@ -396,15 +390,15 @@ class FullCompilationSpec extends FunctionalSpec {
     where:
     // test common configs that touches the different way to access the classpath
     javaVersion | androidPluginVersion | gradleVersion
-    '1.6'       | '1.1.0'              | '2.10'
-    '1.6'       | '1.3.0'              | '2.10'
-    '1.6'       | '1.5.0'              | '2.10'
-    '1.7'       | '1.5.0'              | '2.11'
-    '1.7'       | '1.5.0'              | '2.12' // added due to breaking changes in gradle 2.12
-    '1.7'       | '2.0.0'              | '2.13'
-    '1.7'       | '2.1.2'              | '2.14'
-    '1.7'       | '2.2.0'              | '2.14.1'
-    '1.7'       | '2.2.0'              | '3.0'
-    '1.7'       | '2.2.0'              | '3.1'
+    'JavaVersion.VERSION_1_6'       | '1.1.0'              | '2.2'
+    'JavaVersion.VERSION_1_6'       | '1.3.0'              | '2.2'
+    'JavaVersion.VERSION_1_6'       | '1.5.0'              | '2.10'
+    'JavaVersion.VERSION_1_7'       | '1.5.0'              | '2.11'
+    'JavaVersion.VERSION_1_7'       | '1.5.0'              | '2.12' // added due to breaking changes in gradle 2.12
+    'JavaVersion.VERSION_1_7'       | '2.0.0'              | '2.13'
+    'JavaVersion.VERSION_1_7'       | '2.1.2'              | '2.14'
+    'JavaVersion.VERSION_1_7'       | '2.2.0'              | '2.14.1'
+    'JavaVersion.VERSION_1_7'       | '2.2.0'              | '3.0'
+    'JavaVersion.VERSION_1_7'       | '2.2.0'              | '3.1'
   }
 }
