@@ -1,5 +1,9 @@
+:groovyVersion: 2.4.7
+:pluginVersion: 1.1.0
+:pluginSnapshotVersion: 1.2.0
+:androidPluginVersion: 2.2.0
+
 = Groovy language support for Android
-:groovy: ./groovy-android-sample-app
 
 link:https://travis-ci.org/groovy/groovy-android-gradle-plugin[image:https://travis-ci.org/groovy/groovy-android-gradle-plugin.svg?branch=master[Build Status]]
 
@@ -13,13 +17,21 @@ https://github.com/rvanderwerf/grooid-templates[grooid-template]
 
 Edit your `build.gradle` file with the following:
 
-[source, groovy]
+[source, groovy, subs='attributes']
 ----
-include::./build.gradle[lines=17..24]
+buildscript {
+  repositories {
+    jcenter()
+  }
+
+  dependencies {
+    classpath 'com.android.tools.build:gradle:{androidPluginVersion}'
+    classpath 'org.codehaus.groovy:groovy-android-gradle-plugin:{pluginVersion}'
   }
 }
 
-include::{groovy}/sample-app.gradle[lines=17..18]
+apply plugin: 'com.android.application'
+apply plugin: 'groovyx.android'
 ----
 
 The latest version can be found https://github.com/groovy/groovy-android-gradle-plugin/releases[here]
@@ -27,16 +39,19 @@ The latest version can be found https://github.com/groovy/groovy-android-gradle-
 Then you must choose which version of Groovy you use. So far, Android support is available in
 the 2.4.0 release and beyond, you will need to add the following repository to your `build.gradle` file:
 
-[source, groovy, indent=0]
+[source, groovy]
 ----
-include::./build.gradle[lines=45..47]
+repositories {
+  jcenter()
+}
 ----
 
 Then you can start using Groovy by adding the groovy dependency with the `grooid` classifier:
 
-[source, groovy, indent=0]
+[source, groovy, subs='attributes']
 ----
-include::{groovy}/sample-app.gradle[lines=70..71]
+dependencies {
+  compile "org.codehaus.groovy:groovy:{groovyVersion}:grooid"
 }
 ----
 
@@ -46,14 +61,17 @@ Then use the `assembleDebug` task to test out your build and make sure everythin
 Should you want to test development versions of the plugin, you can add the snapshot repository and
 depend on a SNAPSHOT:
 
-[source, groovy]
+[source, groovy, subs='attributes']
 ----
-include::./build.gradle[lines=17..19]
+buildscript {
+  repositories {
+    jcenter()
     maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local' }
   }
 }
-include::./build.gradle[lines=22..23]
-    classpath "org.codehaus.groovy:groovy-android-gradle-plugin:$version-SNAPSHOT"
+  dependencies {
+    classpath 'com.android.tools.build:gradle:2.2.0'
+    classpath "org.codehaus.groovy:groovy-android-gradle-plugin:{pluginSnapshotVersion}-SNAPSHOT"
   }
 }
 ----
