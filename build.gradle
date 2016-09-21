@@ -57,6 +57,18 @@ ext {
   groovyVersion = '2.4.7'
 }
 
+task prepareRelease(type: Exec) {
+  description = 'Prepare for a release: Ensure branch is up to date'
+  group = 'Publishing'
+
+  commandLine 'bash', '-c',
+"""
+  git checkout master
+  git pull --rebase "https://$project.githubToken@github.com/groovy/groovy-android-gradle-plugin.git" master
+  git checkout -b release/${version}
+"""
+}
+
 task tagRelease(type: Exec) {
   description = 'Tag the release and push it to github'
   group = 'Publishing'

@@ -50,7 +50,7 @@ task fullTest(type: Test) {
 task release {
   description = 'Releases a version of the plugin on Artifactory and Bintray'
   group = 'Publishing'
-  dependsOn artifactoryPublish, bintrayUpload, rootProject.tasks.tagRelease
+  dependsOn fullTest, artifactoryPublish, bintrayUpload, rootProject.tasks.tagRelease
 }
 
 tasks.withType(Test) {
@@ -63,6 +63,6 @@ tasks.withType(Test) {
   dependsOn install
 
   testLogging {
-    exceptionFormat "full"
+    exceptionFormat 'full'
   }
 }
