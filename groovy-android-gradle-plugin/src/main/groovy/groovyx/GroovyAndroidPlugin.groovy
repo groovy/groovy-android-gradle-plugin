@@ -27,6 +27,7 @@ import groovy.transform.CompileStatic
 import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.file.ConfigurableFileTree
 import org.gradle.api.internal.HasConvention
 import org.gradle.api.internal.file.FileResolver
 import org.gradle.api.tasks.GroovySourceSet
@@ -184,14 +185,29 @@ class GroovyAndroidPlugin implements Plugin<Project> {
     return null
   }
 
-  @CompileStatic
   private static List<File> getGeneratedSourceDirs(BaseVariantData variantData) {
-    def getJavaSourcesMethod = variantData.metaClass.getMetaMethod('getJavaSources')
-    if (getJavaSourcesMethod.returnType.metaClass == objectArrayMetaClass) {
-      return variantData.javaSources.findAll { it instanceof File } as List<File>
+    List<File> result = []
+
+    def getExtraSourcesMethod = variantData.getMetaClass().getMetaMethod("getExtraGeneratedSourceFolders")
+    if (getExtraSourcesMethod.returnType.metaClass == List.metaClass) {
+      def folders = variantData.getExtraGeneratedSourceFolders()
+      if (folders != null) {
+        result.addAll(folders)
+      }
     }
 
-    List<File> result = []
+    def getJavaSourcesMethod = variantData.metaClass.getMetaMethod('getJavaSources')
+    if (getJavaSourcesMethod.returnType.metaClass == List.metaClass) {
+      def fileTrees = variantData.javaSources.findAll { it instanceof ConfigurableFileTree }
+      result.addAll(fileTrees.collect { it.getDir() })
+      return result
+    }
+
+    if (getJavaSourcesMethod.returnType.metaClass == Object[].metaClass) {
+      def sources = variantData.javaSources
+      result.addAll(sources.findAll { it instanceof File } as Collection<File>)
+      return result
+    }
 
     if (variantData.scope.generateRClassTask != null) {
       result << variantData.scope.RClassSourceOutputDir
@@ -205,8 +221,8 @@ class GroovyAndroidPlugin implements Plugin<Project> {
       result << variantData.scope.aidlSourceOutputDir
     }
 
-    // We use getter instead of property for globalScope
-    // since property returns TransformGlobalScope instead of GlobalScope.
+    // We use getter instead of property for globalScope since property returns
+    // TransformGlobalScope instead of GlobalScope (Static type checker failing).
     if (variantData.scope.getGlobalScope().extension.dataBinding.enabled) {
       result << variantData.scope.classOutputForDataBinding
     }
@@ -225,9 +241,5 @@ class GroovyAndroidPlugin implements Plugin<Project> {
 
   private static VariantManager getVariantManager(BasePlugin plugin) {
     return plugin.variantManager
-  }
-
-  private static MetaClass getObjectArrayMetaClass() {
-    return Object[].metaClass
   }
 }
