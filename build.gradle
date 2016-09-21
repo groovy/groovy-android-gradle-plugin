@@ -32,7 +32,7 @@ buildscript {
 apply from: "$rootDir/gradle/idea/idea.gradle"
 
 allprojects {
-  version = '1.1.0-SNAPSHOT'
+  version = '1.2.0-SNAPSHOT'
   group = 'org.codehaus.groovy'
 
   apply plugin: 'com.github.ben-manes.versions'
@@ -55,6 +55,18 @@ ext {
   spockVersion = '1.1-groovy-2.4-rc-2'
   androidSupportTestVersion = '0.5'
   groovyVersion = '2.4.7'
+}
+
+task prepareRelease(type: Exec) {
+  description = 'Prepare for a release: Ensure branch is up to date'
+  group = 'Publishing'
+
+  commandLine 'bash', '-c',
+"""
+  git checkout master
+  git pull --rebase "https://$project.githubToken@github.com/groovy/groovy-android-gradle-plugin.git" master
+  git checkout -b release/${version}
+"""
 }
 
 task tagRelease(type: Exec) {
