@@ -217,7 +217,6 @@ class FullCompilationSpec extends FunctionalSpec {
     """
 
     when:
-    copyTestDir()
     runWithVersion gradleVersion, 'assemble', 'test'
 
     then:
