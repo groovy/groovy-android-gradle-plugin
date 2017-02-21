@@ -80,9 +80,11 @@ class GroovyAndroidExtensionSpec extends Specification implements AndroidPluginH
 
     def srcDirs = extension.sourceSetsContainer.getByName('main').groovy.srcDirs
 
+    // paths on Windows use backslashes instead of slashes
+    def sourcesDirStrings = srcDirs.collect{ it.path.replaceAll("\\\\", '/') }
     // this is to get around a weird bug where absolute path of dir.root does not actually
     // return the fill path missing the /private folder at the beginning (OSX).
-    def sourcesDirStrings = srcDirs.collect{ it.path.split('/')[-3..-1].join('/') }
+    sourcesDirStrings = sourcesDirStrings.collect{ it.split('/')[-3..-1].join('/') }
 
     then:
     noExceptionThrown()
