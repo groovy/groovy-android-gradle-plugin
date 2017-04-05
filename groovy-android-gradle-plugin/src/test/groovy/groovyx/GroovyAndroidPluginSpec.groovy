@@ -16,12 +16,14 @@
 
 package groovyx
 
+import com.android.build.gradle.AppPlugin
 import com.android.build.gradle.api.AndroidSourceSet
 import groovyx.internal.AndroidFileHelper
 import groovyx.internal.AndroidPluginHelper
 import groovyx.internal.TestProperties
 import org.gradle.api.Project
 import org.gradle.api.tasks.GroovySourceSet
+import org.gradle.api.tasks.compile.GroovyCompile
 import org.gradle.testfixtures.ProjectBuilder
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
@@ -89,12 +91,12 @@ class GroovyAndroidPluginSpec extends Specification implements AndroidFileHelper
       compileSdkVersion TestProperties.getCompileSdkVersion()
     }
 
-    // Android Plugin Reqires this file to exist with parsable XML
+    // Android Plugin Requires this file to exist with parsable XML
     createSimpleAndroidManifest()
 
     when:
     project.evaluate()
-    def groovyTasks = project.tasks.findAll { it.name.contains('Groovy') }
+    def groovyTasks = project.tasks.withType(GroovyCompile)
     def taskNames = groovyTasks.collect { it.name }
 
     then:
@@ -125,7 +127,7 @@ class GroovyAndroidPluginSpec extends Specification implements AndroidFileHelper
 
     when:
     project.evaluate()
-    def groovyTasks = project.tasks.findAll { it.name.contains('Groovyc') }
+    def groovyTasks = project.tasks.withType(GroovyCompile)
 
     then:
     groovyTasks.each { task ->
@@ -137,6 +139,27 @@ class GroovyAndroidPluginSpec extends Specification implements AndroidFileHelper
     version | _
     '1.6'   | _
     '1.7'   | _
+  }
+
+  def "should not enable groovy tasks if no source set"() {
+    given:
+    project.with {
+      pluginManager.apply(AppPlugin)
+      pluginManager.apply(GroovyAndroidPlugin)
+      android {
+        buildToolsVersion TestProperties.getBuildToolsVersion()
+        compileSdkVersion TestProperties.getCompileSdkVersion()
+      }
+    }
+
+    // Android Plugin Requires this file to exist with parsable XML
+    createSimpleAndroidManifest()
+
+    when:
+    project.evaluate()
+
+    then:
+    project.tasks.withType(GroovyCompile).size() == 0
   }
 }
 

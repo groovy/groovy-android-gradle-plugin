@@ -4,8 +4,8 @@ android:
   components:
     - tools
     - platform-tools
-    - build-tools-24.0.2
-    - android-24
+    - build-tools-25.0.2
+    - android-25
     - extra-google-m2repository
     - extra-android-m2repository
 
@@ -18,7 +18,7 @@ before_install:
   - sed -e "s/^\\(127\\.0\\.0\\.1.*\\)/\\1 $(hostname | cut -c1-63)/" /etc/hosts | sudo tee /etc/hosts
   - cat /etc/hosts # optionally check the content *after*
 
-script: ./gradlew -q -s -PbuildInfo.build.number=$TRAVIS_BUILD_NUMBER -PbuildInfo.buildUrl=https://travis-ci.org/${TRAVIS_REPO_SLUG}/builds/${TRAVIS_JOB_ID}
+script: ./gradlew -q -s -Dscan -PbuildInfo.build.number=$TRAVIS_BUILD_NUMBER -PbuildInfo.buildUrl=https://travis-ci.org/${TRAVIS_REPO_SLUG}/builds/${TRAVIS_JOB_ID}
   -PbuildInfo.buildAgent.name=$USER -PbuildInfo.principal=$USER --debug --info clean assemble check fullTest artifactoryPublish
 
 branches:

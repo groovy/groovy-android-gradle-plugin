@@ -64,28 +64,32 @@ class GroovyAndroidPlugin implements Plugin<Project> {
     extension = project.extensions.create(ANDROID_GROOVY_EXTENSION_NAME, GroovyAndroidExtension, project, instantiator, fileResolver)
 
     androidExtension.sourceSets.all { AndroidSourceSet sourceSet ->
-      if (sourceSet instanceof HasConvention) {
-        def sourceSetName = sourceSet.name
-
-        def sourceSetPath = project.file("src/$sourceSetName/groovy")
-
-        // add so Android Studio will recognize groovy files can see these
-        sourceSet.java.srcDir(sourceSetPath)
-
-        // create groovy source set so we can access it later
-        def groovySourceSet = extension.sourceSetsContainer.maybeCreate(sourceSetName)
-        sourceSet.convention.plugins['groovy'] = groovySourceSet
-        def groovyDirSet = groovySourceSet.groovy
-        groovyDirSet.srcDir(sourceSetPath)
-
-        project.logger.debug("Created groovy sourceDirectorySet at $groovyDirSet.srcDirs")
+      if (!(sourceSet instanceof HasConvention)) {
+        return
       }
+
+      def sourceSetName = sourceSet.name
+      def sourceSetPath = project.file("src/$sourceSetName/groovy")
+
+      if (!sourceSetPath.exists()) {
+        return
+      }
+
+      // add so Android Studio will recognize groovy files can see these
+      sourceSet.java.srcDir(sourceSetPath)
+
+      // create groovy source set so we can access it later
+      def groovySourceSet = extension.sourceSetsContainer.maybeCreate(sourceSetName)
+      sourceSet.convention.plugins['groovy'] = groovySourceSet
+      def groovyDirSet = groovySourceSet.groovy
+      groovyDirSet.srcDir(sourceSetPath)
+
+      project.logger.debug("Created groovy sourceDirectorySet at $groovyDirSet.srcDirs")
     }
 
     project.afterEvaluate { Project afterProject ->
       def androidPlugin = getAndroidBasePlugin(afterProject)
       def variantManager = getVariantManager(androidPlugin)
-
       processVariantData(variantManager.variantDataList, androidExtension, androidPlugin)
     }
   }
@@ -121,6 +125,12 @@ class GroovyAndroidPlugin implements Plugin<Project> {
       def providers = variantData.variantConfiguration.sortedSourceProviders
       providers.each { SourceProvider provider ->
         def groovySourceSet = provider.convention.plugins['groovy'] as GroovySourceSet
+        if (groovySourceSet == null) {
+          // no source set skip task for this set
+          project.tasks.remove(groovyTask)
+          return
+        }
+
         def groovySourceDirectorySet = groovySourceSet.groovy
         groovyTask.source(groovySourceDirectorySet)
 
@@ -138,7 +148,6 @@ class GroovyAndroidPlugin implements Plugin<Project> {
           }
         }
       }
-
 
       def additionalSourceFiles = getGeneratedSourceDirs(variantData)
       groovyTask.source(*additionalSourceFiles)
