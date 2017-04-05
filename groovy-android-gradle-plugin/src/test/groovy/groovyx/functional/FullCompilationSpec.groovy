@@ -234,12 +234,15 @@ class FullCompilationSpec extends FunctionalSpec {
     'JavaVersion.VERSION_1_6'       | '1.3.0'              | '2.2'
     'JavaVersion.VERSION_1_6'       | '1.5.0'              | '2.10'
     'JavaVersion.VERSION_1_7'       | '1.5.0'              | '2.11'
-    'JavaVersion.VERSION_1_7'       | '1.5.0'              | '2.12' // added due to breaking changes in gradle 2.12
+    'JavaVersion.VERSION_1_7'       | '1.5.0'              | '2.12'
     'JavaVersion.VERSION_1_7'       | '2.0.0'              | '2.13'
     'JavaVersion.VERSION_1_7'       | '2.1.2'              | '2.14'
     'JavaVersion.VERSION_1_7'       | '2.2.0'              | '2.14.1'
     'JavaVersion.VERSION_1_7'       | '2.2.0'              | '3.0'
     'JavaVersion.VERSION_1_7'       | '2.2.0'              | '3.1'
+    'JavaVersion.VERSION_1_6'       | '2.2.3'              | '3.2'
+    'JavaVersion.VERSION_1_7'       | '2.3.0'              | '3.3'
+    'JavaVersion.VERSION_1_7'       | '2.3.0'              | '3.4'
   }
 
   @Unroll
@@ -393,11 +396,14 @@ class FullCompilationSpec extends FunctionalSpec {
     'JavaVersion.VERSION_1_6'       | '1.3.0'              | '2.2'
     'JavaVersion.VERSION_1_6'       | '1.5.0'              | '2.10'
     'JavaVersion.VERSION_1_7'       | '1.5.0'              | '2.11'
-    'JavaVersion.VERSION_1_7'       | '1.5.0'              | '2.12' // added due to breaking changes in gradle 2.12
+    'JavaVersion.VERSION_1_7'       | '1.5.0'              | '2.12'
     'JavaVersion.VERSION_1_7'       | '2.0.0'              | '2.13'
     'JavaVersion.VERSION_1_7'       | '2.1.2'              | '2.14'
     'JavaVersion.VERSION_1_7'       | '2.2.0'              | '2.14.1'
     'JavaVersion.VERSION_1_7'       | '2.2.0'              | '3.0'
     'JavaVersion.VERSION_1_7'       | '2.2.0'              | '3.1'
+    'JavaVersion.VERSION_1_6'       | '2.2.3'              | '3.2'
+    'JavaVersion.VERSION_1_7'       | '2.3.0'              | '3.3'
+    'JavaVersion.VERSION_1_7'       | '2.3.0'              | '3.4'
   }
 }

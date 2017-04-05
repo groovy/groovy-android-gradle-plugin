@@ -25,16 +25,25 @@ import org.gradle.api.Project
 trait AndroidPluginHelper {
   void applyAppPlugin() {
     project.pluginManager.apply(AppPlugin)
+    createSourceDirs()
     project.pluginManager.apply(GroovyAndroidPlugin)
   }
 
   void applyLibraryPlugin() {
     project.pluginManager.apply(LibraryPlugin)
+    createSourceDirs()
     project.pluginManager.apply(GroovyAndroidPlugin)
   }
 
   GroovyAndroidExtension getExtension() {
     project.extensions.getByType(GroovyAndroidExtension)
+  }
+
+  private void createSourceDirs() {
+    def sourceSets = project.extensions.getByName('android').sourceSets
+    sourceSets.each {
+      project.file("src/$it.name/groovy").mkdirs()
+    }
   }
 
   abstract Project getProject()

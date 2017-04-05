@@ -21,7 +21,7 @@ apply from: "$rootDir/gradle/extraAndroidTasks.gradle"
 description = 'Sample project showing how to use Goovy on Android - http://www.groovy-lang.org'
 
 android {
-  compileSdkVersion 24
+  compileSdkVersion 25
   buildToolsVersion rootProject.buildToolsVersion
 
   defaultConfig {
