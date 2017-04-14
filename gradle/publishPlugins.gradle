@@ -1,0 +1,17 @@
+apply plugin: 'com.gradle.plugin-publish'
+
+pluginBundle {
+  website = 'http://www.groovy-lang.org/'
+  vcsUrl = 'https://github.com/groovy/groovy-android-gradle-plugin'
+  tags = ['android', 'groovy', 'grooid', 'spock', 'application']
+
+  plugins {
+    groovyAndroidPlugin {
+      id = 'org.codehaus.groovy.android'
+      displayName = 'Android Groovy Gradle Plugin'
+      description = 'This plugin adds Groovy language support for Android applications and libraries.'
+      tags = ['android', 'groovy', 'grooid', 'spock', 'application']
+    }
+  }
+}
+

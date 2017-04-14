@@ -22,6 +22,7 @@ apply from: "$rootDir/gradle/bintray.gradle"
 apply from: "$rootDir/gradle/artifactory.gradle"
 apply from: "$rootDir/gradle/versionFile.gradle"
 apply from: "$rootDir/gradle/codenarc.gradle"
+apply from: "$rootDir/gradle/publishPlugins.gradle"
 
 description = 'Groovy support for Android with the Gradle build tool - http://www.groovy-lang.org'
 
@@ -50,7 +51,7 @@ task fullTest(type: Test) {
 task release {
   description = 'Releases a version of the plugin on Artifactory and Bintray'
   group = 'Publishing'
-  dependsOn fullTest, artifactoryPublish, bintrayUpload, rootProject.tasks.tagRelease
+  dependsOn fullTest, artifactoryPublish, bintrayUpload, publishPlugins, rootProject.tasks.tagRelease
 }
 
 tasks.withType(Test) {

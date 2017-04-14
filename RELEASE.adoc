@@ -3,4 +3,4 @@
 . Prepare for release `./gradlew prepareRelease`
 . Update Version Number: remove -SNAPSHOT and commit the change
 . Run release task `./gradlew release`
-. Update Version Number in build.gradle and README.adoc
+. Update Version Number in build.gradle and README.adoc (bump and put SNAPSHOT back)
