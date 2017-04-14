@@ -1,0 +1,6 @@
+= How to Release
+
+. Prepare for release `./gradlew prepareRelease`
+. Update Version Number: remove -SNAPSHOT and commit the change
+. Run release task `./gradlew release`
+. Update Version Number in build.gradle and README.adoc
