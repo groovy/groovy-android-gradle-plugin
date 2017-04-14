@@ -17,6 +17,7 @@
 package groovyx.internal
 
 import groovyx.api.AndroidGroovySourceSet
+import org.gradle.api.Action
 import org.gradle.api.file.SourceDirectorySet
 import org.gradle.api.internal.file.DefaultSourceDirectorySet
 import org.gradle.api.internal.file.FileResolver
@@ -48,6 +49,15 @@ class DefaultAndroidGroovySourceSet implements AndroidGroovySourceSet {
       allGroovy.source(groovy)
       allGroovy.filter.include("**/*.groovy")
     }
+  }
+
+  /**
+   * Looks like this was added in Gradle 3.3 which was causing breaking issues. Leave Override off
+   * to prevent issues.
+   */
+  GroovySourceSet groovy(Action<? super SourceDirectorySet> configureAction) {
+    configureAction.execute(groovy)
+    return this
   }
 
   @Override GroovySourceSet groovy(Closure configureClosure) {
