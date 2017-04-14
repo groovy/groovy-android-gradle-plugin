@@ -1,7 +1,7 @@
-:groovyVersion: 2.4.7
+:groovyVersion: 2.4.10
 :pluginVersion: 1.1.0
 :pluginSnapshotVersion: 1.2.0
-:androidPluginVersion: 2.2.0
+:androidPluginVersion: 2.2.3
 
 = Groovy language support for Android
 
@@ -136,6 +136,24 @@ compile ('org.codehaus.groovy:groovy-xml:2.4.3') {
 }
 ----
 
+== Skipping Groovy Compile
+
+As of version 1.2.0 only build types/build flavors with groovy sources included in them will have
+the groovy compile task added. If you would like to skip the groovy compilation tasks on older
+versions or on newer version wish to skip them in build types that have groovy sources you can use
+the following to disable the groovy compiler task.
+
+[source, groovy]
+```
+tasks.whenTaskAdded { task ->
+  if (task.name == 'compileDebugGroovyWithGroovyc') {
+    task.enabled = false
+  }
+}
+```
+
+This example disables groovy compilation only for the debug build type, simply replace
+`compileDebugGroovyWithGroovyc` with whichever compilation task you would like skip to disable it.
 
 == Configuring the Groovy compilation options
 
