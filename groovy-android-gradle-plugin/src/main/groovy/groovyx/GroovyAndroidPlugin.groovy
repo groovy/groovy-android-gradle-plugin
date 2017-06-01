@@ -137,7 +137,7 @@ class GroovyAndroidPlugin implements Plugin<Project> {
         // Exclude any java files that may be included in both java and groovy source sets
         javaTask.exclude { file ->
           project.logger.debug("Exclude java file $file.file")
-          project.logger.debug("Eexlude against groovy files $groovySourceSet.groovy.files")
+          project.logger.debug("Exelude against groovy files $groovySourceSet.groovy.files")
           file.file in groovySourceSet.groovy.files
         }
 
@@ -156,6 +156,11 @@ class GroovyAndroidPlugin implements Plugin<Project> {
         def androidRunTime = project.files(getRuntimeJars(androidPlugin, androidExtension))
         task.classpath = androidRunTime + javaTask.classpath
         task.groovyClasspath = task.classpath
+
+        project.logger.debug("Java compilerArgs $javaTask.options.compilerArgs")
+        groovyTask.options.compilerArgs += javaTask.options.compilerArgs
+        project.logger.debug("Groovy CompilerArgs $groovyTask.options.compilerArgs")
+        groovyTask.groovyOptions.javaAnnotationProcessing = true
       }
 
       javaTask.finalizedBy(groovyTask)
@@ -178,7 +183,9 @@ class GroovyAndroidPlugin implements Plugin<Project> {
   private static getRuntimeJars(BasePlugin plugin, BaseExtension extension) {
     if (plugin.metaClass.getMetaMethod('getRuntimeJarList')) {
       return plugin.runtimeJarList
-    } else if (extension.metaClass.getMetaMethod('getBootClasspath')) {
+    }
+
+    if (extension.metaClass.getMetaMethod('getBootClasspath')) {
       return extension.bootClasspath
     }
 
@@ -188,9 +195,12 @@ class GroovyAndroidPlugin implements Plugin<Project> {
   private static SourceTask getJavaTask(BaseVariantData baseVariantData) {
     if (baseVariantData.metaClass.getMetaProperty('javaCompileTask')) {
       return baseVariantData.javaCompileTask
-    } else if (baseVariantData.metaClass.getMetaProperty('javaCompilerTask')) {
+    }
+
+    if (baseVariantData.metaClass.getMetaProperty('javaCompilerTask')) {
       return baseVariantData.javaCompilerTask
     }
+
     return null
   }
 
@@ -228,6 +238,10 @@ class GroovyAndroidPlugin implements Plugin<Project> {
 
     if (variantData.scope.getAidlCompileTask() != null) {
       result << variantData.scope.aidlSourceOutputDir
+    }
+
+    if (variantData.scope.annotationProcessorOutputDir != null) {
+      result << variantData.scope.annotationProcessorOutputDir
     }
 
     // We use getter instead of property for globalScope since property returns

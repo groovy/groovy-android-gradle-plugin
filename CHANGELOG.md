@@ -1,3 +1,8 @@
+1.2.0
+-----
+    * Added support for annotation processing (#142)
+    * Disabled groovy task for when there are no groovy sources
+    * Dropped support for Android Gradle Plugin Versions < 1.5.0
 1.1.0
 -----
     * Support for 2.2.0 of Android Gradle Plugin
