@@ -1,6 +1,6 @@
-:groovyVersion: 2.4.10
-:pluginVersion: 1.1.0
-:pluginSnapshotVersion: 1.2.0
+:groovyVersion: 2.4.11
+:pluginVersion: 1.2.0
+:pluginSnapshotVersion: 1.3.0
 :androidPluginVersion: 2.2.3
 
 = Groovy language support for Android
@@ -51,7 +51,7 @@ Then you can start using Groovy by adding the groovy dependency with the `grooid
 [source, groovy, subs='attributes']
 ----
 dependencies {
-  compile "org.codehaus.groovy:groovy:{groovyVersion}:grooid"
+  compile 'org.codehaus.groovy:groovy:{groovyVersion}:grooid'
 }
 ----
 
@@ -71,7 +71,7 @@ buildscript {
 }
   dependencies {
     classpath 'com.android.tools.build:gradle:2.2.0'
-    classpath "org.codehaus.groovy:groovy-android-gradle-plugin:{pluginSnapshotVersion}-SNAPSHOT"
+    classpath 'org.codehaus.groovy:groovy-android-gradle-plugin:{pluginSnapshotVersion}-SNAPSHOT'
   }
 }
 ----
@@ -194,41 +194,7 @@ androidGroovy {
 
 == Annotation Processing
 
-To use annotation processing `javaAnnotationProcessing` must be set to true in `groovyOptions`
-
-[source, groovy]
-----
-androidGroovy {
-  options {
-    configure(groovyOptions) {
-      javaAnnotationProcessing = true
-    }
-  }
-}
-----
-
-NOTE: `skipJavaC` must not be set to true. The java compilation
-process needs to run in order to trigger the annotation processors.
-
-A useful but not required tool is https://bitbucket.org/hvisser/android-apt[android-apt]
-which helps android studio pick up generated files so that auto-complete works
-correctly.
-
-IMPORTANT: https://bitbucket.org/hvisser/android-apt[android-apt] must be
-applied after the groovy android plugin.
-
-For more examples of annotation processing setup see
-https://github.com/pieces029/is-taylor-swift-single-groovy-android[Example Dagger Application]
-and https://github.com/pieces029/groovy-android-data-binding[Example Databinding Application]
-
-== Data Binding
-
-Databinding is actually annotation processing but hidden behind Android Studio
-and a Gradle plugin. Because of this you will need to use the https://bitbucket.org/hvisser/android-apt[android-apt]
-in order to see any of the generated output files.
-
-The setup for Databinding and <<Annotation Processing>> are the same, refer to the
-previous section in order to enable <<Annotation Processing>>.
+As of 1.2.0 Release annotation processing is configured by default.
 
 == Android `packagingOptions`
 

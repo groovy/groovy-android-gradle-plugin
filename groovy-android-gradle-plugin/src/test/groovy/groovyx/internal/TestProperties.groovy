@@ -16,21 +16,22 @@
 
 package groovyx.internal
 
+// default values added to be able to run tests in intellij
 abstract class TestProperties {
   static boolean isAllTests() {
     return System.getProperty('allTests', 'false') == 'true'
   }
 
   static String getAndroidPluginVersion() {
-    return System.getProperty('androidPluginVersion')
+    return System.getProperty('androidPluginVersion')?:'2.3.2'
   }
 
   static String getBuildToolsVersion() {
-    return System.getProperty('buildToolsVersion')
+    return System.getProperty('buildToolsVersion')?:'25.0.3'
   }
 
   static int getCompileSdkVersion() {
     String prop = System.getProperty('compileSdkVersion')
-    return Integer.parseInt(prop)
+    return Integer.parseInt(prop?:'25')
   }
 }
