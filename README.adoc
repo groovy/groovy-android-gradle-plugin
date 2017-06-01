@@ -1,4 +1,4 @@
-:groovyVersion: 2.4.10
+:groovyVersion: 2.4.11
 :pluginVersion: 1.1.0
 :pluginSnapshotVersion: 1.2.0
 :androidPluginVersion: 2.2.3
@@ -51,7 +51,7 @@ Then you can start using Groovy by adding the groovy dependency with the `grooid
 [source, groovy, subs='attributes']
 ----
 dependencies {
-  compile "org.codehaus.groovy:groovy:{groovyVersion}:grooid"
+  compile 'org.codehaus.groovy:groovy:{groovyVersion}:grooid'
 }
 ----
 
@@ -71,7 +71,7 @@ buildscript {
 }
   dependencies {
     classpath 'com.android.tools.build:gradle:2.2.0'
-    classpath "org.codehaus.groovy:groovy-android-gradle-plugin:{pluginSnapshotVersion}-SNAPSHOT"
+    classpath 'org.codehaus.groovy:groovy-android-gradle-plugin:{pluginSnapshotVersion}-SNAPSHOT'
   }
 }
 ----
@@ -206,16 +206,6 @@ androidGroovy {
   }
 }
 ----
-
-NOTE: `skipJavaC` must not be set to true. The java compilation
-process needs to run in order to trigger the annotation processors.
-
-A useful but not required tool is https://bitbucket.org/hvisser/android-apt[android-apt]
-which helps android studio pick up generated files so that auto-complete works
-correctly.
-
-IMPORTANT: https://bitbucket.org/hvisser/android-apt[android-apt] must be
-applied after the groovy android plugin.
 
 For more examples of annotation processing setup see
 https://github.com/pieces029/is-taylor-swift-single-groovy-android[Example Dagger Application]
