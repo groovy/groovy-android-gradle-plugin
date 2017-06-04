@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 the original author or authors.
+ * Copyright 2017 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ import com.android.build.gradle.internal.variant.BaseVariantData
 import com.android.build.gradle.internal.variant.BaseVariantOutputData
 import com.android.builder.model.SourceProvider
 import groovy.transform.CompileStatic
+import groovy.util.logging.Slf4j
 import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -40,6 +41,7 @@ import javax.inject.Inject
 /**
  * Adds support for building Android applications using the Groovy language.
  */
+@Slf4j
 class GroovyAndroidPlugin implements Plugin<Project> {
 
   public static final String ANDROID_GROOVY_EXTENSION_NAME = 'androidGroovy'
@@ -84,7 +86,7 @@ class GroovyAndroidPlugin implements Plugin<Project> {
       def groovyDirSet = groovySourceSet.groovy
       groovyDirSet.srcDir(sourceSetPath)
 
-      project.logger.debug("Created groovy sourceDirectorySet at $groovyDirSet.srcDirs")
+      log.debug('Created groovy sourceDirectorySet at {}', groovyDirSet.srcDirs)
     }
 
     project.afterEvaluate { Project afterProject ->
@@ -100,11 +102,11 @@ class GroovyAndroidPlugin implements Plugin<Project> {
 
     variantDataList.each { variantData ->
       def variantDataName = variantData.name
-      project.logger.debug("Process variant [$variantDataName]")
+      log.debug('Process variant {}', variantDataName)
 
       def javaTask = getJavaTask(variantData)
       if (javaTask == null) {
-        project.logger.info("javaTask is missing for $variantDataName, so Groovy files won't be compiled for it")
+        log.info('javaTask is missing for {}, so Groovy files won\'t be compiled for it', variantDataName)
         return
       }
 
@@ -136,8 +138,6 @@ class GroovyAndroidPlugin implements Plugin<Project> {
 
         // Exclude any java files that may be included in both java and groovy source sets
         javaTask.exclude { file ->
-          project.logger.debug("Exclude java file $file.file")
-          project.logger.debug("Exelude against groovy files $groovySourceSet.groovy.files")
           file.file in groovySourceSet.groovy.files
         }
 
@@ -154,14 +154,15 @@ class GroovyAndroidPlugin implements Plugin<Project> {
 
       groovyTask.doFirst { GroovyCompile task ->
         def androidRunTime = project.files(getRuntimeJars(androidPlugin, androidExtension))
-        task.classpath = androidRunTime + javaTask.classpath
+        def kotlinFiles = project.files(getKotlinClassFiles(variantDataName))
+        task.classpath = androidRunTime + javaTask.classpath + kotlinFiles
         task.groovyClasspath = task.classpath
-
-        project.logger.debug("Java compilerArgs $javaTask.options.compilerArgs")
-        groovyTask.options.compilerArgs += javaTask.options.compilerArgs
-        project.logger.debug("Groovy CompilerArgs $groovyTask.options.compilerArgs")
-        groovyTask.groovyOptions.javaAnnotationProcessing = true
+        task.options.compilerArgs += javaTask.options.compilerArgs
+        task.groovyOptions.javaAnnotationProcessing = true
       }
+
+      log.debug('Groovy classpath: {}', groovyTask.classpath.files)
+      log.debug('Groovy compiler args {}', groovyTask.options.compilerArgs)
 
       javaTask.finalizedBy(groovyTask)
     }
@@ -264,5 +265,17 @@ class GroovyAndroidPlugin implements Plugin<Project> {
 
   private static VariantManager getVariantManager(BasePlugin plugin) {
     return plugin.variantManager
+  }
+
+  private getKotlinClassFiles(String variantName) {
+    // kotlin plugin exists
+    def kotlin = project.plugins.findPlugin('kotlin-android')
+    if (kotlin != null) {
+      def kotlinCopyTask = project.tasks.findByName("copy${variantName.capitalize()}KotlinClasses")
+      return kotlinCopyTask.kotlinOutputDir
+    }
+
+    // empty list to avoid null issues when adding to FileCollection
+    return Collections.emptyList()
   }
 }

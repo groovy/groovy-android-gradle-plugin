@@ -130,6 +130,7 @@ class GroovyAndroidPluginSpec extends Specification implements AndroidFileHelper
     def groovyTasks = project.tasks.withType(GroovyCompile)
 
     then:
+    !groovyTasks.isEmpty()
     groovyTasks.each { task ->
       assert task.sourceCompatibility == version
       assert task.targetCompatibility == version
