@@ -27,7 +27,7 @@ buildscript {
     classpath 'org.jfrog.buildinfo:build-info-extractor-gradle:3.2.0'
     classpath 'com.github.ben-manes:gradle-versions-plugin:0.14.0'
     classpath 'com.netflix.nebula:gradle-extra-configurations-plugin:3.1.0'
-    classpath 'com.gradle:build-scan-plugin:1.6'
+    classpath 'com.gradle:build-scan-plugin:1.7.4'
     classpath 'com.gradle.publish:plugin-publish-plugin:0.9.7'
   }
 }

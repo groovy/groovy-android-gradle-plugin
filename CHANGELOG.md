@@ -2,6 +2,8 @@
 -----
     * Added support for annotation processing (#142)
     * Disabled groovy task for when there are no groovy sources
+    * Kotlin Support - Kotlin plugin applied before Groovy plugin will allow the Groovy compiler
+    to know about the Kotlin source files. (#139)
     * Dropped support for Android Gradle Plugin Versions < 1.5.0
 1.1.0
 -----
