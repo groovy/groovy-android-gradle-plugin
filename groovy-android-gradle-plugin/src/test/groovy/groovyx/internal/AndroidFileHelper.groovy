@@ -27,4 +27,19 @@ trait AndroidFileHelper implements FileHelper {
           package="groovyx.test" />
     """.trim()
   }
+
+  void createSimpleGroovyFile() {
+    file('src/main/groovy/groovyx/Simple.groovy') << """
+      package groovyx
+      
+      import groovy.transform.CompileStatic
+      
+      @CompileStatic
+      class Simple {
+        void doWork() {
+          'Hello World'
+        }
+      }
+    """
+  }
 }

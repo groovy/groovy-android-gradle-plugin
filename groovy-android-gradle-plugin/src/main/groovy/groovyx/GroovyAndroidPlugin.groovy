@@ -74,6 +74,7 @@ class GroovyAndroidPlugin implements Plugin<Project> {
       def sourceSetPath = project.file("src/$sourceSetName/groovy")
 
       if (!sourceSetPath.exists()) {
+        log.debug('SourceSet path does not exists for {} {}', sourceSetName, sourceSetPath)
         return
       }
 
@@ -128,8 +129,6 @@ class GroovyAndroidPlugin implements Plugin<Project> {
       providers.each { SourceProvider provider ->
         def groovySourceSet = provider.convention.plugins['groovy'] as GroovySourceSet
         if (groovySourceSet == null) {
-          // no source set skip task for this set
-          project.tasks.remove(groovyTask)
           return
         }
 
@@ -148,6 +147,14 @@ class GroovyAndroidPlugin implements Plugin<Project> {
           }
         }
       }
+
+      // no sources for groovy to compile skip the groovy task
+      if (groovyTask.source.empty) {
+        log.debug('no groovy sources found for {} removing groovy task', variantDataName)
+        project.tasks.remove(groovyTask)
+        return
+      }
+      log.debug('groovy sources for {}: {}', variantDataName, groovyTask.source.files)
 
       def additionalSourceFiles = getGeneratedSourceDirs(variantData)
       groovyTask.source(*additionalSourceFiles)
