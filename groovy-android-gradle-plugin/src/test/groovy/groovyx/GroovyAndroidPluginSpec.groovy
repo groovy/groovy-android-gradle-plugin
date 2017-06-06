@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 the original author or authors.
+ * Copyright 2017 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -93,6 +93,15 @@ class GroovyAndroidPluginSpec extends Specification implements AndroidFileHelper
 
     // Android Plugin Requires this file to exist with parsable XML
     createSimpleAndroidManifest()
+    createSimpleGroovyFile()
+    file('src/androidTest/groovy/groovyx/SimpleAndroidTest.groovy') << """
+      package groovyx
+      class SimpleAndroidTest { }
+    """
+    file('src/test/groovy/groovyx/SimpleTest.groovy') << """
+      package groovyx 
+      class SimpleTest { }
+    """
 
     when:
     project.evaluate()
@@ -122,15 +131,16 @@ class GroovyAndroidPluginSpec extends Specification implements AndroidFileHelper
       }
     }
 
-    // Android Plugin Reqires this file to exist with parsable XML
+    // Android Plugin Requires this file to exist with parsable XML
     createSimpleAndroidManifest()
+    createSimpleGroovyFile()
 
     when:
     project.evaluate()
     def groovyTasks = project.tasks.withType(GroovyCompile)
 
     then:
-    !groovyTasks.isEmpty()
+    groovyTasks.size() == 2
     groovyTasks.each { task ->
       assert task.sourceCompatibility == version
       assert task.targetCompatibility == version
