@@ -1,13 +1,13 @@
-:groovyVersion: 2.4.10
-:pluginVersion: 1.1.0
-:pluginSnapshotVersion: 1.2.0
-:androidPluginVersion: 2.2.3
+:groovyVersion: 2.4.11
+:pluginVersion: 1.2.0
+:pluginSnapshotVersion: 1.3.0
+:androidPluginVersion: 2.3.2
 
 = Groovy language support for Android
 
 link:https://travis-ci.org/groovy/groovy-android-gradle-plugin[image:https://travis-ci.org/groovy/groovy-android-gradle-plugin.svg?branch=master[Build Status]]
 
-This plugin adds http://groovy-lang.org[Groovy language] support for Android applications and libraries.
+This plugin adds http://groovy-lang.org[Groovy Language] support for Android applications and libraries.
 
 == Quick Start
 Use a https://github.com/pledbrook/lazybones[lazybones] template from
@@ -15,7 +15,7 @@ https://github.com/rvanderwerf/grooid-templates[grooid-template]
 
 == Usage
 
-Edit your `build.gradle` file with the following:
+Edit your `build.gradle` file to contain the following:
 
 [source, groovy, subs='attributes']
 ----
@@ -34,10 +34,10 @@ apply plugin: 'com.android.application'
 apply plugin: 'groovyx.android'
 ----
 
-The latest version can be found https://github.com/groovy/groovy-android-gradle-plugin/releases[here]
+The latest version of the Groovy Android Plugin can be found https://github.com/groovy/groovy-android-gradle-plugin/releases[here]
 
-Then you must choose which version of Groovy you use. So far, Android support is available in
-the 2.4.0 release and beyond, you will need to add the following repository to your `build.gradle` file:
+Then you must choose which version of Groovy you use. Android support is available in
+starting at the 2.4.x releases. You will need to add the following repository to your `build.gradle` file:
 
 [source, groovy]
 ----
@@ -51,12 +51,12 @@ Then you can start using Groovy by adding the groovy dependency with the `grooid
 [source, groovy, subs='attributes']
 ----
 dependencies {
-  compile "org.codehaus.groovy:groovy:{groovyVersion}:grooid"
+  compile 'org.codehaus.groovy:groovy:{groovyVersion}:grooid'
 }
 ----
 
-where `$groovyVersion` should be released with a version from https://bintray.com/groovy/maven/groovy[here].
-Then use the `assembleDebug` task to test out your build and make sure everything compiles.
+Full list of releases can be found here https://bintray.com/groovy/maven/groovy[here].
+Then use the `assembleDebug` gradle task to test out your build and make sure everything compiles.
 
 Should you want to test development versions of the plugin, you can add the snapshot repository and
 depend on a SNAPSHOT:
@@ -71,7 +71,7 @@ buildscript {
 }
   dependencies {
     classpath 'com.android.tools.build:gradle:2.2.0'
-    classpath "org.codehaus.groovy:groovy-android-gradle-plugin:{pluginSnapshotVersion}-SNAPSHOT"
+    classpath 'org.codehaus.groovy:groovy-android-gradle-plugin:{pluginSnapshotVersion}-SNAPSHOT'
   }
 }
 ----
@@ -88,7 +88,7 @@ for more about configuring different build variants.
 
 Extra groovy sources may be added in a similar fashion as the https://sites.google.com/a/android.com/tools/tech-docs/new-build-system/user-guide#TOC-Sourcesets-and-Dependencies[android plugin]
 using the `androidGroovy.sourceSets` block. This is especially useful for sharing code between the different test types, and also
-allows you to add Groovy to a previous project. For example
+allows you to add Groovy to an existing project. For example
 
 [source, groovy]
 ----
@@ -105,8 +105,8 @@ androidGroovy {
 
 would add all of the Java files in `src/main/java` directory to the Groovy
 compile task. These files will be removed from the Java compile task,
-instead being compiled by the Groovy compile, and will allow for the Java sources
-to make references to the Groovy sources (joint compilation).
+instead being compiled by GroovyC, and will allow for the Java sources
+to be referenced in the Groovy sources (joint compilation).
 Please note, that you may need to also add these extra directories to the Java
 source sets in the android plugin for Android Studio to recognize the Groovy
 files as source.
@@ -146,13 +146,13 @@ the following to disable the groovy compiler task.
 [source, groovy]
 ```
 tasks.whenTaskAdded { task ->
-  if (task.name == 'compileDebugGroovyWithGroovyc') {
+  if (task.name == 'compileDebugGroovyWithGroovyc') { # <1>
     task.enabled = false
   }
 }
 ```
 
-This example disables groovy compilation only for the debug build type, simply replace
+<1> Disables groovy compilation only for the debug build type, simply replace
 `compileDebugGroovyWithGroovyc` with whichever compilation task you would like skip to disable it.
 
 == Configuring the Groovy compilation options
@@ -194,7 +194,9 @@ androidGroovy {
 
 == Annotation Processing
 
-To use annotation processing `javaAnnotationProcessing` must be set to true in `groovyOptions`
+As of 1.2.0 Release annotation processing is configured by default.
+
+Previous versions would require `javaAnnotationProcessing` to be set to true.
 
 [source, groovy]
 ----
@@ -206,29 +208,6 @@ androidGroovy {
   }
 }
 ----
-
-NOTE: `skipJavaC` must not be set to true. The java compilation
-process needs to run in order to trigger the annotation processors.
-
-A useful but not required tool is https://bitbucket.org/hvisser/android-apt[android-apt]
-which helps android studio pick up generated files so that auto-complete works
-correctly.
-
-IMPORTANT: https://bitbucket.org/hvisser/android-apt[android-apt] must be
-applied after the groovy android plugin.
-
-For more examples of annotation processing setup see
-https://github.com/pieces029/is-taylor-swift-single-groovy-android[Example Dagger Application]
-and https://github.com/pieces029/groovy-android-data-binding[Example Databinding Application]
-
-== Data Binding
-
-Databinding is actually annotation processing but hidden behind Android Studio
-and a Gradle plugin. Because of this you will need to use the https://bitbucket.org/hvisser/android-apt[android-apt]
-in order to see any of the generated output files.
-
-The setup for Databinding and <<Annotation Processing>> are the same, refer to the
-previous section in order to enable <<Annotation Processing>>.
 
 == Android `packagingOptions`
 

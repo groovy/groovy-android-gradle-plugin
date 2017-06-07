@@ -230,8 +230,6 @@ class FullCompilationSpec extends FunctionalSpec {
     where:
     // test common configs that touches the different way to access the classpath
     javaVersion                     | androidPluginVersion | gradleVersion
-    'JavaVersion.VERSION_1_6'       | '1.1.0'              | '2.2'
-    'JavaVersion.VERSION_1_6'       | '1.3.0'              | '2.2'
     'JavaVersion.VERSION_1_6'       | '1.5.0'              | '2.10'
     'JavaVersion.VERSION_1_7'       | '1.5.0'              | '2.11'
     'JavaVersion.VERSION_1_7'       | '1.5.0'              | '2.12'
@@ -244,6 +242,7 @@ class FullCompilationSpec extends FunctionalSpec {
     'JavaVersion.VERSION_1_7'       | '2.3.0'              | '3.3'
     'JavaVersion.VERSION_1_7'       | '2.3.0'              | '3.4'
     'JavaVersion.VERSION_1_7'       | '2.3.1'              | '3.5'
+    'JavaVersion.VERSION_1_7'       | '2.3.2'              | '3.5'
   }
 
   @Unroll
@@ -393,8 +392,6 @@ class FullCompilationSpec extends FunctionalSpec {
     where:
     // test common configs that touches the different way to access the classpath
     javaVersion                     | androidPluginVersion | gradleVersion
-    'JavaVersion.VERSION_1_6'       | '1.1.0'              | '2.2'
-    'JavaVersion.VERSION_1_6'       | '1.3.0'              | '2.2'
     'JavaVersion.VERSION_1_6'       | '1.5.0'              | '2.10'
     'JavaVersion.VERSION_1_7'       | '1.5.0'              | '2.11'
     'JavaVersion.VERSION_1_7'       | '1.5.0'              | '2.12'
@@ -406,6 +403,7 @@ class FullCompilationSpec extends FunctionalSpec {
     'JavaVersion.VERSION_1_6'       | '2.2.3'              | '3.2'
     'JavaVersion.VERSION_1_7'       | '2.3.0'              | '3.3'
     'JavaVersion.VERSION_1_7'       | '2.3.0'              | '3.4'
+    'JavaVersion.VERSION_1_7'       | '2.3.1'              | '3.5'
     'JavaVersion.VERSION_1_7'       | '2.3.1'              | '3.5'
   }
 }
