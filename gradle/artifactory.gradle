@@ -32,12 +32,6 @@ artifactory {
             publications ('mavenJava')
         }
     }
-    resolve {
-        repository {
-            repoKey = 'libs-release'
-        }
-    }
-
 }
 
 artifactoryPublish {
