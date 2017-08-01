@@ -21,12 +21,12 @@ buildscript {
   }
 
   dependencies {
-    classpath 'com.android.tools.build:gradle:2.3.2'
-    classpath 'org.codehaus.groovy:groovy-android-gradle-plugin:1.1.0'
-    classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.6'
-    classpath 'org.jfrog.buildinfo:build-info-extractor-gradle:3.2.0'
-    classpath 'com.github.ben-manes:gradle-versions-plugin:0.14.0'
-    classpath 'com.netflix.nebula:gradle-extra-configurations-plugin:3.1.0'
+    classpath 'com.android.tools.build:gradle:2.3.3'
+    classpath 'org.codehaus.groovy:groovy-android-gradle-plugin:1.2.0'
+    classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+    classpath 'org.jfrog.buildinfo:build-info-extractor-gradle:4.5.0'
+    classpath 'com.github.ben-manes:gradle-versions-plugin:0.15.0'
+    classpath 'com.netflix.nebula:gradle-extra-configurations-plugin:3.2.0'
     classpath 'com.gradle:build-scan-plugin:1.7.4'
     classpath 'com.gradle.publish:plugin-publish-plugin:0.9.7'
   }
@@ -41,6 +41,19 @@ allprojects {
 
   apply plugin: 'com.github.ben-manes.versions'
   apply from: "$rootDir/gradle/credentials.gradle"
+
+  dependencyUpdates.resolutionStrategy = {
+    componentSelection { rules ->
+      rules.all { ComponentSelection selection ->
+        boolean rejected = ['alpha', 'beta', 'preview'].any { qualifier ->
+          selection.candidate.version ==~ /(?i).*[.-]${qualifier}[.\d-]*/
+        }
+        if (rejected) {
+          selection.reject('Release candidate')
+        }
+      }
+    }
+  }
 }
 
 subprojects {
@@ -63,7 +76,7 @@ ext {
   compileSdkVersion = 25
   spockVersion = '1.1-groovy-2.4'
   androidSupportTestVersion = '0.5'
-  groovyVersion = '2.4.11'
+  groovyVersion = '2.4.12'
 }
 
 task prepareRelease(type: Exec) {
