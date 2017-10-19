@@ -70,7 +70,7 @@ buildscript {
   }
 }
   dependencies {
-    classpath 'com.android.tools.build:gradle:2.2.0'
+    classpath 'com.android.tools.build:gradle:2.3.3'
     classpath 'org.codehaus.groovy:groovy-android-gradle-plugin:{pluginSnapshotVersion}-SNAPSHOT'
   }
 }
