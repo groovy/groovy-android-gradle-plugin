@@ -17,6 +17,7 @@
 buildscript {
   repositories {
     jcenter()
+    google()
     maven { url 'https://plugins.gradle.org/m2/' }
   }
 
@@ -62,6 +63,7 @@ subprojects {
 
   repositories {
     jcenter()
+    google()
   }
 }
 
