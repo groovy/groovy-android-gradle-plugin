@@ -243,6 +243,7 @@ class FullCompilationSpec extends FunctionalSpec {
     'JavaVersion.VERSION_1_7'       | '2.3.0'              | '3.4'
     'JavaVersion.VERSION_1_7'       | '2.3.1'              | '3.5'
     'JavaVersion.VERSION_1_7'       | '2.3.2'              | '3.5'
+    'JavaVersion.VERSION_1_7'       | '2.3.3'              | '4.2'
   }
 
   @Unroll
@@ -405,5 +406,6 @@ class FullCompilationSpec extends FunctionalSpec {
     'JavaVersion.VERSION_1_7'       | '2.3.0'              | '3.4'
     'JavaVersion.VERSION_1_7'       | '2.3.1'              | '3.5'
     'JavaVersion.VERSION_1_7'       | '2.3.1'              | '3.5'
+    'JavaVersion.VERSION_1_7'       | '2.3.3'              | '4.2'
   }
 }
