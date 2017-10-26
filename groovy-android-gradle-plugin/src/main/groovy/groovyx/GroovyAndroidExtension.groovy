@@ -16,7 +16,6 @@
 
 package groovyx
 
-import groovy.transform.PackageScope
 import groovyx.internal.AndroidGroovySourceSetFactory
 import org.gradle.api.Action
 import org.gradle.api.NamedDomainObjectContainer
@@ -107,7 +106,7 @@ class GroovyAndroidExtension {
     configClosure.execute(sourceSetsContainer)
   }
 
-  @PackageScope void configure(GroovyCompile task) {
+  void configure(GroovyCompile task) {
     if (configClosure != null) {
       ConfigureUtil.configure(configClosure, task)
     }

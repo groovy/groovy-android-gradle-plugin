@@ -1,3 +1,7 @@
+2.0.0
+-----
+    * Support for Android Gradle Plugin 3.0.0+ only. For lower versions use 1.2.0
+
 1.2.0
 -----
     * Added support for annotation processing (#142)

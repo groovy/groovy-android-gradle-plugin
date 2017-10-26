@@ -21,9 +21,9 @@ import org.gradle.api.Action
 import org.gradle.api.file.SourceDirectorySet
 import org.gradle.api.internal.file.DefaultSourceDirectorySet
 import org.gradle.api.internal.file.FileResolver
+import org.gradle.api.internal.file.collections.DefaultDirectoryFileTreeFactory
 import org.gradle.api.tasks.GroovySourceSet
 import org.gradle.util.ConfigureUtil
-import org.gradle.util.GradleVersion
 
 class DefaultAndroidGroovySourceSet implements AndroidGroovySourceSet {
   final String name
@@ -33,22 +33,12 @@ class DefaultAndroidGroovySourceSet implements AndroidGroovySourceSet {
   DefaultAndroidGroovySourceSet(String displayName, FileResolver fileResolver) {
     name = displayName
 
-    if (GradleVersion.current().compareTo(GradleVersion.version('2.11')) > 0) {
-      // do this for older version of gradle to be able to not have to worry about loading the class
-      def directoryFileTreeFactoryClass = this.class.classLoader.loadClass('org.gradle.api.internal.file.collections.DefaultDirectoryFileTreeFactory')
-      def directoryFileTreeFactory = directoryFileTreeFactoryClass.newInstance()
-      groovy = new DefaultSourceDirectorySet("$displayName Groovy source", fileResolver, directoryFileTreeFactory)
-      groovy.filter.include("**/*.java", "**/*.groovy")
-      allGroovy = new DefaultSourceDirectorySet(String.format("%s Groovy source", displayName), fileResolver, directoryFileTreeFactory)
-      allGroovy.source(groovy)
-      allGroovy.filter.include("**/*.groovy")
-    } else {
-      groovy = new DefaultSourceDirectorySet("$displayName Groovy source", fileResolver)
-      groovy.filter.include("**/*.java", "**/*.groovy")
-      allGroovy = new DefaultSourceDirectorySet(String.format("%s Groovy source", displayName), fileResolver)
-      allGroovy.source(groovy)
-      allGroovy.filter.include("**/*.groovy")
-    }
+    def directoryFileTreeFactory = new DefaultDirectoryFileTreeFactory()
+    groovy = new DefaultSourceDirectorySet("$displayName Groovy source", fileResolver, directoryFileTreeFactory)
+    groovy.filter.include("**/*.java", "**/*.groovy")
+    allGroovy = new DefaultSourceDirectorySet(String.format("%s Groovy source", displayName), fileResolver, directoryFileTreeFactory)
+    allGroovy.source(groovy)
+    allGroovy.filter.include("**/*.groovy")
   }
 
   /**

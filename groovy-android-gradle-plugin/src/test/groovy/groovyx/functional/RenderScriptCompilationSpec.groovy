@@ -16,10 +16,13 @@
 
 package groovyx.functional
 
+import groovyx.functional.internal.AndroidFunctionalSpec
 import spock.lang.IgnoreIf
 
 import javax.imageio.ImageIO
 import java.awt.image.BufferedImage
+
+import java.lang.Void as Should
 
 import static groovyx.internal.TestProperties.allTests
 import static groovyx.internal.TestProperties.androidPluginVersion
@@ -29,17 +32,20 @@ import static groovyx.internal.TestProperties.compileSdkVersion
 /**
  * Ensure that projects with renderscript compile properly.
  */
-@IgnoreIf({ !allTests})
-class RenderScriptCompilationSpec extends FunctionalSpec {
+@IgnoreIf({!allTests})
+class RenderScriptCompilationSpec extends AndroidFunctionalSpec {
 
-  def "should compile with renderscript"() {
+  Should "compile with renderscript"() {
     file("settings.gradle") << "rootProject.name = 'test-app'"
+
+    createProguardRules()
 
     buildFile << """
       buildscript {
         repositories {
           maven { url "${localRepo.toURI()}" }
           jcenter()
+          google()
         }
         dependencies {
           classpath 'com.android.tools.build:gradle:$androidPluginVersion'
@@ -52,6 +58,7 @@ class RenderScriptCompilationSpec extends FunctionalSpec {
 
       repositories {
         jcenter()
+        google()
       }
 
       android {
@@ -79,10 +86,22 @@ class RenderScriptCompilationSpec extends FunctionalSpec {
           sourceCompatibility JavaVersion.VERSION_1_7
           targetCompatibility JavaVersion.VERSION_1_7
         }
+
+        buildTypes {
+          debug {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            testProguardFile 'proguard-rules.txt'
+          }
+          release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+          }
+        }
       }
 
       dependencies {
-        compile 'org.codehaus.groovy:groovy:2.4.5:grooid'
+        implementation 'org.codehaus.groovy:groovy:2.4.12:grooid'
       }
     """
 
@@ -181,7 +200,7 @@ class RenderScriptCompilationSpec extends FunctionalSpec {
 
     then:
     noExceptionThrown()
-    file('build/outputs/apk/test-app-debug.apk').exists()
+    file('build/outputs/apk/debug/test-app-debug.apk').exists()
     file('build/intermediates/classes/debug/groovyx/test/MainActivity.class').exists()
   }
 }

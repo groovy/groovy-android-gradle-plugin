@@ -16,7 +16,10 @@
 
 package groovyx.functional
 
+import groovyx.functional.internal.AndroidFunctionalSpec
 import spock.lang.IgnoreIf
+
+import java.lang.Void as Should
 
 import static groovyx.internal.TestProperties.allTests
 import static groovyx.internal.TestProperties.androidPluginVersion
@@ -24,16 +27,19 @@ import static groovyx.internal.TestProperties.buildToolsVersion
 import static groovyx.internal.TestProperties.compileSdkVersion
 
 @IgnoreIf({ !allTests })
-class SkipJavaCSpec extends FunctionalSpec {
+class SkipJavaCSpec extends AndroidFunctionalSpec {
 
-  def "should joint compile java files added to groovy sourceDirs"() {
+  Should "joint compile java files added to groovy sourceDirs"() {
     file("settings.gradle") << "rootProject.name = 'test-app'"
+
+    createProguardRules()
 
     buildFile << """
       buildscript {
         repositories {
           maven { url "${localRepo.toURI()}" }
           jcenter()
+          google()
         }
         dependencies {
           classpath 'com.android.tools.build:gradle:$androidPluginVersion'
@@ -46,6 +52,7 @@ class SkipJavaCSpec extends FunctionalSpec {
 
       repositories {
         jcenter()
+        google()
       }
 
       android {
@@ -72,6 +79,18 @@ class SkipJavaCSpec extends FunctionalSpec {
           sourceCompatibility '1.7'
           targetCompatibility '1.7'
         }
+
+        buildTypes {
+          debug {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            testProguardFile 'proguard-rules.txt'
+          }
+          release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+          }
+        }
       }
 
       androidGroovy {
@@ -79,7 +98,7 @@ class SkipJavaCSpec extends FunctionalSpec {
       }
 
       dependencies {
-        compile 'org.codehaus.groovy:groovy:2.4.5:grooid'
+        implementation 'org.codehaus.groovy:groovy:2.4.12:grooid'
       }
     """
 
@@ -166,7 +185,7 @@ class SkipJavaCSpec extends FunctionalSpec {
 
     then:
     noExceptionThrown()
-    file('build/outputs/apk/test-app-debug.apk').exists()
+    file('build/outputs/apk/debug/test-app-debug.apk').exists()
     file('build/intermediates/classes/debug/groovyx/test/MainActivity.class').exists()
     file('build/intermediates/classes/debug/groovyx/test/ExampleJava.class').exists()
   }

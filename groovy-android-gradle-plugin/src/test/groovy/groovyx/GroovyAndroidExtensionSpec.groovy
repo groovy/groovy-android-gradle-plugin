@@ -27,6 +27,8 @@ import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
+import java.lang.Void as Should
+
 class GroovyAndroidExtensionSpec extends Specification implements AndroidPluginHelper, AndroidFileHelper {
 
   @Rule TemporaryFolder dir
@@ -38,9 +40,9 @@ class GroovyAndroidExtensionSpec extends Specification implements AndroidPluginH
     applyAppPlugin()
   }
 
-  def "should set options on groovy compile"() {
+  Should "set options on groovy compile"() {
     given:
-    def groovyTask = project.tasks.create('Test Groovy Compile', GroovyCompile)
+    def groovyTask = project.tasks.create('TestGroovyCompile', GroovyCompile)
 
     project.androidGroovy {
       options { // must be explicit here as spock does not resolve like gradle
@@ -63,7 +65,7 @@ class GroovyAndroidExtensionSpec extends Specification implements AndroidPluginH
     groovyTask.groovyOptions.forkOptions.jvmArgs == ['-noverify']
   }
 
-  def "should add groovy source directories to groovy extension"() {
+  Should "add groovy source directories to groovy extension"() {
     given:
     def expectedSourceDirs = ['test/groovy/test', 'src/main/groovy']
 
@@ -91,7 +93,7 @@ class GroovyAndroidExtensionSpec extends Specification implements AndroidPluginH
     sourcesDirStrings == expectedSourceDirs
   }
 
-  def "should add all sources to groovyCompile"() {
+  Should "add all sources to groovyCompile"() {
     given:
     // Android Plugin Requires this file to exist with parsable XML
     createSimpleAndroidManifest()

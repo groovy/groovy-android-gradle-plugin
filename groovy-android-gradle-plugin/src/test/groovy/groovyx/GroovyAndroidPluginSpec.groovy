@@ -30,6 +30,8 @@ import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import java.lang.Void as Should
+
 import static groovyx.GroovyAndroidPlugin.ANDROID_GROOVY_EXTENSION_NAME
 
 class GroovyAndroidPluginSpec extends Specification implements AndroidFileHelper, AndroidPluginHelper {
@@ -38,11 +40,11 @@ class GroovyAndroidPluginSpec extends Specification implements AndroidFileHelper
 
   Project project
 
-  def setup() {
+  void setup() {
     project = ProjectBuilder.builder().withProjectDir(dir.root).build()
   }
 
-  def "should apply groovy plugin on top of app plugin"() {
+  Should "apply groovy plugin on top of app plugin"() {
     when:
     applyAppPlugin()
 
@@ -51,7 +53,7 @@ class GroovyAndroidPluginSpec extends Specification implements AndroidFileHelper
     project.plugins.hasPlugin(GroovyAndroidPlugin)
   }
 
-  def "should apply groovy plugin on top of library plugin"() {
+  Should "apply groovy plugin on top of library plugin"() {
     when:
     applyLibraryPlugin()
 
@@ -60,7 +62,7 @@ class GroovyAndroidPluginSpec extends Specification implements AndroidFileHelper
     project.plugins.hasPlugin(GroovyAndroidPlugin)
   }
 
-  def "should add groovy extension"() {
+  Should "add groovy extension"() {
     given:
     applyAppPlugin()
 
@@ -68,7 +70,7 @@ class GroovyAndroidPluginSpec extends Specification implements AndroidFileHelper
     project.extensions.getByName(ANDROID_GROOVY_EXTENSION_NAME) != null
   }
 
-  def "should add groovy source sets"() {
+  Should "add groovy source sets"() {
     given:
     applyAppPlugin()
     def extension = project.extensions.getByName('android')
@@ -83,7 +85,7 @@ class GroovyAndroidPluginSpec extends Specification implements AndroidFileHelper
     }
   }
 
-  def "should add groovy compile tasks"() {
+  Should "add groovy compile tasks"() {
     given:
     applyAppPlugin()
     project.android {
@@ -118,7 +120,7 @@ class GroovyAndroidPluginSpec extends Specification implements AndroidFileHelper
   }
 
   @Unroll
-  def "should add groovy sourceCompatibility=#version and targetCompatibility=#version automatically"() {
+  Should "add groovy sourceCompatibility=#version and targetCompatibility=#version automatically"() {
     given:
     applyAppPlugin()
     project.android {
@@ -152,7 +154,7 @@ class GroovyAndroidPluginSpec extends Specification implements AndroidFileHelper
     '1.7'   | _
   }
 
-  def "should not enable groovy tasks if no source set"() {
+  Should "not enable groovy tasks if no source set"() {
     given:
     project.with {
       pluginManager.apply(AppPlugin)
