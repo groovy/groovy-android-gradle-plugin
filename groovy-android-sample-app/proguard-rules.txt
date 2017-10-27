@@ -11,4 +11,6 @@
 
 -dontwarn org.codehaus.groovy.**
 -dontwarn groovy**
+-dontnote org.codehaus.groovy.**
+-dontnote groovy**
 
