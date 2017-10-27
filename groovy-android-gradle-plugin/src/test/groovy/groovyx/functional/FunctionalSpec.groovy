@@ -28,6 +28,7 @@ import spock.lang.Specification
 abstract class FunctionalSpec extends Specification implements FileHelper {
 
   static final String PLUGIN_VERSION = FunctionalSpec.classLoader.getResource('groovyx/groovy-android-gradle-plugin-version.txt').text.trim()
+  static final String QUIET_ARGUMENT = '--quiet'
 
   @Rule TemporaryFolder dir
 
@@ -37,7 +38,7 @@ abstract class FunctionalSpec extends Specification implements FileHelper {
         .withDebug(true) // always run inline to save memory, especially on CI
         .forwardOutput()
         .withTestKitDir(getTestKitDir())
-        .withArguments(args.toList())
+        .withArguments(args.toList() + QUIET_ARGUMENT)
         .withGradleVersion(gradleVersion?:GradleVersion.current().version)
   }
 
