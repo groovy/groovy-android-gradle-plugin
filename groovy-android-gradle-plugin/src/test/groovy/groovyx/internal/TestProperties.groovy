@@ -23,7 +23,7 @@ abstract class TestProperties {
   }
 
   static String getAndroidPluginVersion() {
-    return System.getProperty('androidPluginVersion')?:'2.3.2'
+    return System.getProperty('androidPluginVersion')?:'2.3.3'
   }
 
   static String getBuildToolsVersion() {

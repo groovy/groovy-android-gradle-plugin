@@ -18,8 +18,9 @@ before_install:
   - sed -e "s/^\\(127\\.0\\.0\\.1.*\\)/\\1 $(hostname | cut -c1-63)/" /etc/hosts | sudo tee /etc/hosts
   - cat /etc/hosts # optionally check the content *after*
 
-script: ./gradlew -q -s -Dscan -PbuildInfo.build.number=$TRAVIS_BUILD_NUMBER -PbuildInfo.buildUrl=https://travis-ci.org/${TRAVIS_REPO_SLUG}/builds/${TRAVIS_JOB_ID}
-  -PbuildInfo.buildAgent.name=$USER -PbuildInfo.principal=$USER --debug --info clean assemble check fullTest artifactoryPublish
+script: 
+  - travis_wait 30 ./gradlew -q -s -PbuildInfo.build.number=$TRAVIS_BUILD_NUMBER -PbuildInfo.buildUrl=https://travis-ci.org/${TRAVIS_REPO_SLUG}/builds/${TRAVIS_JOB_ID} -PbuildInfo.buildAgent.name=$USER -PbuildInfo.principal=$USER clean :groovy-android-sample-app:assemble :groovy-android-sample-app:check
+  - travis_wait 30 ./gradlew -q -s -Dscan -PbuildInfo.build.number=$TRAVIS_BUILD_NUMBER -PbuildInfo.buildUrl=https://travis-ci.org/${TRAVIS_REPO_SLUG}/builds/${TRAVIS_JOB_ID} -PbuildInfo.buildAgent.name=$USER -PbuildInfo.principal=$USER :groovy-android-gradle-plugin:assemble :groovy-android-gradle-plugin:check fullTest artifactoryPublish
 
 branches:
   except:
