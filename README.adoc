@@ -1,6 +1,6 @@
-:groovyVersion: 2.4.11
+:groovyVersion: 2.4.12
 :pluginVersion: 1.2.0
-:pluginSnapshotVersion: 1.3.0
+:pluginSnapshotVersion: 2.0.0
 :androidPluginVersion: 2.3.2
 
 = Groovy language support for Android
@@ -70,7 +70,7 @@ buildscript {
   }
 }
   dependencies {
-    classpath 'com.android.tools.build:gradle:2.3.3'
+    classpath 'com.android.tools.build:gradle:3.0.0'
     classpath 'org.codehaus.groovy:groovy-android-gradle-plugin:{pluginSnapshotVersion}-SNAPSHOT'
   }
 }

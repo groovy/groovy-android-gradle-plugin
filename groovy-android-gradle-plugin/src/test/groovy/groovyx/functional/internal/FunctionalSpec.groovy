@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package groovyx.functional
+package groovyx.functional.internal
 
 import com.google.common.base.StandardSystemProperty
 import groovyx.internal.FileHelper
@@ -35,7 +35,6 @@ abstract class FunctionalSpec extends Specification implements FileHelper {
   GradleRunner runner(String gradleVersion, String... args) {
     return GradleRunner.create()
         .withProjectDir(dir.root)
-        .withDebug(true) // always run inline to save memory, especially on CI
         .forwardOutput()
         .withTestKitDir(getTestKitDir())
         .withArguments(args.toList() + QUIET_ARGUMENT)

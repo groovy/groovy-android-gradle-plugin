@@ -16,7 +16,7 @@
 
 apply plugin: 'groovy'
 apply plugin: 'maven'
-apply plugin: 'nebula.optional-base'
+
 apply from: "$rootDir/gradle/publishing.gradle"
 apply from: "$rootDir/gradle/bintray.gradle"
 apply from: "$rootDir/gradle/artifactory.gradle"
@@ -30,13 +30,14 @@ sourceCompatibility = JavaVersion.VERSION_1_6
 targetCompatibility = JavaVersion.VERSION_1_6
 
 dependencies {
-  compile localGroovy()
-  compile gradleApi()
+  implementation localGroovy()
+  implementation gradleApi()
 
-  compile "com.android.tools.build:gradle:$androidPluginVersion", optional
+  implementation "com.android.tools.build:gradle:$androidPluginVersion"
 
-  testCompile gradleTestKit()
-  testCompile "org.spockframework:spock-core:$spockVersion", {
+  testImplementation gradleTestKit()
+  testImplementation "com.android.tools.build:gradle:3.0.0"
+  testImplementation "org.spockframework:spock-core:$spockVersion", {
     exclude group: 'org.codehaus.groovy', module: 'groovy-all'
   }
 }
@@ -54,7 +55,11 @@ task release {
   dependsOn fullTest, artifactoryPublish, bintrayUpload, publishPlugins, rootProject.tasks.tagRelease
 }
 
-tasks.withType(Test) {
+test {
+  doFirst {
+    maxParallelForks 1
+  }
+
   systemProperty 'androidPluginVersion', androidPluginVersion
   systemProperty 'buildToolsVersion', buildToolsVersion
   systemProperty 'compileSdkVersion', compileSdkVersion

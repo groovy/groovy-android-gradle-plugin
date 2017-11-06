@@ -15,6 +15,8 @@
  */
 package groovyx.functional
 
+import groovyx.functional.internal.AndroidFunctionalSpec
+
 import static groovyx.internal.TestProperties.androidPluginVersion
 import static groovyx.internal.TestProperties.buildToolsVersion
 import static groovyx.internal.TestProperties.compileSdkVersion
@@ -23,30 +25,35 @@ import static groovyx.internal.TestProperties.compileSdkVersion
  * Allows Kotlin and Groovy to play nicely with each other.
  * https://github.com/groovy/groovy-android-gradle-plugin/issues/139
  */
-class KotlinSupportSpec extends FunctionalSpec {
+class KotlinSupportSpec extends AndroidFunctionalSpec {
 
   def "should compile with kotlin dependencies"() {
     given:
     file("settings.gradle") << "rootProject.name = 'test-app'"
+
+    createProguardRules()
 
     buildFile << """
       buildscript {
         repositories {
           maven { url "${localRepo.toURI()}" }
           jcenter()
+          google()
         }
         dependencies {
           classpath 'com.android.tools.build:gradle:$androidPluginVersion'
           classpath 'org.codehaus.groovy:groovy-android-gradle-plugin:$PLUGIN_VERSION'
-          classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.1.2'
+          classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.1.51'
         }
       }
 
       apply plugin: 'com.android.application'
       apply plugin: 'kotlin-android' // must be applied before groovy
+      apply plugin: 'kotlin-kapt'
       apply plugin: 'groovyx.android'
 
       repositories {
+        google()
         jcenter()
       }
 
@@ -74,14 +81,26 @@ class KotlinSupportSpec extends FunctionalSpec {
           sourceCompatibility '1.7'
           targetCompatibility '1.7'
         }
+
+        buildTypes {
+          debug {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            testProguardFile 'proguard-rules.txt'
+          }
+          release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+          }
+        }
       }
 
       dependencies {
-        compile 'org.codehaus.groovy:groovy:2.4.11:grooid'
-        compile 'org.jetbrains.kotlin:kotlin-stdlib-jre7:1.1.2'
+        implementation 'org.codehaus.groovy:groovy:2.4.12:grooid'
+        implementation 'org.jetbrains.kotlin:kotlin-stdlib-jre7:1.1.51'
 
-        androidTestCompile 'com.android.support.test:runner:0.5'
-        androidTestCompile 'com.android.support.test:rules:0.5'
+        androidTestImplementation 'com.android.support.test:runner:1.0.1'
+        androidTestImplementation 'com.android.support.test:rules:1.0.1'
 
         testCompile 'junit:junit:4.12'
       }
@@ -194,9 +213,10 @@ class KotlinSupportSpec extends FunctionalSpec {
 
     then:
     noExceptionThrown()
-    file('build/outputs/apk/test-app-debug.apk').exists()
+    file('build/outputs/apk/debug/test-app-debug.apk').exists()
     file('build/intermediates/classes/debug/groovyx/test/MainActivity.class').exists()
-    file('build/intermediates/classes/debug/groovyx/test/SimpleTest.class').exists()
+    file('build/tmp/kotlin-classes/debug/groovyx/test/SimpleTest.class').exists()
+    file('build/tmp/kotlin-classes/release/groovyx/test/SimpleTest.class').exists()
     file('build/intermediates/classes/androidTest/debug/groovyx/test/AndroidTest.class').exists()
     file('build/intermediates/classes/test/debug/groovyx/test/JvmTest.class').exists()
     file('build/intermediates/classes/test/release/groovyx/test/JvmTest.class').exists()
