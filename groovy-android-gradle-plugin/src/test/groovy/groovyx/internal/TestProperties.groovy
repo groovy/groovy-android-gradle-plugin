@@ -32,6 +32,10 @@ abstract class TestProperties {
 
   static int getCompileSdkVersion() {
     String prop = System.getProperty('compileSdkVersion')
-    return Integer.parseInt(prop?:'25')
+    return Integer.parseInt(prop?:'26')
+  }
+
+  static String getKotlinVersion() {
+    return System.getProperty('kotlinVersion')?:'1.1.51'
   }
 }

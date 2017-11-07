@@ -64,10 +64,11 @@ class GroovyAndroidPlugin implements Plugin<Project> {
       .collect { project.plugins.findPlugin(it) as BasePlugin }
       .find { it != null }
 
+    log.debug('Found Plugin: {}', androidPlugin)
+
     if (androidPlugin == null) {
       throw new GradleException('You must apply the Android plugin or the Android library plugin before using the groovy-android plugin')
     }
-
 
     def extension = project.extensions.getByType(GroovyAndroidExtension)
 
@@ -193,7 +194,7 @@ class GroovyAndroidPlugin implements Plugin<Project> {
       def androidRunTime = project.files(getRuntimeJars(androidPlugin, androidExtension))
       task.classpath = androidRunTime + javaTask.classpath
       task.groovyClasspath = task.classpath
-      task.options.compilerArgs += getJavaTaskCompilerArgs(javaTask)
+      task.options.compilerArgs += getJavaTaskCompilerArgs(javaTask, extension.skipJavaC)
       task.groovyOptions.javaAnnotationProcessing = true
       task.options.annotationProcessorPath = javaTask.options.annotationProcessorPath
       log.debug('Java annotationProcessorPath {}', javaTask.options.annotationProcessorPath)
@@ -217,9 +218,18 @@ class GroovyAndroidPlugin implements Plugin<Project> {
     return plugin.bootClasspath
   }
 
-  private static List<String> getJavaTaskCompilerArgs(JavaCompile javaTask) {
-    log.debug('javaTask.options.compilerArgs = {}', javaTask.options.compilerArgs)
-    return javaTask.options.compilerArgs
+  private static List<String> getJavaTaskCompilerArgs(JavaCompile javaTask, boolean skipJavaC) {
+    def compilerArgs = javaTask.options.compilerArgs
+    log.debug('javaTask.options.compilerArgs = {}', compilerArgs)
+
+    if (skipJavaC) {
+      // if we skip java c the java compiler will still look for the annotation processor directory
+      // we should create it for it.
+      compilerArgs.findAll { !it.startsWith('-') }
+        .each { new File(it).mkdirs() }
+    }
+
+    return compilerArgs
   }
 
 
