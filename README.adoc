@@ -1,13 +1,23 @@
 :groovyVersion: 2.4.12
-:pluginVersion: 1.2.0
-:pluginSnapshotVersion: 2.0.0
-:androidPluginVersion: 2.3.2
+:pluginVersion: 2.0.0
+:pluginSnapshotVersion: 2.1.0
+:androidPluginVersion: 3.0.0
 
 = Groovy language support for Android
 
 link:https://travis-ci.org/groovy/groovy-android-gradle-plugin[image:https://travis-ci.org/groovy/groovy-android-gradle-plugin.svg?branch=master[Build Status]]
 
 This plugin adds http://groovy-lang.org[Groovy Language] support for Android applications and libraries.
+
+== Updates
+As of 2.0.0 of this plugin only will work with the Android Gradle Plugin 3.0.0 and above. For support of lower
+version use 1.2.0.
+
+There is an issues when using build tool 26+ and the Groovy jar. The current work around is to use proguard or
+to use JarJar to create a jar file that does not have invoke dynamic classes.
+See https://gist.github.com/AndrewReitz/3e1145d66a8ef3f7b578d8604ecd671c[ZarZaring the Groovy Jar for Android 26+]
+to create your own jar and avoid having to run proguard.
+See https://github.com/groovy/groovy-android-gradle-plugin/issues/145[Github Issue] for more details.
 
 == Quick Start
 Use a https://github.com/pledbrook/lazybones[lazybones] template from
@@ -36,7 +46,7 @@ apply plugin: 'groovyx.android'
 
 The latest version of the Groovy Android Plugin can be found https://github.com/groovy/groovy-android-gradle-plugin/releases[here]
 
-Then you must choose which version of Groovy you use. Android support is available in
+You must choose which version of Groovy you use. Android support is available in
 starting at the 2.4.x releases. You will need to add the following repository to your `build.gradle` file:
 
 [source, groovy]
@@ -240,3 +250,9 @@ be available at runtime and you'll get a runtime exception.
 There is an alternative. The https://github.com/kaleidos/emerger[emerger]
 gradle plugin will add excludes for you and merges all extension module
 descriptors into a single file which will be available at runtime.
+
+== Groovy Community
+
+Have questions, want to learn more!?
+Come ask questions or help others in #android in the Groovy Community Slack
+groovycommunity.com[Sign-Up Here]
