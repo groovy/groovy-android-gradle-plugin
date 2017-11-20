@@ -77,6 +77,7 @@ ext {
   spockVersion = '1.1-groovy-2.4'
   androidSupportTestVersion = '1.0.1'
   groovyVersion = '2.4.12'
+  kotlinVersion = '1.1.60'
 }
 
 task prepareRelease(type: Exec) {

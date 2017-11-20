@@ -44,22 +44,21 @@ class GroovyAndroidPluginSpec extends Specification implements AndroidFileHelper
     project = ProjectBuilder.builder().withProjectDir(dir.root).build()
   }
 
-  Should "apply groovy plugin on top of app plugin"() {
+  @Unroll
+  Should "apply groovy plugin on top of #projectPlugin"() {
+    given:
+    project.apply plugin: projectPlugin
+
     when:
-    applyAppPlugin()
+    project.apply plugin: 'groovyx.android'
 
     then:
     noExceptionThrown()
     project.plugins.hasPlugin(GroovyAndroidPlugin)
-  }
 
-  Should "apply groovy plugin on top of library plugin"() {
-    when:
-    applyLibraryPlugin()
-
-    then:
-    noExceptionThrown()
-    project.plugins.hasPlugin(GroovyAndroidPlugin)
+    where:
+    projectPlugin << ['android', 'com.android.application', 'android-library', 'com.android.library',
+                      'com.android.test', 'com.android.feature']
   }
 
   Should "add groovy extension"() {
@@ -152,6 +151,7 @@ class GroovyAndroidPluginSpec extends Specification implements AndroidFileHelper
     version | _
     '1.6'   | _
     '1.7'   | _
+    '1.8'   | _
   }
 
   Should "not enable groovy tasks if no source set"() {

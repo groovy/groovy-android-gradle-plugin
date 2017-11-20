@@ -55,7 +55,7 @@ task release {
   dependsOn fullTest, artifactoryPublish, bintrayUpload, publishPlugins, rootProject.tasks.tagRelease
 }
 
-test {
+tasks.withType(Test) {
   doFirst {
     maxParallelForks 1
   }
@@ -63,6 +63,7 @@ test {
   systemProperty 'androidPluginVersion', androidPluginVersion
   systemProperty 'buildToolsVersion', buildToolsVersion
   systemProperty 'compileSdkVersion', compileSdkVersion
+  systemProperty 'kotlinVersion', kotlinVersion
 
   environment "GRADLE_USER_HOME", gradle.gradleUserHomeDir
 

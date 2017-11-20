@@ -17,9 +17,12 @@ package groovyx.functional
 
 import groovyx.functional.internal.AndroidFunctionalSpec
 
+import java.lang.Void as Should
+
 import static groovyx.internal.TestProperties.androidPluginVersion
 import static groovyx.internal.TestProperties.buildToolsVersion
 import static groovyx.internal.TestProperties.compileSdkVersion
+import static groovyx.internal.TestProperties.kotlinVersion
 
 /**
  * Allows Kotlin and Groovy to play nicely with each other.
@@ -27,7 +30,7 @@ import static groovyx.internal.TestProperties.compileSdkVersion
  */
 class KotlinSupportSpec extends AndroidFunctionalSpec {
 
-  def "should compile with kotlin dependencies"() {
+  Should "compile with kotlin dependencies"() {
     given:
     file("settings.gradle") << "rootProject.name = 'test-app'"
 
@@ -43,7 +46,7 @@ class KotlinSupportSpec extends AndroidFunctionalSpec {
         dependencies {
           classpath 'com.android.tools.build:gradle:$androidPluginVersion'
           classpath 'org.codehaus.groovy:groovy-android-gradle-plugin:$PLUGIN_VERSION'
-          classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.1.51'
+          classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion'
         }
       }
 
@@ -97,12 +100,12 @@ class KotlinSupportSpec extends AndroidFunctionalSpec {
 
       dependencies {
         implementation 'org.codehaus.groovy:groovy:2.4.12:grooid'
-        implementation 'org.jetbrains.kotlin:kotlin-stdlib-jre7:1.1.51'
+        implementation 'org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion'
 
         androidTestImplementation 'com.android.support.test:runner:1.0.1'
         androidTestImplementation 'com.android.support.test:rules:1.0.1'
 
-        testCompile 'junit:junit:4.12'
+        testImplementation 'junit:junit:4.12'
       }
 
       // force unit test types to be assembled too

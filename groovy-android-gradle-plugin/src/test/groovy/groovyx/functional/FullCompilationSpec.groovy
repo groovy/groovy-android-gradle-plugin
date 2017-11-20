@@ -17,21 +17,23 @@
 package groovyx.functional
 
 import groovyx.functional.internal.AndroidFunctionalSpec
-import spock.lang.Ignore
+import groovyx.internal.AndroidFileHelper
 import spock.lang.IgnoreIf
 import spock.lang.Unroll
 
-import static groovyx.internal.TestProperties.*
+import java.lang.Void as Should
+
+import static groovyx.internal.TestProperties.allTests
+
 /**
  * Complete test suite to ensure the plugin works with the different versions of android gradle plugin.
  * This will only be run if the system property of 'allTests' is set to true
  */
-//@IgnoreIf({ !allTests })
-@Ignore // Ignore Tests for 3.0.0 are a WIP
-class FullCompilationSpec extends AndroidFunctionalSpec {
+@IgnoreIf({ !allTests })
+class FullCompilationSpec extends AndroidFunctionalSpec implements AndroidFileHelper {
 
   @Unroll
-  def "should compile android app with java:#javaVersion, android plugin:#androidPluginVersion, gradle version: #gradleVersion"() {
+  Should "compile android app with java:#javaVersion, android plugin:#androidPluginVersion, gradle version: #gradleVersion"() {
     given:
     file("settings.gradle") << "rootProject.name = 'test-app'"
 
@@ -113,92 +115,37 @@ class FullCompilationSpec extends AndroidFunctionalSpec {
     """
 
     when:
-    runWithVersion gradleVersion, 'assemble', 'test'
+    runWithVersion(gradleVersion, *args)
 
     then:
     noExceptionThrown()
-    file('build/outputs/apk/test-app-debug.apk').exists()
+    file('build/outputs/apk/debug/test-app-debug.apk').exists()
     file('build/intermediates/classes/debug/groovyx/test/MainActivity.class').exists()
     file('build/intermediates/classes/androidTest/debug/groovyx/test/AndroidTest.class').exists()
-    file('build/intermediates/classes/test/debug/groovyx/test/JvmTest.class').exists()
-    file('build/intermediates/classes/test/release/groovyx/test/JvmTest.class').exists()
+    if (args.contains('test')) {
+      assert file('build/intermediates/classes/test/debug/groovyx/test/JvmTest.class').exists()
+      assert file('build/intermediates/classes/test/release/groovyx/test/JvmTest.class').exists()
+    }
 
     where:
     // test common configs that touches the different way to access the classpath
-    javaVersion                     | _androidPluginVersion | gradleVersion
-    'JavaVersion.VERSION_1_7'       | '2.2.0'              | '3.0'
-    'JavaVersion.VERSION_1_7'       | '2.2.0'              | '3.1'
-    'JavaVersion.VERSION_1_6'       | '2.2.3'              | '3.2'
-    'JavaVersion.VERSION_1_7'       | '2.3.0'              | '3.3'
-    'JavaVersion.VERSION_1_7'       | '2.3.0'              | '3.4'
-    'JavaVersion.VERSION_1_7'       | '2.3.1'              | '3.5'
-    'JavaVersion.VERSION_1_7'       | '2.3.2'              | '3.5'
-    'JavaVersion.VERSION_1_7'       | '2.3.3'              | '4.2'
+    // Skipping tests on Gradle 4.1 and 4.2.1 due to a bug.
+    // > Could not write message [ChannelMessage channel: org.gradle.process.internal.worker.request.RequestProtocol, payload: [MethodInvocation method: run(execute, [Ljava.lang.Class;@61128295, [Ljava.lang.Object;@652d0a6f, 166)]] to '/0:0:0:0:0:0:0:1:57024'.
+    // > org.gradle.api.internal.artifacts.configurations.DefaultConfiguration$ConfigurationFileCollection
+    // Stack trace shows Caused by: java.io.NotSerializableException: org.gradle.api.internal.artifacts.configurations.DefaultConfiguration$ConfigurationFileCollection
+    javaVersion               | _androidPluginVersion | gradleVersion | args
+    'JavaVersion.VERSION_1_6' | '3.0.0'               | '4.1'         | ['assemble']
+    'JavaVersion.VERSION_1_7' | '3.0.0'               | '4.2.1'       | ['assemble']
+    'JavaVersion.VERSION_1_8' | '3.0.0'               | '4.3'         | ['assemble', 'test']
   }
 
   @Unroll
-  def "should compile android library with java:#javaVersion and android plugin:#androidPluginVersion, gradle version:#gradleVersion"() {
+  Should "compile android library with java:#javaVersion and android plugin:#androidPluginVersion, gradle version:#gradleVersion"() {
     given:
     file("settings.gradle") << "rootProject.name = 'test-lib'"
 
-    buildFile << """
-      buildscript {
-        repositories {
-          maven { url "${localRepo.toURI()}" }
-          jcenter()
-          google()
-        }
-        dependencies {
-          classpath 'com.android.tools.build:gradle:$_androidPluginVersion'
-          classpath 'org.codehaus.groovy:groovy-android-gradle-plugin:$PLUGIN_VERSION'
-        }
-      }
-
-      apply plugin: 'com.android.library'
-      apply plugin: 'groovyx.android'
-
-      repositories {
-        jcenter()
-        google()
-      }
-
-      android {
-        compileSdkVersion $compileSdkVersion
-        buildToolsVersion '$buildToolsVersion'
-
-        defaultConfig {
-          minSdkVersion 16
-          targetSdkVersion $compileSdkVersion
-
-          versionCode 1
-          versionName '1.0.0'
-        }
-
-        compileOptions {
-          sourceCompatibility $javaVersion
-          targetCompatibility $javaVersion
-        }
-      }
-
-      dependencies {
-        compile 'org.codehaus.groovy:groovy:2.4.12:grooid'
-
-        androidTestCompile 'com.android.support.test:runner:0.4.1'
-        androidTestCompile 'com.android.support.test:rules:0.4.1'
-
-        testCompile 'junit:junit:4.12'
-      }
-
-      // force unit test types to be assembled too
-      android.testVariants.all { variant ->
-        tasks.getByName('assemble').dependsOn variant.assemble
-      }
-    """
-
-    file('src/main/AndroidManifest.xml') << """
-      <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-        package="groovyx.test"/>
-    """
+    createBuildFileForLibrary()
+    createSimpleAndroidManifest()
 
     // create Java class to ensure this compiles correctly along with groovy classes
     file('src/main/java/groovyx/test/SimpleJava.java') << """
@@ -270,7 +217,7 @@ class FullCompilationSpec extends AndroidFunctionalSpec {
     """
 
     when:
-    runWithVersion gradleVersion, 'assemble', 'test'
+    runWithVersion(gradleVersion, *args)
 
     then:
     noExceptionThrown()
@@ -279,25 +226,20 @@ class FullCompilationSpec extends AndroidFunctionalSpec {
     file('build/intermediates/classes/debug/groovyx/test/Test.class').exists()
     file('build/intermediates/classes/release/groovyx/test/Test.class').exists()
     file('build/intermediates/classes/androidTest/debug/groovyx/test/AndroidTest.class').exists()
-    file('build/intermediates/classes/test/debug/groovyx/test/JvmTest.class').exists()
-    file('build/intermediates/classes/test/release/groovyx/test/JvmTest.class').exists()
+    if (args.contains('test')) {
+      assert file('build/intermediates/classes/test/debug/groovyx/test/JvmTest.class').exists()
+      assert file('build/intermediates/classes/test/release/groovyx/test/JvmTest.class').exists()
+    }
 
     where:
     // test common configs that touches the different way to access the classpath
-    javaVersion                     | _androidPluginVersion | gradleVersion
-    'JavaVersion.VERSION_1_6'       | '1.5.0'              | '2.10'
-    'JavaVersion.VERSION_1_7'       | '1.5.0'              | '2.11'
-    'JavaVersion.VERSION_1_7'       | '1.5.0'              | '2.12'
-    'JavaVersion.VERSION_1_7'       | '2.0.0'              | '2.13'
-    'JavaVersion.VERSION_1_7'       | '2.1.2'              | '2.14'
-    'JavaVersion.VERSION_1_7'       | '2.2.0'              | '2.14.1'
-    'JavaVersion.VERSION_1_7'       | '2.2.0'              | '3.0'
-    'JavaVersion.VERSION_1_7'       | '2.2.0'              | '3.1'
-    'JavaVersion.VERSION_1_6'       | '2.2.3'              | '3.2'
-    'JavaVersion.VERSION_1_7'       | '2.3.0'              | '3.3'
-    'JavaVersion.VERSION_1_7'       | '2.3.0'              | '3.4'
-    'JavaVersion.VERSION_1_7'       | '2.3.1'              | '3.5'
-    'JavaVersion.VERSION_1_7'       | '2.3.1'              | '3.5'
-    'JavaVersion.VERSION_1_7'       | '2.3.3'              | '4.2'
+    // Skipping tests on Gradle 4.1 and 4.2.1 due to a bug.
+    // > Could not write message [ChannelMessage channel: org.gradle.process.internal.worker.request.RequestProtocol, payload: [MethodInvocation method: run(execute, [Ljava.lang.Class;@61128295, [Ljava.lang.Object;@652d0a6f, 166)]] to '/0:0:0:0:0:0:0:1:57024'.
+    // > org.gradle.api.internal.artifacts.configurations.DefaultConfiguration$ConfigurationFileCollection
+    // Stack trace shows Caused by: java.io.NotSerializableException: org.gradle.api.internal.artifacts.configurations.DefaultConfiguration$ConfigurationFileCollection
+    javaVersion               | _androidPluginVersion | gradleVersion | args
+    'JavaVersion.VERSION_1_6' | '3.0.0'               | '4.1'         | ['assemble']
+    'JavaVersion.VERSION_1_7' | '3.0.0'               | '4.2.1'       | ['assemble']
+    'JavaVersion.VERSION_1_8' | '3.0.0'               | '4.3'         | ['assemble', 'test']
   }
 }
