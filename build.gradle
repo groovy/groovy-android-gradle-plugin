@@ -88,7 +88,7 @@ task prepareRelease(type: Exec) {
 """
   git checkout master
   git pull --rebase "https://$project.githubToken@github.com/groovy/groovy-android-gradle-plugin.git" master
-  git checkout -b release/${version}
+  git checkout -b release/${version - '-SNAPSHOT'}
 """
 }
 
