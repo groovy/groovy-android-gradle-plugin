@@ -35,7 +35,7 @@ apply plugin: 'com.gradle.build-scan'
 apply from: "$rootDir/gradle/idea/idea.gradle"
 
 allprojects {
-  version = '2.0.0-SNAPSHOT'
+  version = '2.0.0'
   group = 'org.codehaus.groovy'
 
   apply plugin: 'com.github.ben-manes.versions'
@@ -88,7 +88,7 @@ task prepareRelease(type: Exec) {
 """
   git checkout master
   git pull --rebase "https://$project.githubToken@github.com/groovy/groovy-android-gradle-plugin.git" master
-  git checkout -b release/${version}
+  git checkout -b release/${version - '-SNAPSHOT'}
 """
 }
 
