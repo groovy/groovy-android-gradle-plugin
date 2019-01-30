@@ -236,6 +236,9 @@ android {
   packagingOptions {
       exclude 'META-INF/services/org.codehaus.groovy.transform.ASTTransformation'
       exclude 'META-INF/services/org.codehaus.groovy.runtime.ExtensionModule'
+      // you may need to exclude other files if you get "duplicate files during packaging of APK"
+      exclude 'META-INF/groovy-release-info.properties'
+      exclude 'META-INF/LICENSE'      
   }
 }
 ----
