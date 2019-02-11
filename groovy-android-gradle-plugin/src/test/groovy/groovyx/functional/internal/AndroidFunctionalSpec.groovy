@@ -2,7 +2,6 @@ package groovyx.functional.internal
 
 import groovyx.internal.TestProperties
 
-import static groovyx.internal.TestProperties.buildToolsVersion
 import static groovyx.internal.TestProperties.compileSdkVersion
 
 abstract class AndroidFunctionalSpec extends FunctionalSpec {
@@ -55,10 +54,9 @@ abstract class AndroidFunctionalSpec extends FunctionalSpec {
 
       android {
         compileSdkVersion $compileSdkVersion
-        buildToolsVersion '$buildToolsVersion'
 
         defaultConfig {
-          minSdkVersion ${plugin == AndroidPlugin.LIBRARY ? '26' : '16' }
+          minSdkVersion ${plugin == AndroidPlugin.LIBRARY ? '28' : '16' }
           targetSdkVersion $compileSdkVersion
 
           versionCode 1
@@ -86,19 +84,19 @@ abstract class AndroidFunctionalSpec extends FunctionalSpec {
       }
 
       dependencies {
-        implementation 'org.codehaus.groovy:groovy:2.4.12:grooid'
+        implementation 'org.codehaus.groovy:groovy:2.4.16:grooid'
 
         annotationProcessor 'com.google.auto.value:auto-value:1.5.2'
         compileOnly 'com.jakewharton.auto.value:auto-value-annotations:1.5'
 
-        androidTestImplementation 'com.android.support.test:runner:1.0.1'
-        androidTestImplementation 'com.android.support.test:rules:1.0.1'
+        androidTestImplementation 'com.android.support.test:runner:1.0.2'
+        androidTestImplementation 'com.android.support.test:rules:1.0.2'
 
         testImplementation 'junit:junit:4.12'
       }
 
       configurations.all {
-        resolutionStrategy.force 'com.android.support:support-annotations:26.1.0'
+        resolutionStrategy.force 'com.android.support:support-annotations:28.0.0'
       }
 
       // force unit test types to be assembled too

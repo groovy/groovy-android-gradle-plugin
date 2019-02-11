@@ -86,7 +86,7 @@ class FullCompilationSpec extends AndroidFunctionalSpec implements AndroidFileHe
       package groovyx.test
 
       import android.support.test.runner.AndroidJUnit4
-      import android.test.suitebuilder.annotation.SmallTest
+      import android.support.test.filters.SmallTest
       import groovy.transform.CompileStatic
       import org.junit.Before
       import org.junit.Test
@@ -120,11 +120,11 @@ class FullCompilationSpec extends AndroidFunctionalSpec implements AndroidFileHe
     then:
     noExceptionThrown()
     file('build/outputs/apk/debug/test-app-debug.apk').exists()
-    file('build/intermediates/classes/debug/groovyx/test/MainActivity.class').exists()
-    file('build/intermediates/classes/androidTest/debug/groovyx/test/AndroidTest.class').exists()
+    file('build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/groovyx/test/MainActivity.class').exists()
+    file('build/intermediates/javac/debugAndroidTest/compileDebugAndroidTestJavaWithJavac/classes/groovyx/test/AndroidTest.class').exists()
     if (args.contains('test')) {
-      assert file('build/intermediates/classes/test/debug/groovyx/test/JvmTest.class').exists()
-      assert file('build/intermediates/classes/test/release/groovyx/test/JvmTest.class').exists()
+      assert file('build/intermediates/javac/debugUnitTest/compileDebugUnitTestJavaWithJavac/classes/groovyx/test/JvmTest.class').exists()
+      assert file('build/intermediates/javac/releaseUnitTest/compileReleaseUnitTestJavaWithJavac/classes/groovyx/test/JvmTest.class').exists()
     }
 
     where:
@@ -134,9 +134,9 @@ class FullCompilationSpec extends AndroidFunctionalSpec implements AndroidFileHe
     // > org.gradle.api.internal.artifacts.configurations.DefaultConfiguration$ConfigurationFileCollection
     // Stack trace shows Caused by: java.io.NotSerializableException: org.gradle.api.internal.artifacts.configurations.DefaultConfiguration$ConfigurationFileCollection
     javaVersion               | _androidPluginVersion | gradleVersion | args
-    'JavaVersion.VERSION_1_6' | '3.0.0'               | '4.1'         | ['assemble']
-    'JavaVersion.VERSION_1_7' | '3.0.0'               | '4.2.1'       | ['assemble']
-    'JavaVersion.VERSION_1_8' | '3.0.0'               | '4.3'         | ['assemble', 'test']
+    'JavaVersion.VERSION_1_6' | '3.3.1'               | '4.10.1'         | ['assemble']
+    'JavaVersion.VERSION_1_7' | '3.3.1'               | '4.10.1'         | ['assemble']
+    'JavaVersion.VERSION_1_8' | '3.3.1'               | '4.10.1'         | ['assemble', 'test']
   }
 
   @Unroll
@@ -187,7 +187,7 @@ class FullCompilationSpec extends AndroidFunctionalSpec implements AndroidFileHe
       package groovyx.test
 
       import android.support.test.runner.AndroidJUnit4
-      import android.test.suitebuilder.annotation.SmallTest
+      import android.support.test.filters.SmallTest
       import groovy.transform.CompileStatic
       import org.junit.Before
       import org.junit.Test
@@ -223,12 +223,12 @@ class FullCompilationSpec extends AndroidFunctionalSpec implements AndroidFileHe
     noExceptionThrown()
     file('build/outputs/aar/test-lib-debug.aar').exists()
     file('build/outputs/aar/test-lib-release.aar').exists()
-    file('build/intermediates/classes/debug/groovyx/test/Test.class').exists()
-    file('build/intermediates/classes/release/groovyx/test/Test.class').exists()
-    file('build/intermediates/classes/androidTest/debug/groovyx/test/AndroidTest.class').exists()
+    file('build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/groovyx/test/Test.class').exists()
+    file('build/intermediates/javac/release/compileReleaseJavaWithJavac/classes/groovyx/test/Test.class').exists()
+    file('build/intermediates/javac/debugAndroidTest/compileDebugAndroidTestJavaWithJavac/classes/groovyx/test/AndroidTest.class').exists()
     if (args.contains('test')) {
-      assert file('build/intermediates/classes/test/debug/groovyx/test/JvmTest.class').exists()
-      assert file('build/intermediates/classes/test/release/groovyx/test/JvmTest.class').exists()
+      assert file('build/intermediates/javac/debugUnitTest/compileDebugUnitTestJavaWithJavac/classes/groovyx/test/JvmTest.class').exists()
+      assert file('build/intermediates/javac/releaseUnitTest/compileReleaseUnitTestJavaWithJavac/classes/groovyx/test/JvmTest.class').exists()
     }
 
     where:
@@ -238,8 +238,8 @@ class FullCompilationSpec extends AndroidFunctionalSpec implements AndroidFileHe
     // > org.gradle.api.internal.artifacts.configurations.DefaultConfiguration$ConfigurationFileCollection
     // Stack trace shows Caused by: java.io.NotSerializableException: org.gradle.api.internal.artifacts.configurations.DefaultConfiguration$ConfigurationFileCollection
     javaVersion               | _androidPluginVersion | gradleVersion | args
-    'JavaVersion.VERSION_1_6' | '3.0.0'               | '4.1'         | ['assemble']
-    'JavaVersion.VERSION_1_7' | '3.0.0'               | '4.2.1'       | ['assemble']
-    'JavaVersion.VERSION_1_8' | '3.0.0'               | '4.3'         | ['assemble', 'test']
+    'JavaVersion.VERSION_1_6' | '3.3.1'               | '4.10.1'         | ['assemble']
+    'JavaVersion.VERSION_1_7' | '3.3.1'               | '4.10.1'         | ['assemble']
+    'JavaVersion.VERSION_1_8' | '3.3.1'               | '4.10.1'         | ['assemble', 'test']
   }
 }

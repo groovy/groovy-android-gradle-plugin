@@ -33,11 +33,13 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.internal.HasConvention
 import org.gradle.api.tasks.GroovySourceSet
+import org.gradle.api.tasks.TaskProvider
 import org.gradle.api.tasks.compile.GroovyCompile
 import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.internal.reflect.Instantiator
 
 import javax.inject.Inject
+
 /**
  * Adds support for building Android applications using the Groovy language.
  */
@@ -100,7 +102,7 @@ class GroovyAndroidPlugin implements Plugin<Project> {
     }
 
     project.afterEvaluate {
-      forEachVariant(project){ BaseVariant variant ->
+      forEachVariant(project) { BaseVariant variant ->
         processVariant(variant, project, androidExtension, androidPlugin, extension)
       }
     }
@@ -136,7 +138,7 @@ class GroovyAndroidPlugin implements Plugin<Project> {
     def variantName = getVariantName(variantData)
     log.debug('Processing variant {}', variantName)
 
-    def javaTask = getJavaTask(variantData)
+    def javaTask = getJavaTaskProvider(variantData).get()
     if (javaTask == null) {
       log.info('javaTask it null for {}', variantName)
       return
@@ -174,6 +176,9 @@ class GroovyAndroidPlugin implements Plugin<Project> {
         groovyTask.source(*(javaTask.source.files as List))
         javaTask.exclude {
           true
+        }
+        javaTask.onlyIf {
+          false
         }
       }
     }
@@ -237,9 +242,9 @@ class GroovyAndroidPlugin implements Plugin<Project> {
     return variant.name
   }
 
-  private static JavaCompile getJavaTask(BaseVariant variantData) {
+  private static TaskProvider<JavaCompile> getJavaTaskProvider(BaseVariant variantData) {
     // just get actual javac we don't support jack.
-    return variantData.getJavaCompile()
+    return variantData.getJavaCompileProvider()
   }
 
   private static Iterable<SourceProvider> getSourceProviders(BaseVariant variantData) {

@@ -23,7 +23,6 @@ import java.lang.Void as Should
 
 import static groovyx.internal.TestProperties.allTests
 import static groovyx.internal.TestProperties.androidPluginVersion
-import static groovyx.internal.TestProperties.buildToolsVersion
 import static groovyx.internal.TestProperties.compileSdkVersion
 
 @IgnoreIf({ !allTests })
@@ -57,7 +56,6 @@ class SkipJavaCSpec extends AndroidFunctionalSpec {
 
       android {
         compileSdkVersion $compileSdkVersion
-        buildToolsVersion '$buildToolsVersion'
 
         defaultConfig {
           minSdkVersion 16
@@ -98,7 +96,7 @@ class SkipJavaCSpec extends AndroidFunctionalSpec {
       }
 
       dependencies {
-        implementation 'org.codehaus.groovy:groovy:2.4.12:grooid'
+        implementation 'org.codehaus.groovy:groovy:2.4.16:grooid'
       }
     """
 
@@ -186,7 +184,7 @@ class SkipJavaCSpec extends AndroidFunctionalSpec {
     then:
     noExceptionThrown()
     file('build/outputs/apk/debug/test-app-debug.apk').exists()
-    file('build/intermediates/classes/debug/groovyx/test/MainActivity.class').exists()
-    file('build/intermediates/classes/debug/groovyx/test/ExampleJava.class').exists()
+    file('build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/groovyx/test/MainActivity.class').exists()
+    file('build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/groovyx/test/ExampleJava.class').exists()
   }
 }

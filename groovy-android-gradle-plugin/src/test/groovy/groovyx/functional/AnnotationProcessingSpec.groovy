@@ -92,7 +92,7 @@ class AnnotationProcessingSpec extends AndroidFunctionalSpec {
       package groovyx.test
 
       import android.support.test.runner.AndroidJUnit4
-      import android.test.suitebuilder.annotation.SmallTest
+      import android.support.test.filters.SmallTest
       import groovy.transform.CompileStatic
       import org.junit.Before
       import org.junit.Test
@@ -114,25 +114,25 @@ class AnnotationProcessingSpec extends AndroidFunctionalSpec {
     then:
     noExceptionThrown()
     file('build/outputs/apk/debug/test-app-debug.apk').exists()
-    file('build/intermediates/classes/debug/groovyx/test/MainActivity.class').exists()
+    file('build//intermediates/javac/debug/compileDebugJavaWithJavac/classes/groovyx/test/MainActivity.class').exists()
 
-    file('build/intermediates/classes/debug/groovyx/test/Animal.class').exists()
-    file('build/generated/source/apt/debug/groovyx/test/AutoValue_Animal.java').exists()
-    file('build/generated/source/apt/release/groovyx/test/AutoValue_Animal.java').exists()
-    file('build/intermediates/classes/debug/groovyx/test/AutoValue_Animal.class').exists()
+    file('build//intermediates/javac/debug/compileDebugJavaWithJavac/classes/groovyx/test/Animal.class').exists()
+    file('build//generated/source/apt/debug/groovyx/test/AutoValue_Animal.java').exists()
+    file('build//generated/source/apt/release/groovyx/test/AutoValue_Animal.java').exists()
+    file('build//intermediates/javac/debug/compileDebugJavaWithJavac/classes/groovyx/test/AutoValue_Animal.class').exists()
 
-    file('build/intermediates/classes/debug/groovyx/test/Automobile.class').exists()
-    file('build/generated/source/apt/debug/groovyx/test/AutoValue_Automobile.java').exists()
-    file('build/generated/source/apt/release/groovyx/test/AutoValue_Automobile.java').exists()
-    file('build/intermediates/classes/debug/groovyx/test/AutoValue_Automobile.class').exists()
+    file('build//intermediates/javac/debug/compileDebugJavaWithJavac/classes/groovyx/test/Automobile.class').exists()
+    file('build//intermediates/javac/debug/compileDebugJavaWithJavac/classes/groovyx/test/AutoValue_Automobile.java').exists()
+    file('build//intermediates/javac/release/compileReleaseJavaWithJavac/classes/groovyx/test/AutoValue_Automobile.java').exists()
+    file('build//intermediates/javac/debug/compileDebugJavaWithJavac/classes/groovyx/test/AutoValue_Automobile.class').exists()
 
-    file('build/intermediates/classes/debug/groovyx/test/Temp.class').exists()
-    file('build/generated/source/apt/debug/groovyx/test/AutoValue_Temp.java').exists()
-    file('build/generated/source/apt/release/groovyx/test/AutoValue_Temp.java').exists()
-    file('build/intermediates/classes/debug/groovyx/test/AutoValue_Temp.class').exists()
+    file('build//intermediates/javac/debug/compileDebugJavaWithJavac/classes/groovyx/test/Temp.class').exists()
+    file('build//intermediates/javac/debug/compileDebugJavaWithJavac/classes/groovyx/test/AutoValue_Temp.java').exists()
+    file('build//intermediates/javac/release/compileReleaseJavaWithJavac/classes/groovyx/test/AutoValue_Temp.java').exists()
+    file('build//intermediates/javac/debug/compileDebugJavaWithJavac/classes/groovyx/test/AutoValue_Temp.class').exists()
 
-    file('build/intermediates/classes/androidTest/debug/groovyx/test/AndroidTest.class').exists()
-    file('build/intermediates/classes/test/debug/groovyx/test/JvmTest.class').exists()
-    file('build/intermediates/classes/test/release/groovyx/test/JvmTest.class').exists()
+    file('build//intermediates/javac/debugAndroidTest/compileDebugAndroidTestJavaWithJavac/classes/groovyx/test/AndroidTest.class').exists()
+    file('build//intermediates/javac/debugUnitTest/compileDebugUnitTestJavaWithJavac/classes/groovyx/test/JvmTest.class').exists()
+    file('build//intermediates/javac/releaseUnitTest/compileReleaseUnitTestJavaWithJavac/classes/groovyx/test/JvmTest.class').exists()
   }
 }

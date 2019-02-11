@@ -195,7 +195,7 @@ class KotlinSupportSpec extends AndroidFunctionalSpec {
       package groovyx.test
 
       import android.support.test.runner.AndroidJUnit4
-      import android.test.suitebuilder.annotation.SmallTest
+      import android.support.test.filters.SmallTest
       import groovy.transform.CompileStatic
       import org.junit.Before
       import org.junit.Test
@@ -217,11 +217,11 @@ class KotlinSupportSpec extends AndroidFunctionalSpec {
     then:
     noExceptionThrown()
     file('build/outputs/apk/debug/test-app-debug.apk').exists()
-    file('build/intermediates/classes/debug/groovyx/test/MainActivity.class').exists()
+    file('build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/groovyx/test/MainActivity.class').exists()
     file('build/tmp/kotlin-classes/debug/groovyx/test/SimpleTest.class').exists()
     file('build/tmp/kotlin-classes/release/groovyx/test/SimpleTest.class').exists()
-    file('build/intermediates/classes/androidTest/debug/groovyx/test/AndroidTest.class').exists()
-    file('build/intermediates/classes/test/debug/groovyx/test/JvmTest.class').exists()
-    file('build/intermediates/classes/test/release/groovyx/test/JvmTest.class').exists()
+    file('build/intermediates/javac/debugAndroidTest/compileDebugAndroidTestJavaWithJavac/classes/groovyx/test/AndroidTest.class').exists()
+    file('build/intermediates/javac/debugUnitTest/compileDebugUnitTestJavaWithJavac/classes/groovyx/test/JvmTest.class').exists()
+    file('build/intermediates/javac/releaseUnitTest/compileReleaseUnitTestJavaWithJavac/classes/groovyx/test/JvmTest.class').exists()
   }
 }

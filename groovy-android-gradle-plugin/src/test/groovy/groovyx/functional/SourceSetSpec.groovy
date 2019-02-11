@@ -23,7 +23,6 @@ import java.lang.Void as Should
 
 import static groovyx.internal.TestProperties.allTests
 import static groovyx.internal.TestProperties.androidPluginVersion
-import static groovyx.internal.TestProperties.buildToolsVersion
 import static groovyx.internal.TestProperties.compileSdkVersion
 
 @IgnoreIf({ !allTests })
@@ -57,7 +56,6 @@ class SourceSetSpec extends AndroidFunctionalSpec {
 
       android {
         compileSdkVersion $compileSdkVersion
-        buildToolsVersion '$buildToolsVersion'
 
         defaultConfig {
           minSdkVersion 16
@@ -102,7 +100,7 @@ class SourceSetSpec extends AndroidFunctionalSpec {
       }
 
       dependencies {
-        implementation 'org.codehaus.groovy:groovy:2.4.12:grooid'
+        implementation 'org.codehaus.groovy:groovy:2.4.16:grooid'
       }
     """
 
@@ -182,8 +180,8 @@ class SourceSetSpec extends AndroidFunctionalSpec {
     then:
     noExceptionThrown()
     file('build/outputs/apk/debug/test-app-debug.apk').exists()
-    file('build/intermediates/classes/debug/groovyx/test/MainActivity.class').exists()
-    file('build/intermediates/classes/debug/groovyx/test/ExampleGroovy.class').exists()
+    file('build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/groovyx/test/MainActivity.class').exists()
+    file('build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/groovyx/test/ExampleGroovy.class').exists()
   }
 
   Should "joint compile java files added to groovy sourceDirs"() {
@@ -214,7 +212,6 @@ class SourceSetSpec extends AndroidFunctionalSpec {
 
       android {
         compileSdkVersion $compileSdkVersion
-        buildToolsVersion '$buildToolsVersion'
 
         defaultConfig {
           minSdkVersion 16
@@ -259,7 +256,7 @@ class SourceSetSpec extends AndroidFunctionalSpec {
       }
 
       dependencies {
-        implementation 'org.codehaus.groovy:groovy:2.4.12:grooid'
+        implementation 'org.codehaus.groovy:groovy:2.4.16:grooid'
       }
     """
 
@@ -347,7 +344,7 @@ class SourceSetSpec extends AndroidFunctionalSpec {
     then:
     noExceptionThrown()
     file('build/outputs/apk/debug/test-app-debug.apk').exists()
-    file('build/intermediates/classes/debug/groovyx/test/MainActivity.class').exists()
-    file('build/intermediates/classes/debug/groovyx/test/ExampleJava.class').exists()
+    file('build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/groovyx/test/MainActivity.class').exists()
+    file('build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/groovyx/test/ExampleJava.class').exists()
   }
 }
