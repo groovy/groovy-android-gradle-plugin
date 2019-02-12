@@ -201,6 +201,6 @@ class RenderScriptCompilationSpec extends AndroidFunctionalSpec {
     then:
     noExceptionThrown()
     file('build/outputs/apk/debug/test-app-debug.apk').exists()
-    file('build/intermediates/classes/debug/groovyx/test/MainActivity.class').exists()
+    file('build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/groovyx/test/MainActivity.class').exists()
   }
 }
