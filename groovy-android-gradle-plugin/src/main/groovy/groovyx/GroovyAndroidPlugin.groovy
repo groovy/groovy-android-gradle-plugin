@@ -206,7 +206,7 @@ class GroovyAndroidPlugin implements Plugin<Project> {
       log.debug('Groovy compiler args {}', task.options.compilerArgs)
     }
 
-    log.debug('Groovy classpath: {}', groovyTask.classpath.files)
+    log.debug('Groovy classpath: {}', groovyTask.classpath)
 
     javaTask.finalizedBy(groovyTask)
   }

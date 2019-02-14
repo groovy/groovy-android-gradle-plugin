@@ -29,16 +29,26 @@ abstract class FunctionalSpec extends Specification implements FileHelper {
 
   static final String PLUGIN_VERSION = FunctionalSpec.classLoader.getResource('groovyx/groovy-android-gradle-plugin-version.txt').text.trim()
   static final String QUIET_ARGUMENT = '--quiet'
+  private static final String DEBUG_ARGUMENT = '--debug'
 
   @Rule TemporaryFolder dir
 
   GradleRunner runner(String gradleVersion, String... args) {
+    def argsList = args.toList()
+    if (!argsList.contains(DEBUG_ARGUMENT)) {
+      argsList += QUIET_ARGUMENT
+    }
+
     return GradleRunner.create()
         .withProjectDir(dir.root)
         .forwardOutput()
         .withTestKitDir(getTestKitDir())
-        .withArguments(args.toList() + QUIET_ARGUMENT)
+        .withArguments(argsList)
         .withGradleVersion(gradleVersion?:GradleVersion.current().version)
+  }
+
+  BuildResult runDebug() {
+    runner(null, DEBUG_ARGUMENT).build()
   }
 
   BuildResult runWithVersion(String gradleVersion, String... args) {
