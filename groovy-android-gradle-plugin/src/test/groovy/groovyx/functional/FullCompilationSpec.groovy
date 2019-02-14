@@ -242,4 +242,44 @@ class FullCompilationSpec extends AndroidFunctionalSpec implements AndroidFileHe
     'JavaVersion.VERSION_1_7' | '3.3.1'               | '4.10.1'         | ['assemble']
     'JavaVersion.VERSION_1_8' | '3.3.1'               | '4.10.1'         | ['assemble', 'test']
   }
+
+    Should "not resolve dependencies during configuration with --debug"() {
+        given: 'a multi-module project'
+        file("settings.gradle") << """
+            rootProject.name = 'test-lib'
+      
+            include ":java-lib"
+        """
+
+        and: 'an Android library module that depends on a Java library module'
+        createBuildFileForLibrary()
+        createSimpleAndroidManifest()
+
+        buildFile << """
+            dependencies {
+                implementation project(":java-lib")
+            }
+        """
+
+        and: 'a trivial class to trigger Groovy compilation'
+        file('src/test/groovy/groovyx/test/TrivialClass.groovy') << """
+            package groovyx.test
+
+            class TrivialClass {
+            }
+        """
+
+        and: 'a trivial Java library module'
+        file("java-lib/build.gradle") << """
+            plugins {
+                id 'java-library'
+            }
+        """
+
+        when: ''
+        runDebug()
+
+        then:
+        noExceptionThrown()
+    }
 }
