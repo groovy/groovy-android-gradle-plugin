@@ -1,3 +1,8 @@
+2.0.1
+-----
+    * Fixed compilation issue where running with `--debug` would fail the build (#169)
+    * Updated to use `getJavaCompileProvider` instead of deprecated `getJavaCompile` (#167)
+
 2.0.0
 -----
     * Support for Android Gradle Plugin 3.0.0+ only. For lower versions use 1.2.0

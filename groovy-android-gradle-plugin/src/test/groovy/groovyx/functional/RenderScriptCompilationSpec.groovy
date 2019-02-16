@@ -28,6 +28,7 @@ import static groovyx.internal.TestProperties.allTests
 import static groovyx.internal.TestProperties.androidPluginVersion
 import static groovyx.internal.TestProperties.buildToolsVersion
 import static groovyx.internal.TestProperties.compileSdkVersion
+import static groovyx.internal.TestProperties.groovyVersion
 
 /**
  * Ensure that projects with renderscript compile properly.
@@ -83,8 +84,8 @@ class RenderScriptCompilationSpec extends AndroidFunctionalSpec {
         }
 
         compileOptions {
-          sourceCompatibility JavaVersion.VERSION_1_7
-          targetCompatibility JavaVersion.VERSION_1_7
+          sourceCompatibility JavaVersion.VERSION_1_8
+          targetCompatibility JavaVersion.VERSION_1_8
         }
 
         buildTypes {
@@ -101,7 +102,7 @@ class RenderScriptCompilationSpec extends AndroidFunctionalSpec {
       }
 
       dependencies {
-        implementation 'org.codehaus.groovy:groovy:2.4.12:grooid'
+        implementation 'org.codehaus.groovy:groovy:$groovyVersion:grooid'
       }
     """
 

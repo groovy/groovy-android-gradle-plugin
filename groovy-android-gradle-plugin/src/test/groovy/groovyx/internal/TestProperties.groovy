@@ -23,19 +23,23 @@ abstract class TestProperties {
   }
 
   static String getAndroidPluginVersion() {
-    return System.getProperty('androidPluginVersion')?:'3.0.0'
+    return System.getProperty('androidPluginVersion')?:'3.3.1'
   }
 
   static String getBuildToolsVersion() {
-    return System.getProperty('buildToolsVersion')?:'26.0.2'
+    return System.getProperty('buildToolsVersion')?:'28.0.3'
   }
 
   static int getCompileSdkVersion() {
     String prop = System.getProperty('compileSdkVersion')
-    return Integer.parseInt(prop?:'26')
+    return Integer.parseInt(prop?:'28')
   }
 
   static String getKotlinVersion() {
-    return System.getProperty('kotlinVersion')?:'1.1.51'
+    return System.getProperty('kotlinVersion')?:'1.3.21'
+  }
+
+  static String getGroovyVersion() {
+    return System.getProperty('groovyVersion')?:'2.4.16'
   }
 }

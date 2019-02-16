@@ -31,6 +31,8 @@ Thumbs.db
 # Android Studio
 .idea
 *.iml
+*.ipr
+*.iws
 .gradle
 build/
 

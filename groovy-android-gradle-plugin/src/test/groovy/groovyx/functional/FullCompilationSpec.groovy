@@ -16,6 +16,7 @@
 
 package groovyx.functional
 
+import org.gradle.util.VersionNumber
 import groovyx.functional.internal.AndroidFunctionalSpec
 import groovyx.internal.AndroidFileHelper
 import spock.lang.IgnoreIf
@@ -33,7 +34,7 @@ import static groovyx.internal.TestProperties.allTests
 class FullCompilationSpec extends AndroidFunctionalSpec implements AndroidFileHelper {
 
   @Unroll
-  Should "compile android app with java:#javaVersion, android plugin:#androidPluginVersion, gradle version: #gradleVersion"() {
+  Should "compile android app with java:#javaVersion, android plugin:#_androidPluginVersion, gradle version: #gradleVersion"() {
     given:
     file("settings.gradle") << "rootProject.name = 'test-app'"
 
@@ -120,11 +121,11 @@ class FullCompilationSpec extends AndroidFunctionalSpec implements AndroidFileHe
     then:
     noExceptionThrown()
     file('build/outputs/apk/debug/test-app-debug.apk').exists()
-    file('build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/groovyx/test/MainActivity.class').exists()
-    file('build/intermediates/javac/debugAndroidTest/compileDebugAndroidTestJavaWithJavac/classes/groovyx/test/AndroidTest.class').exists()
+    file("build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/groovyx/test/MainActivity.class").exists()
+    file("build/intermediates//javac/debugAndroidTest/compileDebugAndroidTestJavaWithJavac/classes/groovyx/test/AndroidTest.class").exists()
     if (args.contains('test')) {
-      assert file('build/intermediates/javac/debugUnitTest/compileDebugUnitTestJavaWithJavac/classes/groovyx/test/JvmTest.class').exists()
-      assert file('build/intermediates/javac/releaseUnitTest/compileReleaseUnitTestJavaWithJavac/classes/groovyx/test/JvmTest.class').exists()
+      assert file("build/intermediates/javac/debugUnitTest/compileDebugUnitTestJavaWithJavac/classes/groovyx/test/JvmTest.class").exists()
+      assert file("build/intermediates/javac/releaseUnitTest/compileReleaseUnitTestJavaWithJavac/classes/groovyx/test/JvmTest.class").exists()
     }
 
     where:
@@ -134,14 +135,24 @@ class FullCompilationSpec extends AndroidFunctionalSpec implements AndroidFileHe
     // > org.gradle.api.internal.artifacts.configurations.DefaultConfiguration$ConfigurationFileCollection
     // Stack trace shows Caused by: java.io.NotSerializableException: org.gradle.api.internal.artifacts.configurations.DefaultConfiguration$ConfigurationFileCollection
     javaVersion               | _androidPluginVersion | gradleVersion | args
-    'JavaVersion.VERSION_1_6' | '3.3.1'               | '4.10.1'         | ['assemble']
-    'JavaVersion.VERSION_1_7' | '3.3.1'               | '4.10.1'         | ['assemble']
-    'JavaVersion.VERSION_1_8' | '3.3.1'               | '4.10.1'         | ['assemble', 'test']
+    'JavaVersion.VERSION_1_7' | '3.0.1'               | '4.10.3'      | ['assemble']
+    'JavaVersion.VERSION_1_7' | '3.1.4'               | '4.10.3'      | ['assemble']
+    'JavaVersion.VERSION_1_7' | '3.2.1'               | '4.10.3'      | ['assemble']
+    'JavaVersion.VERSION_1_6' | '3.3.1'               | '4.10.3'      | ['assemble']
+    'JavaVersion.VERSION_1_7' | '3.3.1'               | '4.10.3'      | ['assemble']
+    'JavaVersion.VERSION_1_8' | '3.3.1'               | '4.10.3'      | ['assemble', 'test']
+    'JavaVersion.VERSION_1_8' | '3.4.0-beta04'        | '5.1.1'       | ['assemble', 'test']
+    'JavaVersion.VERSION_1_8' | '3.5.0-alpha04'       | '5.1.1'       | ['assemble', 'test']
+    'JavaVersion.VERSION_1_8' | '3.3.1'               | '5.1.1'       | ['assemble', 'test']
+    'JavaVersion.VERSION_1_8' | '3.3.1'               | '5.2.1'       | ['assemble', 'test']
+    'JavaVersion.VERSION_1_8' | '3.3.1'               | '5.2.1'       | ['assemble', 'test']
   }
 
   @Unroll
-  Should "compile android library with java:#javaVersion and android plugin:#androidPluginVersion, gradle version:#gradleVersion"() {
+  Should "compile android library with java:#javaVersion and android plugin:#_androidPluginVersion, gradle version:#gradleVersion"() {
     given:
+    def isGradle5 = VersionNumber.parse(gradleVersion).major == 5
+
     file("settings.gradle") << "rootProject.name = 'test-lib'"
 
     createBuildFileForLibrary()
@@ -221,14 +232,15 @@ class FullCompilationSpec extends AndroidFunctionalSpec implements AndroidFileHe
 
     then:
     noExceptionThrown()
-    file('build/outputs/aar/test-lib-debug.aar').exists()
-    file('build/outputs/aar/test-lib-release.aar').exists()
-    file('build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/groovyx/test/Test.class').exists()
-    file('build/intermediates/javac/release/compileReleaseJavaWithJavac/classes/groovyx/test/Test.class').exists()
-    file('build/intermediates/javac/debugAndroidTest/compileDebugAndroidTestJavaWithJavac/classes/groovyx/test/AndroidTest.class').exists()
+    file("build/outputs/aar/test-lib${isGradle5 ? '' : '-debug'}.aar").exists()
+    isGradle5 ? true : file('build/outputs/aar/test-lib-release.aar').exists()
+    file('build/outputs/apk/androidTest/debug/test-lib-debug-androidTest.apk').exists()
+    file("build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/groovyx/test/Test.class").exists()
+    file("build/intermediates/javac/release/compileReleaseJavaWithJavac/classes/groovyx/test/Test.class").exists()
+    file("build/intermediates/javac/debugAndroidTest/compileDebugAndroidTestJavaWithJavac/classes/groovyx/test/AndroidTest.class").exists()
     if (args.contains('test')) {
-      assert file('build/intermediates/javac/debugUnitTest/compileDebugUnitTestJavaWithJavac/classes/groovyx/test/JvmTest.class').exists()
-      assert file('build/intermediates/javac/releaseUnitTest/compileReleaseUnitTestJavaWithJavac/classes/groovyx/test/JvmTest.class').exists()
+      assert file("build/intermediates/javac/debugUnitTest/compileDebugUnitTestJavaWithJavac/classes/groovyx/test/JvmTest.class").exists()
+      assert file("build/intermediates/javac/releaseUnitTest/compileReleaseUnitTestJavaWithJavac/classes/groovyx/test/JvmTest.class").exists()
     }
 
     where:
@@ -238,9 +250,17 @@ class FullCompilationSpec extends AndroidFunctionalSpec implements AndroidFileHe
     // > org.gradle.api.internal.artifacts.configurations.DefaultConfiguration$ConfigurationFileCollection
     // Stack trace shows Caused by: java.io.NotSerializableException: org.gradle.api.internal.artifacts.configurations.DefaultConfiguration$ConfigurationFileCollection
     javaVersion               | _androidPluginVersion | gradleVersion | args
-    'JavaVersion.VERSION_1_6' | '3.3.1'               | '4.10.1'         | ['assemble']
-    'JavaVersion.VERSION_1_7' | '3.3.1'               | '4.10.1'         | ['assemble']
-    'JavaVersion.VERSION_1_8' | '3.3.1'               | '4.10.1'         | ['assemble', 'test']
+    'JavaVersion.VERSION_1_7' | '3.0.1'               | '4.10.3'      | ['assemble']
+    'JavaVersion.VERSION_1_7' | '3.1.4'               | '4.10.3'      | ['assemble']
+    'JavaVersion.VERSION_1_7' | '3.2.1'               | '4.10.3'      | ['assemble']
+    'JavaVersion.VERSION_1_6' | '3.3.1'               | '4.10.3'      | ['assemble']
+    'JavaVersion.VERSION_1_7' | '3.3.1'               | '4.10.3'      | ['assemble']
+    'JavaVersion.VERSION_1_8' | '3.3.1'               | '4.10.3'      | ['assemble', 'test']
+    'JavaVersion.VERSION_1_8' | '3.4.0-beta04'        | '5.1.1'       | ['assemble', 'test']
+    'JavaVersion.VERSION_1_8' | '3.5.0-alpha04'       | '5.1.1'       | ['assemble', 'test']
+    'JavaVersion.VERSION_1_8' | '3.3.1'               | '5.1.1'       | ['assemble', 'test']
+    'JavaVersion.VERSION_1_8' | '3.3.1'               | '5.2.1'       | ['assemble', 'test']
+    'JavaVersion.VERSION_1_8' | '3.3.1'               | '5.2.1'       | ['assemble', 'test']
   }
 
     Should "not resolve dependencies during configuration with --debug"() {
