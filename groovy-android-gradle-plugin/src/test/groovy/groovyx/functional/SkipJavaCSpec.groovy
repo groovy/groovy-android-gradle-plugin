@@ -24,6 +24,7 @@ import java.lang.Void as Should
 import static groovyx.internal.TestProperties.allTests
 import static groovyx.internal.TestProperties.androidPluginVersion
 import static groovyx.internal.TestProperties.compileSdkVersion
+import static groovyx.internal.TestProperties.groovyVersion
 
 @IgnoreIf({ !allTests })
 class SkipJavaCSpec extends AndroidFunctionalSpec {
@@ -74,8 +75,8 @@ class SkipJavaCSpec extends AndroidFunctionalSpec {
         }
 
         compileOptions {
-          sourceCompatibility '1.7'
-          targetCompatibility '1.7'
+          sourceCompatibility '1.8'
+          targetCompatibility '1.8'
         }
 
         buildTypes {
@@ -96,7 +97,7 @@ class SkipJavaCSpec extends AndroidFunctionalSpec {
       }
 
       dependencies {
-        implementation 'org.codehaus.groovy:groovy:2.4.16:grooid'
+        implementation 'org.codehaus.groovy:groovy:$groovyVersion:grooid'
       }
     """
 

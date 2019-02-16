@@ -26,8 +26,8 @@ apply from: "$rootDir/gradle/publishPlugins.gradle"
 
 description = 'Groovy support for Android with the Gradle build tool - http://www.groovy-lang.org'
 
-sourceCompatibility = JavaVersion.VERSION_1_6
-targetCompatibility = JavaVersion.VERSION_1_6
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
 dependencies {
   implementation localGroovy()
@@ -64,6 +64,7 @@ tasks.withType(Test) {
   systemProperty 'buildToolsVersion', buildToolsVersion
   systemProperty 'compileSdkVersion', compileSdkVersion
   systemProperty 'kotlinVersion', kotlinVersion
+  systemProperty 'groovyVersion', groovyVersion
 
   environment "GRADLE_USER_HOME", gradle.gradleUserHomeDir
 

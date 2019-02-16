@@ -23,6 +23,7 @@ import static groovyx.internal.TestProperties.androidPluginVersion
 import static groovyx.internal.TestProperties.buildToolsVersion
 import static groovyx.internal.TestProperties.compileSdkVersion
 import static groovyx.internal.TestProperties.kotlinVersion
+import static groovyx.internal.TestProperties.groovyVersion
 
 /**
  * Allows Kotlin and Groovy to play nicely with each other.
@@ -81,8 +82,8 @@ class KotlinSupportSpec extends AndroidFunctionalSpec {
         }
 
         compileOptions {
-          sourceCompatibility '1.7'
-          targetCompatibility '1.7'
+          sourceCompatibility '1.8'
+          targetCompatibility '1.8'
         }
 
         buildTypes {
@@ -99,11 +100,11 @@ class KotlinSupportSpec extends AndroidFunctionalSpec {
       }
 
       dependencies {
-        implementation 'org.codehaus.groovy:groovy:2.4.12:grooid'
+        implementation 'org.codehaus.groovy:groovy:$groovyVersion:grooid'
         implementation 'org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion'
 
-        androidTestImplementation 'com.android.support.test:runner:1.0.1'
-        androidTestImplementation 'com.android.support.test:rules:1.0.1'
+        androidTestImplementation 'com.android.support.test:runner:1.0.2'
+        androidTestImplementation 'com.android.support.test:rules:1.0.2'
 
         testImplementation 'junit:junit:4.12'
       }

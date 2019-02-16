@@ -3,6 +3,7 @@ package groovyx.functional.internal
 import groovyx.internal.TestProperties
 
 import static groovyx.internal.TestProperties.compileSdkVersion
+import static groovyx.internal.TestProperties.groovyVersion
 
 abstract class AndroidFunctionalSpec extends FunctionalSpec {
 
@@ -84,10 +85,10 @@ abstract class AndroidFunctionalSpec extends FunctionalSpec {
       }
 
       dependencies {
-        implementation 'org.codehaus.groovy:groovy:2.4.16:grooid'
+        implementation 'org.codehaus.groovy:groovy:$groovyVersion:grooid'
 
-        annotationProcessor 'com.google.auto.value:auto-value:1.5.2'
-        compileOnly 'com.jakewharton.auto.value:auto-value-annotations:1.5'
+        annotationProcessor 'com.google.auto.value:auto-value:1.6.3'
+        compileOnly 'com.google.auto.value:auto-value-annotations:1.6.3'
 
         androidTestImplementation 'com.android.support.test:runner:1.0.2'
         androidTestImplementation 'com.android.support.test:rules:1.0.2'
