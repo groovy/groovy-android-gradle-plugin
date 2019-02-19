@@ -1,6 +1,6 @@
 :groovyVersion: 2.4.12
-:pluginVersion: 2.0.0
-:pluginSnapshotVersion: 2.0.1
+:pluginVersion: 2.0.1
+:pluginSnapshotVersion: 2.0.2
 :androidPluginVersion: 3.0.0
 
 = Groovy language support for Android
