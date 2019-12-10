@@ -5,7 +5,9 @@
 
 = Groovy language support for Android
 
-link:https://travis-ci.org/groovy/groovy-android-gradle-plugin[image:https://travis-ci.org/groovy/groovy-android-gradle-plugin.svg?branch=master[Build Status]]
+*Deprecated:* This plugin has been deprecated in favor of Kotlin which has the full support of JetBrains 
+and Google. The changes that go into each Android Plugin Version make it really hard for this plugin 
+to keep up. As of Gradle 6.0 this plugin does not work.
 
 This plugin adds http://groovy-lang.org[Groovy Language] support for Android applications and libraries.
 
