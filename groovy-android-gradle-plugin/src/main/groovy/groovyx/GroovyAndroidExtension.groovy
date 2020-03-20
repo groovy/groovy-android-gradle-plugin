@@ -21,6 +21,7 @@ import org.gradle.api.Action
 import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.Project
 import org.gradle.api.internal.file.FileResolver
+import org.gradle.api.model.ObjectFactory
 import org.gradle.api.tasks.GroovySourceSet
 import org.gradle.api.tasks.compile.GroovyCompile
 import org.gradle.internal.reflect.Instantiator
@@ -45,8 +46,8 @@ class GroovyAndroidExtension {
 
   private Closure<Void> configClosure
 
-  GroovyAndroidExtension(Project project, Instantiator instantiator, FileResolver fileResolver) {
-    sourceSetsContainer = project.container(GroovySourceSet, new AndroidGroovySourceSetFactory(instantiator, fileResolver))
+  GroovyAndroidExtension(Project project, Instantiator instantiator) {
+    sourceSetsContainer = project.container(GroovySourceSet, new AndroidGroovySourceSetFactory(instantiator, project.objects))
 
     sourceSetsContainer.whenObjectAdded { GroovySourceSet sourceSet ->
       sourceSet.groovy

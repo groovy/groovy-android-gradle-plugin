@@ -19,6 +19,7 @@ package groovyx.internal
 import groovyx.api.AndroidGroovySourceSet
 import org.gradle.api.NamedDomainObjectFactory
 import org.gradle.api.internal.file.FileResolver
+import org.gradle.api.model.ObjectFactory
 import org.gradle.internal.reflect.Instantiator
 
 /**
@@ -28,14 +29,14 @@ import org.gradle.internal.reflect.Instantiator
 class AndroidGroovySourceSetFactory implements NamedDomainObjectFactory<AndroidGroovySourceSet> {
 
   private final Instantiator instantiator
-  private final FileResolver fileResolver
+  private final ObjectFactory objects
 
-  AndroidGroovySourceSetFactory(Instantiator instantiator, FileResolver fileResolver) {
+  AndroidGroovySourceSetFactory(Instantiator instantiator, ObjectFactory objects) {
     this.instantiator = instantiator
-    this.fileResolver = fileResolver
+    this.objects = objects
   }
 
   @Override AndroidGroovySourceSet create(String name) {
-    return instantiator.newInstance(DefaultAndroidGroovySourceSet, name, fileResolver)
+    return instantiator.newInstance(DefaultAndroidGroovySourceSet, name, objects)
   }
 }

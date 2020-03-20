@@ -19,9 +19,7 @@ package groovyx.internal
 import groovyx.api.AndroidGroovySourceSet
 import org.gradle.api.Action
 import org.gradle.api.file.SourceDirectorySet
-import org.gradle.api.internal.file.DefaultSourceDirectorySet
-import org.gradle.api.internal.file.FileResolver
-import org.gradle.api.internal.file.collections.DefaultDirectoryFileTreeFactory
+import org.gradle.api.model.ObjectFactory
 import org.gradle.api.tasks.GroovySourceSet
 import org.gradle.util.ConfigureUtil
 
@@ -30,13 +28,12 @@ class DefaultAndroidGroovySourceSet implements AndroidGroovySourceSet {
   final SourceDirectorySet groovy
   final SourceDirectorySet allGroovy
 
-  DefaultAndroidGroovySourceSet(String displayName, FileResolver fileResolver) {
+  DefaultAndroidGroovySourceSet(String displayName, ObjectFactory objects) {
     name = displayName
 
-    def directoryFileTreeFactory = new DefaultDirectoryFileTreeFactory()
-    groovy = new DefaultSourceDirectorySet("$displayName Groovy source", fileResolver, directoryFileTreeFactory)
+    groovy = objects.sourceDirectorySet("$displayName Groovy source", "$displayName Groovy source")
     groovy.filter.include("**/*.java", "**/*.groovy")
-    allGroovy = new DefaultSourceDirectorySet(String.format("%s Groovy source", displayName), fileResolver, directoryFileTreeFactory)
+    allGroovy = objects.sourceDirectorySet(String.format("%s Groovy source", displayName), String.format("%s Groovy source", displayName))
     allGroovy.source(groovy)
     allGroovy.filter.include("**/*.groovy")
   }

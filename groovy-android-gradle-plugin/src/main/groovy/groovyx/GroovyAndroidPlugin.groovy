@@ -56,7 +56,7 @@ class GroovyAndroidPlugin implements Plugin<Project> {
   }
 
   void apply(Project project) {
-    project.extensions.create(ANDROID_GROOVY_EXTENSION_NAME, GroovyAndroidExtension, project, instantiator, project.fileResolver)
+    project.extensions.create(ANDROID_GROOVY_EXTENSION_NAME, GroovyAndroidExtension, project, instantiator)
     handleProject(project)
   }
 
@@ -186,7 +186,7 @@ class GroovyAndroidPlugin implements Plugin<Project> {
     // no sources for groovy to compile skip the groovy task
     if (groovyTask.source.empty) {
       log.debug('no groovy sources found for {} removing groovy task', variantName)
-      project.tasks.remove(groovyTask)
+      groovyTask.enabled = false
       return
     }
     log.debug('groovy sources for {}: {}', variantName, groovyTask.source.files)
