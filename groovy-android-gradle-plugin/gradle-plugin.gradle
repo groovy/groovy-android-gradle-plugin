@@ -36,7 +36,7 @@ dependencies {
   implementation "com.android.tools.build:gradle:$androidPluginVersion"
 
   testImplementation gradleTestKit()
-  testImplementation "com.android.tools.build:gradle:3.5.0"
+  testImplementation "com.android.tools.build:gradle:3.3.1"
   testImplementation "org.spockframework:spock-core:$spockVersion", {
     exclude group: 'org.codehaus.groovy', module: 'groovy-all'
   }
