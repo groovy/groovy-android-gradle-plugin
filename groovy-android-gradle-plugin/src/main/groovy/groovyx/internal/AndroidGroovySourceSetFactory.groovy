@@ -18,7 +18,6 @@ package groovyx.internal
 
 import groovyx.api.AndroidGroovySourceSet
 import org.gradle.api.NamedDomainObjectFactory
-import org.gradle.api.internal.file.FileResolver
 import org.gradle.api.model.ObjectFactory
 import org.gradle.internal.reflect.Instantiator
 
