@@ -135,14 +135,6 @@ class FullCompilationSpec extends AndroidFunctionalSpec implements AndroidFileHe
     // > org.gradle.api.internal.artifacts.configurations.DefaultConfiguration$ConfigurationFileCollection
     // Stack trace shows Caused by: java.io.NotSerializableException: org.gradle.api.internal.artifacts.configurations.DefaultConfiguration$ConfigurationFileCollection
     javaVersion               | _androidPluginVersion | gradleVersion | args
-    'JavaVersion.VERSION_1_7' | '3.0.1'               | '4.10.3'      | ['assemble']
-    'JavaVersion.VERSION_1_7' | '3.1.4'               | '4.10.3'      | ['assemble']
-    'JavaVersion.VERSION_1_7' | '3.2.1'               | '4.10.3'      | ['assemble']
-    'JavaVersion.VERSION_1_6' | '3.3.1'               | '4.10.3'      | ['assemble']
-    'JavaVersion.VERSION_1_7' | '3.3.1'               | '4.10.3'      | ['assemble']
-    'JavaVersion.VERSION_1_8' | '3.3.1'               | '4.10.3'      | ['assemble', 'test']
-    'JavaVersion.VERSION_1_8' | '3.4.0-beta04'        | '5.1.1'       | ['assemble', 'test']
-    'JavaVersion.VERSION_1_8' | '3.5.0-alpha04'       | '5.1.1'       | ['assemble', 'test']
     'JavaVersion.VERSION_1_8' | '3.3.1'               | '5.1.1'       | ['assemble', 'test']
     'JavaVersion.VERSION_1_8' | '3.3.1'               | '5.2.1'       | ['assemble', 'test']
     'JavaVersion.VERSION_1_8' | '3.3.1'               | '5.2.1'       | ['assemble', 'test']
@@ -250,14 +242,6 @@ class FullCompilationSpec extends AndroidFunctionalSpec implements AndroidFileHe
     // > org.gradle.api.internal.artifacts.configurations.DefaultConfiguration$ConfigurationFileCollection
     // Stack trace shows Caused by: java.io.NotSerializableException: org.gradle.api.internal.artifacts.configurations.DefaultConfiguration$ConfigurationFileCollection
     javaVersion               | _androidPluginVersion | gradleVersion | args
-    'JavaVersion.VERSION_1_7' | '3.0.1'               | '4.10.3'      | ['assemble']
-    'JavaVersion.VERSION_1_7' | '3.1.4'               | '4.10.3'      | ['assemble']
-    'JavaVersion.VERSION_1_7' | '3.2.1'               | '4.10.3'      | ['assemble']
-    'JavaVersion.VERSION_1_6' | '3.3.1'               | '4.10.3'      | ['assemble']
-    'JavaVersion.VERSION_1_7' | '3.3.1'               | '4.10.3'      | ['assemble']
-    'JavaVersion.VERSION_1_8' | '3.3.1'               | '4.10.3'      | ['assemble', 'test']
-    'JavaVersion.VERSION_1_8' | '3.4.0-beta04'        | '5.1.1'       | ['assemble', 'test']
-    'JavaVersion.VERSION_1_8' | '3.5.0-alpha04'       | '5.1.1'       | ['assemble', 'test']
     'JavaVersion.VERSION_1_8' | '3.3.1'               | '5.1.1'       | ['assemble', 'test']
     'JavaVersion.VERSION_1_8' | '3.3.1'               | '5.2.1'       | ['assemble', 'test']
     'JavaVersion.VERSION_1_8' | '3.3.1'               | '5.2.1'       | ['assemble', 'test']
@@ -267,7 +251,7 @@ class FullCompilationSpec extends AndroidFunctionalSpec implements AndroidFileHe
         given: 'a multi-module project'
         file("settings.gradle") << """
             rootProject.name = 'test-lib'
-      
+
             include ":java-lib"
         """
 

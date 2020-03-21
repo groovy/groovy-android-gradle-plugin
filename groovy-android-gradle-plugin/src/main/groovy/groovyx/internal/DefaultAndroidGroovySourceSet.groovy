@@ -31,7 +31,7 @@ class DefaultAndroidGroovySourceSet implements AndroidGroovySourceSet {
   DefaultAndroidGroovySourceSet(String displayName, ObjectFactory objects) {
     name = displayName
 
-    groovy = objects.sourceDirectorySet("$displayName Groovy source", "$displayName Groovy source")
+    groovy = objects.sourceDirectorySet("$displayName Groovy source".toString(), "$displayName Groovy source".toString())
     groovy.filter.include("**/*.java", "**/*.groovy")
     allGroovy = objects.sourceDirectorySet(String.format("%s Groovy source", displayName), String.format("%s Groovy source", displayName))
     allGroovy.source(groovy)
