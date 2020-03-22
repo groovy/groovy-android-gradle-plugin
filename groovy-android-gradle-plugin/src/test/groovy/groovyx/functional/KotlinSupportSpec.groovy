@@ -166,7 +166,7 @@ class KotlinSupportSpec extends AndroidFunctionalSpec {
         @Override void onCreate(Bundle savedInstanceState) {
           super.onCreate(savedInstanceState)
           contentView = R.layout.activity_main
-          
+
           def value = new SimpleTest().getValue()
         }
       }
@@ -218,11 +218,11 @@ class KotlinSupportSpec extends AndroidFunctionalSpec {
     then:
     noExceptionThrown()
     file('build/outputs/apk/debug/test-app-debug.apk').exists()
-    file('build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/groovyx/test/MainActivity.class').exists()
+    file('build/intermediates/javac/debug/classes/groovyx/test/MainActivity.class').exists()
     file('build/tmp/kotlin-classes/debug/groovyx/test/SimpleTest.class').exists()
     file('build/tmp/kotlin-classes/release/groovyx/test/SimpleTest.class').exists()
-    file('build/intermediates/javac/debugAndroidTest/compileDebugAndroidTestJavaWithJavac/classes/groovyx/test/AndroidTest.class').exists()
-    file('build/intermediates/javac/debugUnitTest/compileDebugUnitTestJavaWithJavac/classes/groovyx/test/JvmTest.class').exists()
-    file('build/intermediates/javac/releaseUnitTest/compileReleaseUnitTestJavaWithJavac/classes/groovyx/test/JvmTest.class').exists()
+    file('build/intermediates/javac/debugAndroidTest/classes/groovyx/test/AndroidTest.class').exists()
+    file('build/intermediates/javac/debugUnitTest/classes/groovyx/test/JvmTest.class').exists()
+    file('build/intermediates/javac/releaseUnitTest/classes/groovyx/test/JvmTest.class').exists()
   }
 }

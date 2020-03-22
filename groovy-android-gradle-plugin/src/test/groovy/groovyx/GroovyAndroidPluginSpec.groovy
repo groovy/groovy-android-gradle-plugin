@@ -57,8 +57,7 @@ class GroovyAndroidPluginSpec extends Specification implements AndroidFileHelper
     project.plugins.hasPlugin(GroovyAndroidPlugin)
 
     where:
-    projectPlugin << ['android', 'com.android.application', 'android-library', 'com.android.library',
-                      'com.android.test', 'com.android.feature']
+    projectPlugin << ['android', 'com.android.application', 'android-library', 'com.android.library', 'com.android.test']
   }
 
   Should "add groovy extension"() {
@@ -175,4 +174,3 @@ class GroovyAndroidPluginSpec extends Specification implements AndroidFileHelper
     assert project.tasks.withType(GroovyCompile).count { it.enabled } == 0
   }
 }
-

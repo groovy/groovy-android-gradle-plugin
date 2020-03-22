@@ -111,13 +111,12 @@ class CompilationSpec extends AndroidFunctionalSpec implements AndroidFileHelper
     run 'assemble', 'test'
 
     then:
-
     noExceptionThrown()
     file('build/outputs/apk/androidTest/debug/test-app-debug-androidTest.apk').exists()
-    file('build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/groovyx/test/MainActivity.class').exists()
-    file('build/intermediates/javac/debugAndroidTest/compileDebugAndroidTestJavaWithJavac/classes/groovyx/test/AndroidTest.class').exists()
-    file('build/intermediates/javac/debugUnitTest/compileDebugUnitTestJavaWithJavac/classes/groovyx/test/JvmTest.class').exists()
-    file('build/intermediates/javac/releaseUnitTest/compileReleaseUnitTestJavaWithJavac/classes/groovyx/test/JvmTest.class').exists()
+    file('build/intermediates/javac/debug/classes/groovyx/test/MainActivity.class').exists()
+    file('build/intermediates/javac/debugAndroidTest/classes/groovyx/test/AndroidTest.class').exists()
+    file('build/intermediates/javac/debugUnitTest/classes/groovyx/test/JvmTest.class').exists()
+    file('build/intermediates/javac/releaseUnitTest/classes/groovyx/test/JvmTest.class').exists()
   }
 
   Should "should compile android library"() {
@@ -201,13 +200,12 @@ class CompilationSpec extends AndroidFunctionalSpec implements AndroidFileHelper
 
     then:
     noExceptionThrown()
-    file('build/outputs/aar/test-lib.aar').exists()
-//    file('build/outputs/aar/test-lib-debug.aar').exists()
-//    file('build/outputs/aar/test-lib-release.aar').exists()
-    file('build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/groovyx/test/Test.class').exists()
-    file('build/intermediates/javac/release/compileReleaseJavaWithJavac/classes/groovyx/test/Test.class').exists()
-    file('build/intermediates/javac/debugAndroidTest/compileDebugAndroidTestJavaWithJavac/classes/groovyx/test/AndroidTest.class').exists()
-    file('build/intermediates/javac/debugUnitTest/compileDebugUnitTestJavaWithJavac/classes/groovyx/test/JvmTest.class').exists()
-    file('build/intermediates/javac/releaseUnitTest/compileReleaseUnitTestJavaWithJavac/classes/groovyx/test/JvmTest.class').exists()
+    file('build/outputs/aar/test-lib-debug.aar').exists()
+    file('build/outputs/aar/test-lib-release.aar').exists()
+    file('build/intermediates/javac/debug/classes/groovyx/test/Test.class').exists()
+    file('build/intermediates/javac/release/classes/groovyx/test/Test.class').exists()
+    file('build/intermediates/javac/debugAndroidTest/classes/groovyx/test/AndroidTest.class').exists()
+    file('build/intermediates/javac/debugUnitTest/classes/groovyx/test/JvmTest.class').exists()
+    file('build/intermediates/javac/releaseUnitTest/classes/groovyx/test/JvmTest.class').exists()
   }
 }
