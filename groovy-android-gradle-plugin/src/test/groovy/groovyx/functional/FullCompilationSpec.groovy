@@ -121,31 +121,16 @@ class FullCompilationSpec extends AndroidFunctionalSpec implements AndroidFileHe
     then:
     noExceptionThrown()
     file('build/outputs/apk/debug/test-app-debug.apk').exists()
-    file("build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/groovyx/test/MainActivity.class").exists()
-    file("build/intermediates//javac/debugAndroidTest/compileDebugAndroidTestJavaWithJavac/classes/groovyx/test/AndroidTest.class").exists()
+    file("build/intermediates/javac/debug/classes/groovyx/test/MainActivity.class").exists()
+    file("build/intermediates/javac/debugAndroidTest/classes/groovyx/test/AndroidTest.class").exists()
     if (args.contains('test')) {
-      assert file("build/intermediates/javac/debugUnitTest/compileDebugUnitTestJavaWithJavac/classes/groovyx/test/JvmTest.class").exists()
-      assert file("build/intermediates/javac/releaseUnitTest/compileReleaseUnitTestJavaWithJavac/classes/groovyx/test/JvmTest.class").exists()
+      assert file("build/intermediates/javac/debugUnitTest/classes/groovyx/test/JvmTest.class").exists()
+      assert file("build/intermediates/javac/releaseUnitTest/classes/groovyx/test/JvmTest.class").exists()
     }
 
     where:
-    // test common configs that touches the different way to access the classpath
-    // Skipping tests on Gradle 4.1 and 4.2.1 due to a bug.
-    // > Could not write message [ChannelMessage channel: org.gradle.process.internal.worker.request.RequestProtocol, payload: [MethodInvocation method: run(execute, [Ljava.lang.Class;@61128295, [Ljava.lang.Object;@652d0a6f, 166)]] to '/0:0:0:0:0:0:0:1:57024'.
-    // > org.gradle.api.internal.artifacts.configurations.DefaultConfiguration$ConfigurationFileCollection
-    // Stack trace shows Caused by: java.io.NotSerializableException: org.gradle.api.internal.artifacts.configurations.DefaultConfiguration$ConfigurationFileCollection
     javaVersion               | _androidPluginVersion | gradleVersion | args
-    'JavaVersion.VERSION_1_7' | '3.0.1'               | '4.10.3'      | ['assemble']
-    'JavaVersion.VERSION_1_7' | '3.1.4'               | '4.10.3'      | ['assemble']
-    'JavaVersion.VERSION_1_7' | '3.2.1'               | '4.10.3'      | ['assemble']
-    'JavaVersion.VERSION_1_6' | '3.3.1'               | '4.10.3'      | ['assemble']
-    'JavaVersion.VERSION_1_7' | '3.3.1'               | '4.10.3'      | ['assemble']
-    'JavaVersion.VERSION_1_8' | '3.3.1'               | '4.10.3'      | ['assemble', 'test']
-    'JavaVersion.VERSION_1_8' | '3.4.0-beta04'        | '5.1.1'       | ['assemble', 'test']
-    'JavaVersion.VERSION_1_8' | '3.5.0-alpha04'       | '5.1.1'       | ['assemble', 'test']
-    'JavaVersion.VERSION_1_8' | '3.3.1'               | '5.1.1'       | ['assemble', 'test']
-    'JavaVersion.VERSION_1_8' | '3.3.1'               | '5.2.1'       | ['assemble', 'test']
-    'JavaVersion.VERSION_1_8' | '3.3.1'               | '5.2.1'       | ['assemble', 'test']
+    'JavaVersion.VERSION_1_8' | '3.6.1'               | '6.2.2'       | ['assemble', 'test']
   }
 
   @Unroll
@@ -235,39 +220,24 @@ class FullCompilationSpec extends AndroidFunctionalSpec implements AndroidFileHe
     file("build/outputs/aar/test-lib${isGradle5 ? '' : '-debug'}.aar").exists()
     isGradle5 ? true : file('build/outputs/aar/test-lib-release.aar').exists()
     file('build/outputs/apk/androidTest/debug/test-lib-debug-androidTest.apk').exists()
-    file("build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/groovyx/test/Test.class").exists()
-    file("build/intermediates/javac/release/compileReleaseJavaWithJavac/classes/groovyx/test/Test.class").exists()
-    file("build/intermediates/javac/debugAndroidTest/compileDebugAndroidTestJavaWithJavac/classes/groovyx/test/AndroidTest.class").exists()
+    file("build/intermediates/javac/debug/classes/groovyx/test/Test.class").exists()
+    file("build/intermediates/javac/release/classes/groovyx/test/Test.class").exists()
+    file("build/intermediates/javac/debugAndroidTest/classes/groovyx/test/AndroidTest.class").exists()
     if (args.contains('test')) {
-      assert file("build/intermediates/javac/debugUnitTest/compileDebugUnitTestJavaWithJavac/classes/groovyx/test/JvmTest.class").exists()
-      assert file("build/intermediates/javac/releaseUnitTest/compileReleaseUnitTestJavaWithJavac/classes/groovyx/test/JvmTest.class").exists()
+      assert file("build/intermediates/javac/debugUnitTest/classes/groovyx/test/JvmTest.class").exists()
+      assert file("build/intermediates/javac/releaseUnitTest/classes/groovyx/test/JvmTest.class").exists()
     }
 
     where:
-    // test common configs that touches the different way to access the classpath
-    // Skipping tests on Gradle 4.1 and 4.2.1 due to a bug.
-    // > Could not write message [ChannelMessage channel: org.gradle.process.internal.worker.request.RequestProtocol, payload: [MethodInvocation method: run(execute, [Ljava.lang.Class;@61128295, [Ljava.lang.Object;@652d0a6f, 166)]] to '/0:0:0:0:0:0:0:1:57024'.
-    // > org.gradle.api.internal.artifacts.configurations.DefaultConfiguration$ConfigurationFileCollection
-    // Stack trace shows Caused by: java.io.NotSerializableException: org.gradle.api.internal.artifacts.configurations.DefaultConfiguration$ConfigurationFileCollection
     javaVersion               | _androidPluginVersion | gradleVersion | args
-    'JavaVersion.VERSION_1_7' | '3.0.1'               | '4.10.3'      | ['assemble']
-    'JavaVersion.VERSION_1_7' | '3.1.4'               | '4.10.3'      | ['assemble']
-    'JavaVersion.VERSION_1_7' | '3.2.1'               | '4.10.3'      | ['assemble']
-    'JavaVersion.VERSION_1_6' | '3.3.1'               | '4.10.3'      | ['assemble']
-    'JavaVersion.VERSION_1_7' | '3.3.1'               | '4.10.3'      | ['assemble']
-    'JavaVersion.VERSION_1_8' | '3.3.1'               | '4.10.3'      | ['assemble', 'test']
-    'JavaVersion.VERSION_1_8' | '3.4.0-beta04'        | '5.1.1'       | ['assemble', 'test']
-    'JavaVersion.VERSION_1_8' | '3.5.0-alpha04'       | '5.1.1'       | ['assemble', 'test']
-    'JavaVersion.VERSION_1_8' | '3.3.1'               | '5.1.1'       | ['assemble', 'test']
-    'JavaVersion.VERSION_1_8' | '3.3.1'               | '5.2.1'       | ['assemble', 'test']
-    'JavaVersion.VERSION_1_8' | '3.3.1'               | '5.2.1'       | ['assemble', 'test']
+    'JavaVersion.VERSION_1_8' | '3.6.1'               | '6.2.2'       | ['assemble', 'test']
   }
 
     Should "not resolve dependencies during configuration with --debug"() {
         given: 'a multi-module project'
         file("settings.gradle") << """
             rootProject.name = 'test-lib'
-      
+
             include ":java-lib"
         """
 

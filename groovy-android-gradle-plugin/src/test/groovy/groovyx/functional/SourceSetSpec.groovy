@@ -181,8 +181,8 @@ class SourceSetSpec extends AndroidFunctionalSpec {
     then:
     noExceptionThrown()
     file('build/outputs/apk/debug/test-app-debug.apk').exists()
-    file('build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/groovyx/test/MainActivity.class').exists()
-    file('build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/groovyx/test/ExampleGroovy.class').exists()
+    file('build/intermediates/javac/debug/classes/groovyx/test/MainActivity.class').exists()
+    file('build/intermediates/javac/debug/classes/groovyx/test/ExampleGroovy.class').exists()
   }
 
   Should "joint compile java files added to groovy sourceDirs"() {
@@ -345,7 +345,7 @@ class SourceSetSpec extends AndroidFunctionalSpec {
     then:
     noExceptionThrown()
     file('build/outputs/apk/debug/test-app-debug.apk').exists()
-    file('build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/groovyx/test/MainActivity.class').exists()
-    file('build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/groovyx/test/ExampleJava.class').exists()
+    file('build/intermediates/javac/debug/classes/groovyx/test/MainActivity.class').exists()
+    file('build/intermediates/javac/debug/classes/groovyx/test/ExampleJava.class').exists()
   }
 }

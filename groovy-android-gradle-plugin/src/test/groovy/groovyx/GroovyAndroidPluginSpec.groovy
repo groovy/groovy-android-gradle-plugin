@@ -57,8 +57,7 @@ class GroovyAndroidPluginSpec extends Specification implements AndroidFileHelper
     project.plugins.hasPlugin(GroovyAndroidPlugin)
 
     where:
-    projectPlugin << ['android', 'com.android.application', 'android-library', 'com.android.library',
-                      'com.android.test', 'com.android.feature']
+    projectPlugin << ['android', 'com.android.application', 'android-library', 'com.android.library', 'com.android.test']
   }
 
   Should "add groovy extension"() {
@@ -100,7 +99,7 @@ class GroovyAndroidPluginSpec extends Specification implements AndroidFileHelper
       class SimpleAndroidTest { }
     """
     file('src/test/groovy/groovyx/SimpleTest.groovy') << """
-      package groovyx 
+      package groovyx
       class SimpleTest { }
     """
 
@@ -141,7 +140,7 @@ class GroovyAndroidPluginSpec extends Specification implements AndroidFileHelper
     def groovyTasks = project.tasks.withType(GroovyCompile)
 
     then:
-    groovyTasks.size() == 2
+    groovyTasks.count { it.enabled } == 2
     groovyTasks.each { task ->
       assert task.sourceCompatibility == version
       assert task.targetCompatibility == version
@@ -171,8 +170,7 @@ class GroovyAndroidPluginSpec extends Specification implements AndroidFileHelper
     when:
     project.evaluate()
 
-    then:
-    project.tasks.withType(GroovyCompile).size() == 0
+    then: 'all tasks are disabled'
+    assert project.tasks.withType(GroovyCompile).count { it.enabled } == 0
   }
 }
-
