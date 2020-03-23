@@ -37,7 +37,7 @@ plugins {
 apply from: "$rootDir/gradle/idea/idea.gradle"
 
 allprojects {
-  version = '2.0.2-SNAPSHOT'
+  version = '3.0.0-SNAPSHOT'
   group = 'org.codehaus.groovy'
 
   apply plugin: 'com.github.ben-manes.versions'
